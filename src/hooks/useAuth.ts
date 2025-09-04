@@ -1,7 +1,7 @@
 // hooks/useAuth.ts
 import { useEffect, useState } from 'react';
 import type { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
-import supabase from '../services/SupabaseClient';
+import supabase from '../services/supabaseClient.ts';
 
 export const useAuth = () => {
     const [user, setUser] = useState<User | null>(null);
