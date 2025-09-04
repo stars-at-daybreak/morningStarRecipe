@@ -1,4 +1,4 @@
-import Header from '../components/features/layout/Header.tsx';
+import Header from '../components/Header.tsx';
 import Main from './Main.tsx';
 
 const Layout = () => {

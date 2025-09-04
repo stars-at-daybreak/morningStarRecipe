@@ -1,5 +1,5 @@
-import supabase from '../../../services/SupabaseClient.ts';
-import { useAuth } from '../../../hooks/useAuth.ts';
+import supabase from '../services/SupabaseClient.ts';
+import { useAuth } from '../hooks/useAuth.ts';
 
 const HeaderUserProfile = () => {
     const { user, loading } = useAuth();
