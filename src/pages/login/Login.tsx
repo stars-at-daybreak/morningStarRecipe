@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import supabase from '../../services/SupabaseClient.ts';
+import supabase from '../../services/supabaseClient.ts';
+import { KakaoLoginButton } from '../../components/KakaoLoginButton.tsx';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -24,17 +25,20 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={signInHandler}>
-            <div>
-                <label htmlFor='email'>이메일:</label>
-                <input type='email' id='email' value={email} onChange={inputHandler} />
-            </div>
-            <div>
-                <label htmlFor='password'>비밀번호</label>
-                <input type='password' id='password' value={password} onChange={inputHandler} />
-            </div>
-            <button type='submit'>로그인</button>
-        </form>
+        <>
+            <form onSubmit={signInHandler}>
+                <div>
+                    <label htmlFor='email'>이메일:</label>
+                    <input type='email' id='email' value={email} onChange={inputHandler} />
+                </div>
+                <div>
+                    <label htmlFor='password'>비밀번호</label>
+                    <input type='password' id='password' value={password} onChange={inputHandler} />
+                </div>
+                <button type='submit'>로그인</button>
+            </form>
+            <KakaoLoginButton />
+        </>
     );
 };
 
