@@ -20,7 +20,7 @@ export const signup: Signup = async (signupData: SignupData) => {
         });
 
         if (error) {
-            console.log(error);
+            console.error(error);
             if (error.message === 'User already registered') {
                 alert('이미 존재하는 계정입니다.');
             } else if (error.code === 'over_email_send_rate_limit') {
@@ -42,5 +42,22 @@ export const signup: Signup = async (signupData: SignupData) => {
     } catch (error) {
         console.error(error);
         alert('회원가입 처리 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+};
+
+export const Signin = async (email: string, password: string): Promise<void> => {
+    try {
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) {
+            console.error(error);
+            alert('아이디와 비밀번호를 확인해주세요');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('로그인 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
 };

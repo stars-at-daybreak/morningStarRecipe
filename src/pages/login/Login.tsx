@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import supabase from '../../services/supabaseClient.ts';
-import { KakaoLoginButton } from '../../components/KakaoLoginButton.tsx';
+import { Signin } from '../../services/supabaseUsers.ts';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -8,15 +7,7 @@ const Login = () => {
 
     const signInHandler = async (e: React.FormEvent) => {
         e.preventDefault();
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            console.error(error);
-            alert('아이디와 비밀번호를 확인해주세요');
-        }
+        await Signin(email, password);
     };
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,7 +28,6 @@ const Login = () => {
                 </div>
                 <button type='submit'>로그인</button>
             </form>
-            <KakaoLoginButton />
         </>
     );
 };
