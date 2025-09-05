@@ -18,6 +18,15 @@ const Home = () => {
                     </>
                 </ul>
             )}
+            {user && (
+                <ul>
+                    <>
+                        <li>
+                            <Link to={'/mypage'}>마이페이지</Link>
+                        </li>
+                    </>
+                </ul>
+            )}
         </>
     );
 };
