@@ -40,7 +40,7 @@ export const signup: Signup = async (signupData: SignupData) => {
             }
         }
     } catch (error) {
-        console.error(error);
+        console.error('회원가입 예외:', error);
         alert('회원가입 처리 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
 };
@@ -57,7 +57,20 @@ export const Signin = async (email: string, password: string): Promise<void> => 
             alert('아이디와 비밀번호를 확인해주세요');
         }
     } catch (error) {
-        console.error(error);
+        console.error('로그인 예외:', error);
         alert('로그인 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+};
+
+export const Logout = async (): Promise<void> => {
+    try {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.error('로그아웃 에러:', error.message);
+            alert('로그아웃 중 오류가 발생했습니다.');
+        }
+    } catch (error) {
+        console.error('로그아웃 예외:', error);
+        alert('로그아웃 중 오류가 발생했습니다.');
     }
 };
