@@ -3,7 +3,6 @@ import { useAuth } from '../../hooks/useAuth.ts';
 
 const Home = () => {
     const { user } = useAuth();
-    console.log('user', user);
 
     return (
         <>

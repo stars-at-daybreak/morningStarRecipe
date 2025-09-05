@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import supabase from '../../services/SupabaseClient.ts';
+import { signin } from '../../services/supabaseUsers.ts';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -7,15 +7,7 @@ const Login = () => {
 
     const signInHandler = async (e: React.FormEvent) => {
         e.preventDefault();
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            console.error(error);
-            alert('아이디와 비밀번호를 확인해주세요');
-        }
+        await signin(email, password);
     };
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -24,17 +16,19 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={signInHandler}>
-            <div>
-                <label htmlFor='email'>이메일:</label>
-                <input type='email' id='email' value={email} onChange={inputHandler} />
-            </div>
-            <div>
-                <label htmlFor='password'>비밀번호</label>
-                <input type='password' id='password' value={password} onChange={inputHandler} />
-            </div>
-            <button type='submit'>로그인</button>
-        </form>
+        <>
+            <form onSubmit={signInHandler}>
+                <div>
+                    <label htmlFor='email'>이메일:</label>
+                    <input type='email' id='email' value={email} onChange={inputHandler} />
+                </div>
+                <div>
+                    <label htmlFor='password'>비밀번호</label>
+                    <input type='password' id='password' value={password} onChange={inputHandler} />
+                </div>
+                <button type='submit'>로그인</button>
+            </form>
+        </>
     );
 };
 

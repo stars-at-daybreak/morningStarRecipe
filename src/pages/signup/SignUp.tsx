@@ -1,47 +1,65 @@
-import React, { useState } from 'react';
-import supabase from '../../services/SupabaseClient.ts';
+import React from 'react';
+import { signup } from '../../services/supabaseUsers.ts';
 
 const SignUp = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const signUpHandler = async (e: React.FormEvent) => {
+    const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            const { error } = await supabase.auth.signUp({
-                email,
-                password,
-            });
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData.entries());
 
-            if (error) {
-                console.error('에러발생:', error.message);
-                if (error.message === 'User already registered') {
-                    alert('이미 존재하는 계정입니다');
-                } else {
-                    alert('아이디와 비밀번호를 확인해주세요');
-                }
-            } else {
-                alert('회원가입에 성공하였습니다!');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+        const signupData = {
+            email: data.email as string,
+            password: data.password as string,
+            options: {
+                nickname: data.nickname as string,
+                name: data.name as string,
+                birthDate: data.birthDate as string,
+                gender: data.gender as string,
+                isForeigner: data.isForeigner === 'true',
+                agreeToTerms: formData.has('agreeToTerms'),
+            },
+        };
 
-    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        if (e.target.type === 'email') setEmail(e.target.value);
-        if (e.target.type === 'password') setPassword(e.target.value);
+        await signup(signupData);
     };
 
     return (
         <form onSubmit={signUpHandler}>
             <div>
                 <label htmlFor='email'>이메일:</label>
-                <input type='email' id='email' value={email} onChange={inputHandler} />
+                <input type='email' name='email' required />
             </div>
             <div>
                 <label htmlFor='password'>비밀번호</label>
-                <input type='password' id='password' value={password} onChange={inputHandler} />
+                <input type='password' name='password' required />
+            </div>
+            <div>
+                <label htmlFor='nickname'>닉네임</label>
+                <input type='text' name='nickname' required />
+            </div>
+            <div>
+                <label htmlFor='name'>이름</label>
+                <input type='text' name='name' required />
+            </div>
+            <div>
+                <label htmlFor='birthDate'>생년월일</label>
+                <input type='number' name='birthDate' required />
+            </div>
+            <div>
+                <label htmlFor='male'>남</label>
+                <input type='radio' id='male' name='gender' value='M' required />
+                <label htmlFor='female'>여</label>
+                <input type='radio' id='female' name='gender' value='F' required />
+            </div>
+            <div>
+                <label htmlFor='korean'>내국인</label>
+                <input type='radio' id='korean' name='isForeigner' value='false' required />
+                <label htmlFor='korean'>외국인</label>
+                <input type='radio' id='foreigner' name='isForeigner' value='true' required />
+            </div>
+            <div>
+                <label htmlFor='agreeToTerms'>동의여부</label>
+                <input type='checkbox' name='agreeToTerms' required />
             </div>
             <button type='submit'>회원가입</button>
         </form>
