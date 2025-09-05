@@ -1,20 +1,11 @@
-import supabase from '../services/SupabaseClient.ts';
 import { useAuth } from '../hooks/useAuth.ts';
+import { logout } from '../services/supabaseUsers.ts';
 
 const HeaderUserProfile = () => {
     const { user, loading } = useAuth();
 
     const signOutHandler = async () => {
-        try {
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                console.error('로그아웃 에러:', error.message);
-                alert('로그아웃 중 오류가 발생했습니다.');
-            }
-        } catch (error) {
-            console.error('로그아웃 예외:', error);
-            alert('로그아웃 중 오류가 발생했습니다.');
-        }
+        await logout();
     };
 
     return (
