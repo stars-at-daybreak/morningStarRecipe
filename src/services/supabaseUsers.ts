@@ -1,5 +1,5 @@
 import supabase from './supabaseClient.ts';
-import type { Signup, SignupData } from '../types/users.ts';
+import type { Signup, SignupData, UpdateUser, UpdateUserData } from '../types/users.ts';
 
 export const signup: Signup = async (signupData: SignupData) => {
     try {
@@ -72,5 +72,49 @@ export const logout = async (): Promise<void> => {
     } catch (error) {
         console.error('로그아웃 예외:', error);
         alert('로그아웃 중 오류가 발생했습니다.');
+    }
+};
+
+export const updateUser: UpdateUser = async (updateData: UpdateUserData): Promise<boolean> => {
+    try {
+        const { password, metadata } = updateData;
+
+        const {
+            data: { user },
+            error: getUserError,
+        } = await supabase.auth.getUser();
+
+        if (getUserError || !user) {
+            alert('사용자 정보를 가져올 수 없습니다.');
+            return false;
+        }
+
+        const updatedMetadata = {
+            ...metadata,
+            agreeToTerms: user.user_metadata.agreeToTerms,
+        };
+
+        const { error } = await supabase.auth.updateUser({
+            ...(password && { password }),
+            data: updatedMetadata,
+        });
+
+        if (error) {
+            console.error('사용자 정보 업데이트 실패:', error);
+
+            if (error.code === 'weak_password') {
+                alert('비밀번호는 최소 6자 이상이어야 합니다.');
+            } else {
+                alert('정보 업데이트에 실패했습니다. 다시 시도해주세요.');
+            }
+            return false;
+        }
+
+        alert('사용자 정보가 성공적으로 업데이트되었습니다.');
+        return true;
+    } catch (error) {
+        console.error('사용자 정보 업데이트 예외:', error);
+        alert('정보 업데이트 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        return false;
     }
 };
