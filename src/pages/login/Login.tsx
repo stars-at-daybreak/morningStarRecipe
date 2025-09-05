@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Signin } from '../../services/supabaseUsers.ts';
+import { signin } from '../../services/supabaseUsers.ts';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -7,7 +7,7 @@ const Login = () => {
 
     const signInHandler = async (e: React.FormEvent) => {
         e.preventDefault();
-        await Signin(email, password);
+        await signin(email, password);
     };
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {

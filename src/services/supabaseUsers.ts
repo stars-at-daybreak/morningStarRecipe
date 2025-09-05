@@ -45,7 +45,7 @@ export const signup: Signup = async (signupData: SignupData) => {
     }
 };
 
-export const Signin = async (email: string, password: string): Promise<void> => {
+export const signin = async (email: string, password: string): Promise<void> => {
     try {
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -62,7 +62,7 @@ export const Signin = async (email: string, password: string): Promise<void> => 
     }
 };
 
-export const Logout = async (): Promise<void> => {
+export const logout = async (): Promise<void> => {
     try {
         const { error } = await supabase.auth.signOut();
         if (error) {

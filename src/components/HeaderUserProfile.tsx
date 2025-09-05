@@ -1,11 +1,11 @@
 import { useAuth } from '../hooks/useAuth.ts';
-import { Logout } from '../services/supabaseUsers.ts';
+import { logout } from '../services/supabaseUsers.ts';
 
 const HeaderUserProfile = () => {
     const { user, loading } = useAuth();
 
     const signOutHandler = async () => {
-        await Logout();
+        await logout();
     };
 
     return (
