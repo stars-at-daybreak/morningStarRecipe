@@ -118,3 +118,26 @@ export const updateUser: UpdateUser = async (updateData: UpdateUserData): Promis
         return false;
     }
 };
+
+export const withdraw = async () => {
+    try {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user?.id) {
+            throw Error('user의 id 정보를 찾을 수 없습니다.');
+        }
+        const { error } = await supabase.rpc('delete_user');
+
+        if (error) {
+            throw error;
+        }
+
+        await supabase.auth.signOut();
+        alert('회원 탈퇴가 완료되었습니다.');
+    } catch (error) {
+        console.error('회원 탈퇴 실패:', error);
+        alert('회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+};
