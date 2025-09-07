@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { signup } from '../../services/supabaseUsers.ts';
+import EmailAuthButton from '../../components/EmailAuthButton.tsx';
 
 const SignUp = () => {
+    const [email, setEmail] = useState('');
+
     const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -27,8 +30,15 @@ const SignUp = () => {
         <form onSubmit={signUpHandler}>
             <div>
                 <label htmlFor='email'>이메일:</label>
-                <input type='email' name='email' required />
+                <input
+                    type='email'
+                    name='email'
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    required
+                />
             </div>
+            <EmailAuthButton email={email} />
             <div>
                 <label htmlFor='password'>비밀번호</label>
                 <input type='password' name='password' required />
