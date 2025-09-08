@@ -64,12 +64,12 @@ const SignUp = () => {
             <div>
                 <label htmlFor='korean'>내국인</label>
                 <input type='radio' id='korean' name='isForeigner' value='false' required />
-                <label htmlFor='korean'>외국인</label>
+                <label htmlFor='foreigner'>외국인</label>
                 <input type='radio' id='foreigner' name='isForeigner' value='true' required />
             </div>
             <div>
                 <label htmlFor='agreeToTerms'>동의여부</label>
-                <input type='checkbox' name='agreeToTerms' required />
+                <input type='checkbox' id='agreeToTerms' name='agreeToTerms' required />
             </div>
             <button type='submit'>회원가입</button>
         </form>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../hooks/useAuth.ts';
 import { updateUser } from '../../services/supabaseUsers.ts';
 import { useNavigate } from 'react-router-dom';
+import useUserStore from '../../stores/useUserStore.ts';
 
 const ProfileEditForm = () => {
-    const { user } = useAuth();
+    const { user } = useUserStore();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 

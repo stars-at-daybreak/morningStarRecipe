@@ -1,3 +1,5 @@
+import type { User } from '@supabase/supabase-js';
+
 export interface SignupData {
     email: string;
     password: string;
@@ -23,3 +25,16 @@ export interface UpdateUserData {
     };
 }
 export type UpdateUser = (updateData: UpdateUserData) => Promise<boolean>;
+
+export interface UserState {
+    user: User | null;
+    isLoading: boolean;
+    isAuthenticated: boolean;
+}
+
+export interface UserActions {
+    setUser: (user: User | null) => void;
+    setLoading: (isLoading: boolean) => void;
+    clearUser: () => void;
+    updateUserProfile: (profile: Partial<User>) => void;
+}
