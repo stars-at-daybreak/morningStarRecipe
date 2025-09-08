@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import useUserStore from '../../stores/useUserStore.ts';
+import MainRank from '../../components/MainRank.tsx';
 
 const Home = () => {
     const { user } = useUserStore();
@@ -27,6 +28,7 @@ const Home = () => {
                     </>
                 </ul>
             )}
+            <MainRank />
         </>
     );
 };
