@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../services/supabaseClient';
-import type { Tables } from '../types/supabase';
+import supabase from '../../services/supabaseClient';
+import type { Tables } from '../../types/supabase';
 const MainRank: React.FC = () => {
     const apiUrl: string = import.meta.env.VITE_API_BASE_URL;
     const [posts, setPosts] = useState<Tables<'posts'>[]>([]); // 배열 타입 추가
@@ -14,8 +14,8 @@ const MainRank: React.FC = () => {
             const { data, error } = await supabase
                 .from('posts')
                 .select(`*`)
-                .order('like_count', { ascending: false })
-                .limit(3);
+                .order('created_at', { ascending: false })
+                .limit(6);
 
             if (error) throw error;
 
@@ -53,7 +53,7 @@ const MainRank: React.FC = () => {
     // 데이터 렌더링
     return (
         <div className='p-4'>
-            <h2 className='text-2xl font-bold mb-6'>🏆 인기 게시물 랭킹</h2>
+            <h2 className='text-2xl font-bold mb-6'>🏆 최근 게시물 랭킹</h2>
 
             {posts.length > 0 ? (
                 <div className='space-y-4'>
@@ -105,16 +105,6 @@ const MainRank: React.FC = () => {
             ) : (
                 <div className='text-center p-8 text-gray-500'>게시물이 없습니다.</div>
             )}
-
-            {/* 새로고침 버튼 */}
-            <div className='mt-6 text-center'>
-                <button
-                    onClick={fetchData}
-                    className='px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
-                >
-                    새로고침
-                </button>
-            </div>
         </div>
     );
 };
