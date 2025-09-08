@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../../services/supabaseClient';
 import type { Tables } from '../../types/supabase';
-const Recent: React.FC = () => {
+const Sharing: React.FC = () => {
     const apiUrl: string = import.meta.env.VITE_API_BASE_URL;
     const [posts, setPosts] = useState<Tables<'posts'>[]>([]); // 배열 타입 추가
     const [loading, setLoading] = useState(true);
@@ -14,8 +14,9 @@ const Recent: React.FC = () => {
             const { data, error } = await supabase
                 .from('posts')
                 .select(`*`)
+                .eq('post_type', 'share')
                 .order('created_at', { ascending: false })
-                .limit(6);
+                .limit(3);
 
             if (error) throw error;
 
@@ -53,7 +54,7 @@ const Recent: React.FC = () => {
     // 데이터 렌더링
     return (
         <div className='p-4'>
-            <h2 className='text-2xl font-bold mb-6'>🏆 최근 게시물 랭킹</h2>
+            <h2 className='text-2xl font-bold mb-6'>🏆 나눔 게시물 </h2>
 
             {posts.length > 0 ? (
                 <div className='space-y-4'>
@@ -109,4 +110,4 @@ const Recent: React.FC = () => {
     );
 };
 
-export default Recent;
+export default Sharing;
