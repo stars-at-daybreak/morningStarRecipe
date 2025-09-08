@@ -1,8 +1,8 @@
-import { useAuth } from '../hooks/useAuth.ts';
 import { logout } from '../services/supabaseUsers.ts';
+import useUserStore from '../stores/useUserStore.ts';
 
 const HeaderUserProfile = () => {
-    const { user, loading } = useAuth();
+    const { user, isLoading } = useUserStore();
 
     const signOutHandler = async () => {
         await logout();
@@ -10,7 +10,7 @@ const HeaderUserProfile = () => {
 
     return (
         <div>
-            {loading && <p>로딩중...</p>}
+            {isLoading && <p>로딩중...</p>}
             {user && (
                 <>
                     <p>환영합니다, {user?.email}님!</p>
