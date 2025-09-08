@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.ts';
+import useUserStore from '../../stores/useUserStore.ts';
 
 const Home = () => {
-    const { user } = useAuth();
+    const { user } = useUserStore();
 
     return (
         <>
