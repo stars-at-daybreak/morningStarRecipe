@@ -7,7 +7,6 @@ const Header = () => {
 
     const isMobile = deviceType === 'mobile';
     const isTablet = deviceType === 'tablet';
-    console.log('Header State:', { title, showBackButton, isMobile, isTablet });
     return (
         <header>
             <HeaderUserProfile />

@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import useUserStore from '../../stores/useUserStore.ts';
+import Rank from '../../components/Main/Rank.tsx';
+import Sharing from '../../components/Main/Sharing.tsx';
+import Recent from '../../components/Main/Recent.tsx';
 
 const Home = () => {
     const { user } = useUserStore();
@@ -27,6 +30,9 @@ const Home = () => {
                     </>
                 </ul>
             )}
+            <Rank />
+            <Sharing />
+            <Recent />
         </>
     );
 };
