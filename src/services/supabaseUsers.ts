@@ -143,3 +143,25 @@ export const withdraw = async () => {
         alert('회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
 };
+
+export const updatePassword = async (email: string, newPassword: string): Promise<boolean> => {
+    try {
+        const { error } = await supabase.rpc('update_user_password', {
+            new_password: newPassword,
+            user_email: email,
+        });
+
+        if (error) {
+            console.error('비밀번호 업데이트 실패:', error);
+            alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+            return false;
+        }
+
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        return true;
+    } catch (error) {
+        console.error('비밀번호 변경 예외:', error);
+        alert('비밀번호 변경 중 예기치 못한 오류가 발생했습니다.');
+        return false;
+    }
+};
