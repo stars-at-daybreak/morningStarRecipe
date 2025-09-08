@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import supabase from '../services/supabaseClient';
-import type { BookmarkState } from '../types/boomark.type';
-import type { BookmarkedPost } from '../types/boomark.type';
+import type { BookmarkState } from '../types/bookmark.types';
+import type { BookmarkedPost } from '../types/bookmark.types';
 export const useBookmarkStore = create<BookmarkState>()(
     devtools(
         set => ({
@@ -58,20 +58,3 @@ export const useBookmarkStore = create<BookmarkState>()(
         }
     )
 );
-
-// 찜 관련 커스텀 훅
-export const useBookmarks = () => {
-    const bookmarks = useBookmarkStore(state => state.bookmarks);
-    const loading = useBookmarkStore(state => state.loading);
-    const error = useBookmarkStore(state => state.error);
-    const fetchBookmarks = useBookmarkStore(state => state.fetchBookmarks);
-    const clearBookmarks = useBookmarkStore(state => state.clearBookmarks);
-
-    return {
-        bookmarks,
-        loading,
-        error,
-        fetchBookmarks,
-        clearBookmarks,
-    };
-};

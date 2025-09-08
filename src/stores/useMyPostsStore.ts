@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import supabase from '../services/supabaseClient';
-import type { MyPost, MyPostsState, UseMyPostsReturn } from '../types/myPosts.type';
+import type { MyPost, MyPostsState } from '../types/myPosts.types';
 
 export const useMyPostsStore = create<MyPostsState>()(
     devtools(
@@ -67,20 +67,3 @@ export const useMyPostsStore = create<MyPostsState>()(
         }
     )
 );
-
-// 내 게시글 관련 커스텀 훅
-export const useMyPosts = (): UseMyPostsReturn => {
-    const myPosts = useMyPostsStore(state => state.myPosts);
-    const loading = useMyPostsStore(state => state.loading);
-    const error = useMyPostsStore(state => state.error);
-    const fetchMyPosts = useMyPostsStore(state => state.fetchMyPosts);
-    const clearMyPosts = useMyPostsStore(state => state.clearMyPosts);
-
-    return {
-        myPosts,
-        loading,
-        error,
-        fetchMyPosts,
-        clearMyPosts,
-    };
-};
