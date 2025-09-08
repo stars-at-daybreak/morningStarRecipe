@@ -21,7 +21,11 @@ const App = () => {
 };
 
 const AppRoutes = () => {
-    const { user } = useUserStore();
+    const { user, isLoading } = useUserStore();
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Routes>
