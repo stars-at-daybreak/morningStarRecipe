@@ -7,6 +7,8 @@ import { AuthProvider } from './providers/AuthProvider.tsx';
 import Mypage from './pages/mypage/Mypage.tsx';
 import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
+import Recipes from './pages/recipes/Recipes.tsx';
+import RecipeForm from './components/RecipeForm.tsx';
 
 const App = () => {
     return (
@@ -35,6 +37,8 @@ const AppRoutes = () => {
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
                 <Route path='/mypage/edit' element={!user ? <Login /> : <ProfileEditForm />} />
+                <Route path='/recipes' element={<Recipes />} />
+                <Route path='/recipes/form' element={<RecipeForm />} />
             </Route>
         </Routes>
     );
