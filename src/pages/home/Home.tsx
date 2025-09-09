@@ -6,6 +6,7 @@ import Recent from '../../components/Main/Recent.tsx';
 import SearchPage from '../search/Search.tsx';
 import PasswordFind from '../../components/PasswordFind.tsx';
 import SearchForm from '../../components/SearchForm.tsx';
+import Recipes from '../recipes/Recipes.tsx';
 
 const Home = () => {
     const { user } = useUserStore();
@@ -44,6 +45,7 @@ const Home = () => {
             <Rank />
             <Sharing />
             <Recent />
+            <Recipes />
         </>
     );
 };
