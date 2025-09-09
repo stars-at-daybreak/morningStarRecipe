@@ -1,5 +1,6 @@
 import supabase from './supabaseClient.ts';
 import type { TablesInsert, TablesUpdate } from '../types/supabase.ts';
+import type { RecipePost } from '../types/myPosts.types.ts';
 
 export const createRecipe = async (post: TablesInsert<'posts'>) => {
     try {
@@ -20,5 +21,16 @@ export const updateRecipe = async (id: string, post: TablesUpdate<'posts'>, user
     } catch (error) {
         console.error('레시피 저장 중 에러 발생:', error);
         return false;
+    }
+};
+
+export const fetchRecipe = async (id: string): Promise<RecipePost | null> => {
+    try {
+        const { data, error } = await supabase.from('posts').select('*').eq('id', id).single();
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error('레시피 조회 중 에러 발생:', error);
+        return null;
     }
 };
