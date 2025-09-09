@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createRecipe, updateRecipe } from '../services/supabaseRecipes.ts';
+import { createRecipe, updateRecipe } from '../services/supabasePosts.ts';
 import useUserStore from '../stores/useUserStore.ts';
 
 const RecipeForm = ({ type, recipeId }: { type: 'create' | 'update'; recipeId?: string }) => {
