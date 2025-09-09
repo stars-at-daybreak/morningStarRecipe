@@ -1,12 +1,52 @@
-import { useBookmarkStore } from '../stores/useBookmarkStore';
-import type { UseBookmarksReturn } from '../types/bookmark.types';
+import { useState, useCallback } from 'react';
+import supabase from '../services/supabaseClient';
+import type { BookmarkedPost, UseBookmarksReturn } from '../types/bookmark.types';
 
 export const useBookmarks = (): UseBookmarksReturn => {
-    const bookmarks = useBookmarkStore(state => state.bookmarks);
-    const loading = useBookmarkStore(state => state.loading);
-    const error = useBookmarkStore(state => state.error);
-    const fetchBookmarks = useBookmarkStore(state => state.fetchBookmarks);
-    const clearBookmarks = useBookmarkStore(state => state.clearBookmarks);
+    const [bookmarks, setBookmarks] = useState<BookmarkedPost[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    // 찜한 게시글 목록 가져오기
+    const fetchBookmarks = useCallback(async (userId: string) => {
+        if (!userId) return;
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            const { data, error } = await supabase
+                .from('post_bookmarks')
+                .select(
+                    `*,
+                    posts:post_id (
+                        *,
+                        categories:category_id (
+                            name
+                        )
+                    )`
+                )
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            const bookmarksData = data as BookmarkedPost[];
+            setBookmarks(bookmarksData);
+        } catch (error) {
+            console.error('찜 목록 조회 실패:', error);
+            setError(error instanceof Error ? error.message : '찜 목록을 불러오는데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    // 찜 목록 초기화 (로그아웃 시 사용)
+    const clearBookmarks = useCallback(() => {
+        setBookmarks([]);
+        setLoading(false);
+        setError(null);
+    }, []);
 
     return {
         bookmarks,
@@ -19,10 +59,10 @@ export const useBookmarks = (): UseBookmarksReturn => {
 
 // 사용법
 // import React, { useEffect } from 'react';
-// import { useAuth } from '../../hooks/useAuth';
+// import useUserStore from './stores/useUserStore.ts';
 // import { useBookmarks } from '../../hooks/useBookmark';
 // const BookmarkPage = () => {
-//     const { user } = useAuth();
+//     const { user } = useUserStore();
 //     const { bookmarks, loading, error, fetchBookmarks } = useBookmarks();
 
 //     useEffect(() => {
