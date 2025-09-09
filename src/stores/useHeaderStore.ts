@@ -8,7 +8,7 @@ const DEFAULT_DEVICE_TYPE: DeviceType = 'mobile';
 
 // 디바이스 타입 감지 함수
 const detectDeviceType = (): DeviceType => {
-    if (typeof window === 'undefined') return 'mobile';
+    if (typeof window === 'undefined') return DEFAULT_DEVICE_TYPE;
 
     const width = window.innerWidth;
     if (width < 768) return 'mobile';

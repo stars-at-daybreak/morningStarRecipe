@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from 'react';
 import type { Tables } from '../types/supabase';
 import supabase from '../services/supabaseClient';
 import type {
-    PageType,
     RecipeSortBy,
     ShareStatus,
     PostType,
