@@ -1,6 +1,6 @@
 export type PageType = 'recipe' | 'share' | 'all';
 
-export type RecipeSortBy = 'recommended' | 'popular';
+export type RecipeSortBy = 'recommended' | 'popular' | 'recently';
 
 export type ShareStatus = 'available' | 'reserved' | 'completed' | 'cancelled' | 'all';
 
@@ -59,6 +59,7 @@ export const getSortLabel = (sort: RecipeSortBy): string => {
     const labels = {
         recommended: '추천순',
         popular: '인기순',
+        recently: '최신순',
     };
     return labels[sort] || sort;
 };
