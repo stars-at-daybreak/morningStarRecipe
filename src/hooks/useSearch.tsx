@@ -60,8 +60,10 @@ const useSearch = (options: UseSearchOptions) => {
 
     // 페이지 타입 변경 시 파라미터 초기화
     useEffect(() => {
-        const defaultParams = getDefaultParams();
-        setSearchParams(defaultParams);
+        if (!initialParams || Object.keys(initialParams).length === 0) {
+            const defaultParams = getDefaultParams();
+            setSearchParams(defaultParams);
+        }
     }, [pageType, getDefaultParams]);
 
     // 검색 실행
