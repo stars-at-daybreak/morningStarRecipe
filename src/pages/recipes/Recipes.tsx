@@ -10,7 +10,7 @@ const Recipes = ({ query }: { query?: string }) => {
         },
     });
 
-    const handleFIlter = (filter: RecipeSortBy) => {
+    const handleFilter = (filter: RecipeSortBy) => {
         updateRecipeSortBy(filter);
     };
 
@@ -18,9 +18,9 @@ const Recipes = ({ query }: { query?: string }) => {
         <div>
             <h2>~~~~~~~~~~~~~~레시피 목록~~~~~~~~~~~~~~</h2>
             <NavLink to='/recipes/form'>레시피 등록하기</NavLink>
-            <button onClick={() => handleFIlter('recently')}>최신순</button>
-            <button onClick={() => handleFIlter('recommended')}>추천순</button>
-            <button onClick={() => handleFIlter('popular')}>인기순</button>
+            <button onClick={() => handleFilter('recently')}>최신순</button>
+            <button onClick={() => handleFilter('recommended')}>추천순</button>
+            <button onClick={() => handleFilter('popular')}>인기순</button>
             <div>
                 <label htmlFor='search'>검색어</label>
                 <input id='search' defaultValue={query} onChange={e => updateSearchTerm(e.target.value)} />
@@ -28,15 +28,15 @@ const Recipes = ({ query }: { query?: string }) => {
             {loading ? (
                 <div>로딩 중...</div>
             ) : (
-                searchList.map(item => (
-                    <>
-                        <ul key={item.id}>
-                            <li>
+                <>
+                    <ul>
+                        {searchList.map(item => (
+                            <li key={item.id}>
                                 <Link to={`/recipes/${item.id}`}>{item.title}</Link>
                             </li>
-                        </ul>
-                    </>
-                ))
+                        ))}
+                    </ul>
+                </>
             )}
         </div>
     );

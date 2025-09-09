@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { createPost, updatePost } from '../services/supabasePosts.ts';
 import useUserStore from '../stores/useUserStore.ts';
+import { useLocation } from 'react-router-dom';
 
-const RecipeForm = ({ type, recipeId }: { type: 'create' | 'update'; recipeId?: string }) => {
+const RecipeForm = () => {
+    const location = useLocation();
+    const { type, recipeId } = location.state || { type: 'create' };
     const [formData, setFormData] = useState({
         title: '',
         category_id: '7ddc5ac7-0105-4d9d-be47-46f3ea5f95ba',
@@ -33,7 +36,7 @@ const RecipeForm = ({ type, recipeId }: { type: 'create' | 'update'; recipeId?: 
         if (type === 'create') {
             isSuccess = await createPost(recipeData);
         } else if (type === 'update' && recipeId) {
-            isSuccess = await updatePost(recipeId, recipeData, user.id);
+            isSuccess = await updatePost({ ...recipeData, id: recipeId });
         }
 
         if (isSuccess) {

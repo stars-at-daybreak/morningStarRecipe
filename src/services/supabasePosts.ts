@@ -13,9 +13,9 @@ export const createPost = async (post: TablesInsert<'posts'>) => {
     }
 };
 
-export const updatePost = async (id: string, post: TablesUpdate<'posts'>, userId: string) => {
+export const updatePost = async (post: TablesUpdate<'posts'>) => {
     try {
-        const { error } = await supabase.from('posts').update(post).eq('id', id).eq('user_id', userId);
+        const { error } = await supabase.from('posts').update(post).eq('id', post.id).eq('user_id', post.user_id);
         if (error) throw error;
         return true;
     } catch (error) {
@@ -37,5 +37,16 @@ export const fetchPost = async (id: string): Promise<RecipePost | null> => {
     } catch (error) {
         console.error('게시글 상세 조회 중 에러 발생:', error);
         return null;
+    }
+};
+
+export const deletePost = async (id: string, userId: string) => {
+    try {
+        const { error } = await supabase.from('posts').delete().eq('id', id).eq('user_id', userId);
+        if (error) throw error;
+        return true;
+    } catch (error) {
+        console.error('게시글 삭제 중 에러 발생:', error);
+        return false;
     }
 };
