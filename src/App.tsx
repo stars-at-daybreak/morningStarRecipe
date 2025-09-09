@@ -9,6 +9,7 @@ import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './components/RecipeForm.tsx';
+import RecipeDetail from './components/RecipeDetail.tsx';
 
 const App = () => {
     return (
@@ -42,6 +43,7 @@ const AppRoutes = () => {
                     path='/recipes/form'
                     element={<RecipeForm type='update' recipeId='bb1f2ee9-5921-4c28-b686-dd295127ec19' />}
                 />
+                <Route path='/recipes/:id' element={<RecipeDetail />} />
             </Route>
         </Routes>
     );
