@@ -38,7 +38,7 @@ const AppRoutes = () => {
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
                 <Route path='/mypage/edit' element={!user ? <Login /> : <ProfileEditForm />} />
                 <Route path='/recipes' element={<Recipes />} />
-                <Route path='/recipes/form' element={<RecipeForm />} />
+                <Route path='/recipes/form' element={<RecipeForm type='create' />} />
             </Route>
         </Routes>
     );

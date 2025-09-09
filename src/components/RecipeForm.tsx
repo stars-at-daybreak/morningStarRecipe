@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { createRecipe } from '../services/supabaseRecipes.ts';
+import { createRecipe, updateRecipe } from '../services/supabaseRecipes.ts';
 import useUserStore from '../stores/useUserStore.ts';
 
-const RecipeForm = () => {
+const RecipeForm = ({ type, recipeId }: { type: 'create' | 'update'; recipeId?: string }) => {
     const [formData, setFormData] = useState({
         title: '',
         category_id: '7ddc5ac7-0105-4d9d-be47-46f3ea5f95ba',
@@ -29,12 +29,19 @@ const RecipeForm = () => {
         };
 
         try {
-            const isSuccess = await createRecipe(recipeData);
+            let isSuccess;
+
+            if (type === 'create') {
+                isSuccess = await createRecipe(recipeData);
+            } else if (type === 'update' && recipeId) {
+                isSuccess = await updateRecipe(recipeId, recipeData, user.id);
+            }
+
             if (isSuccess) {
-                alert('레시피 등록 성공');
+                alert('레시피 저장을 완료하였습니다.');
             }
         } catch (error) {
-            console.error('레시피 등록 실패:', error);
+            console.error('레시피 저장 중 오류가 발생하였습니다.:', error);
         }
     };
 
