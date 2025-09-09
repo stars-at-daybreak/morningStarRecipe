@@ -50,3 +50,38 @@ export const sendVerificationCode = async (
         };
     }
 };
+
+export const verifyEmailCode = async (email: string, code: string): Promise<boolean> => {
+    try {
+        const { data, error } = await supabase
+            .from('email_verifications')
+            .select('*')
+            .eq('email', email)
+            .eq('code', code)
+            .gt('expires_at', new Date().toISOString())
+            .single();
+
+        if (error || !data) {
+            console.error('인증번호 검증 실패:', error);
+            alert('인증번호가 만료되었거나 잘못되었습니다.');
+            return false;
+        }
+
+        const { error: deleteError } = await supabase
+            .from('email_verifications')
+            .delete()
+            .eq('email', email)
+            .eq('code', code);
+
+        if (deleteError) {
+            console.error('사용된 인증번호 삭제 실패:', deleteError);
+        }
+
+        alert('이메일 인증이 완료되었습니다.');
+        return true;
+    } catch (error) {
+        console.error('이메일 인증 예외:', error);
+        alert('인증 처리 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        return false;
+    }
+};

@@ -6,10 +6,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { setUser } = useUserStore();
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null);
-        });
-
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -17,7 +13,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
 
         return () => subscription.unsubscribe();
-    }, [setUser]);
+    }, []);
 
     return <>{children}</>;
 }
