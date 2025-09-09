@@ -94,8 +94,10 @@ const useSearch = (options: UseSearchOptions) => {
             if (params.pageType === 'recipe') {
                 if (params.sortBy === 'popular') {
                     query = query.order('bookmark_count', { ascending: false });
-                } else {
+                } else if (params.sortBy === 'recommended') {
                     query = query.order('like_count', { ascending: false });
+                } else if (params.sortBy === 'recently') {
+                    query = query.order('created_at', { ascending: false });
                 }
             } else if (params.pageType === 'share') {
                 if (params.shareStatus && params.shareStatus !== 'all') {
