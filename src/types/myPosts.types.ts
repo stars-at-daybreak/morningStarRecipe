@@ -18,7 +18,7 @@ export interface UseMyPostsReturn {
 }
 
 //레시피
-export type RecipePost = MyPost & {
+export type RecipePost = Omit<MyPost, 'share_status' | 'pickup_location'> & {
     post_type: 'recipe';
     difficulty: NonNullable<MyPost['difficulty']>;
     cooking_time: number;

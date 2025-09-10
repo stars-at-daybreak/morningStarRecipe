@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { createRecipe, updateRecipe } from '../services/supabasePosts.ts';
+import { createPost, updatePost } from '../services/supabasePosts.ts';
 import useUserStore from '../stores/useUserStore.ts';
+import { useLocation } from 'react-router-dom';
 
-const RecipeForm = ({ type, recipeId }: { type: 'create' | 'update'; recipeId?: string }) => {
+const RecipeForm = () => {
+    const location = useLocation();
+    const { type, recipeId } = location.state || { type: 'create' };
     const [formData, setFormData] = useState({
         title: '',
         category_id: '7ddc5ac7-0105-4d9d-be47-46f3ea5f95ba',
@@ -28,20 +31,16 @@ const RecipeForm = ({ type, recipeId }: { type: 'create' | 'update'; recipeId?: 
             user_id: user.id,
         };
 
-        try {
-            let isSuccess;
+        let isSuccess;
 
-            if (type === 'create') {
-                isSuccess = await createRecipe(recipeData);
-            } else if (type === 'update' && recipeId) {
-                isSuccess = await updateRecipe(recipeId, recipeData, user.id);
-            }
+        if (type === 'create') {
+            isSuccess = await createPost(recipeData);
+        } else if (type === 'update' && recipeId) {
+            isSuccess = await updatePost({ ...recipeData, id: recipeId });
+        }
 
-            if (isSuccess) {
-                alert('레시피 저장을 완료하였습니다.');
-            }
-        } catch (error) {
-            console.error('레시피 저장 중 오류가 발생하였습니다.:', error);
+        if (isSuccess) {
+            alert('레시피 저장을 완료하였습니다.');
         }
     };
 
