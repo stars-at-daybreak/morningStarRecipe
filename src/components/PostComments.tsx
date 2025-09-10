@@ -83,7 +83,9 @@ const PostComments = ({ postId }: { postId: string }) => {
                 {comments?.map(comment => (
                     <li key={comment.id}>
                         {comment.content}
-                        <p>닉네임: {comment.user_nickname}</p>
+                        <p>
+                            닉네임: {comment.user_nickname}레벨: {comment?.user_level_title}
+                        </p>
                         <button type='button' onClick={() => handleUpdate(comment.id, comment.content)}>
                             수정
                         </button>

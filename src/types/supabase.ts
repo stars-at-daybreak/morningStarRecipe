@@ -205,7 +205,7 @@ export type Database = {
       posts: {
         Row: {
           bookmark_count: number | null
-          category_id: string
+          category_id: string | null
           content: string | null
           cooking_time: number | null
           created_at: string | null
@@ -227,7 +227,7 @@ export type Database = {
         }
         Insert: {
           bookmark_count?: number | null
-          category_id: string
+          category_id?: string | null
           content?: string | null
           cooking_time?: number | null
           created_at?: string | null
@@ -249,7 +249,7 @@ export type Database = {
         }
         Update: {
           bookmark_count?: number | null
-          category_id?: string
+          category_id?: string | null
           content?: string | null
           cooking_time?: number | null
           created_at?: string | null
@@ -284,6 +284,7 @@ export type Database = {
           created_at: string | null
           current_level: number
           id: string
+          title: string | null
           total_posts_created: number
           updated_at: string | null
           user_id: string
@@ -292,6 +293,7 @@ export type Database = {
           created_at?: string | null
           current_level?: number
           id?: string
+          title?: string | null
           total_posts_created?: number
           updated_at?: string | null
           user_id: string
@@ -300,6 +302,7 @@ export type Database = {
           created_at?: string | null
           current_level?: number
           id?: string
+          title?: string | null
           total_posts_created?: number
           updated_at?: string | null
           user_id?: string
@@ -334,6 +337,7 @@ export type Database = {
           post_id: string
           updated_at: string
           user_id: string
+          user_level_title: string
           user_nickname: string
         }[]
       }
@@ -360,11 +364,12 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          user_level_title: string
           user_nickname: string
         }[]
       }
       get_user_level: {
-        Args: { target_user_id: string }
+        Args: { p_user_id: string }
         Returns: {
           current_level: number
           total_posts_created: number
@@ -376,7 +381,7 @@ export type Database = {
         Returns: undefined
       }
       update_user_level_on_create: {
-        Args: { target_user_id: string }
+        Args: { p_user_id: string }
         Returns: undefined
       }
       update_user_password: {
