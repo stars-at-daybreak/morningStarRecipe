@@ -1,17 +1,22 @@
-import { createComment, deleteComment, fetchComments, updateComment } from '../services/supabaseComments.ts';
+import {
+    createComment,
+    deleteComment,
+    fetchCommentsWithUserNickname,
+    updateComment,
+} from '../services/supabaseComments.ts';
 import React, { useEffect, useState } from 'react';
-import type { Tables } from '../types/supabase.ts';
 import useUserStore from '../stores/useUserStore.ts';
+import type { CommentWithUserNickname } from '../types/comments.type.ts';
 
 const PostComments = ({ postId }: { postId: string }) => {
-    const [comments, setComments] = useState<Tables<'comments'>[] | null>(null);
+    const [comments, setComments] = useState<CommentWithUserNickname[] | null>(null);
     const [comment, setComment] = useState('');
     const [type, setType] = useState<'create' | 'update'>('create');
     const [commentId, setCommentId] = useState<string>('');
     const { user } = useUserStore();
 
     const fetchData = async (post_id: string): Promise<void> => {
-        const data = await fetchComments(post_id);
+        const data = await fetchCommentsWithUserNickname(post_id);
         setComments(data);
     };
 
@@ -78,6 +83,7 @@ const PostComments = ({ postId }: { postId: string }) => {
                 {comments?.map(comment => (
                     <li key={comment.id}>
                         {comment.content}
+                        <p>닉네임: {comment.user_nickname}</p>
                         <button type='button' onClick={() => handleUpdate(comment.id, comment.content)}>
                             수정
                         </button>

@@ -1,13 +1,12 @@
 import supabase from './supabaseClient.ts';
-import type { Tables, TablesInsert, TablesUpdate } from '../types/supabase.ts';
+import type { TablesInsert, TablesUpdate } from '../types/supabase.ts';
+import type { CommentWithUserNickname } from '../types/comments.type.ts';
 
-export const fetchComments = async (id: string): Promise<Tables<'comments'>[] | null> => {
+export const fetchCommentsWithUserNickname = async (id: string): Promise<CommentWithUserNickname[] | null> => {
     try {
-        const { data, error } = await supabase
-            .from('comments')
-            .select('*')
-            .eq('post_id', id)
-            .order('created_at', { ascending: false });
+        const { data, error } = await supabase.rpc('get_comments_with_user_nickname', {
+            post_id_param: id,
+        });
         if (error) throw error;
         return data;
     } catch (error) {
@@ -44,7 +43,11 @@ export const updateComment = async (comment: TablesUpdate<'comments'>): Promise<
 
 export const deleteComment = async (id: string, userId: string) => {
     try {
-        const { error } = await supabase.from('comments').delete().eq('id', id).eq('user_id', userId);
+        const { error } = await supabase
+            .from('comments')
+            .update({ is_comment_active: false })
+            .eq('id', id)
+            .eq('user_id', userId);
         if (error) throw error;
         return true;
     } catch (error) {
