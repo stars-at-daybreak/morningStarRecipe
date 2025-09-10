@@ -12,8 +12,8 @@ const RecipeDetail = () => {
     const { user } = useUserStore();
 
     const fetchData = async (id: string): Promise<void> => {
-        const data = await fetchPostWithUserNickname(id);
-        setRecipe(data);
+        const detail = await fetchPostWithUserNickname(id);
+        setRecipe(detail);
     };
 
     const handleUpdate = () => {
@@ -29,7 +29,7 @@ const RecipeDetail = () => {
             const isSuccess = await deletePost(id, user.id);
             if (isSuccess) {
                 alert('삭제가 완료되었습니다.');
-                navigate('/recipes'); // 레시피 목록으로 이동
+                navigate('/recipes');
             }
         }
     };
@@ -45,7 +45,10 @@ const RecipeDetail = () => {
             {user?.id === recipe?.user_id && <button onClick={handleUpdate}>게시물 수정</button>}
             {user?.id === recipe?.user_id && <button onClick={handleDelete}>게시물 삭제</button>}
             <h2>{recipe?.title}</h2>
-            <p>{recipe?.user_nickname}</p>
+            <p>
+                {recipe?.user_nickname}
+                {recipe?.user_level_title || 'LV.1 초보 집밥러'}
+            </p>
             <p>{recipe?.content}</p>
             {id && <PostComments postId={id} />}
         </div>
