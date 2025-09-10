@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { Tables } from '../types/supabase';
 import supabase from '../services/supabaseClient';
 import type {
@@ -12,114 +12,117 @@ import type {
     UseSearchOptions,
 } from '../types/search.types';
 
+// 쿼리 빌더 함수
+const buildSearchQuery = (params: SearchParams) => {
+    let query = supabase.from('posts').select('*', { count: 'exact' });
+
+    // 기본 필터링
+    if (params.pageType !== 'all') {
+        query = query.eq('post_type', params.pageType);
+    }
+
+    if (params.searchTerm) {
+        query = query.or(`title.ilike.%${params.searchTerm}%`);
+    }
+
+    if (params.category) {
+        query = query.eq('category', params.category);
+    }
+
+    // 페이지 타입별 정렬 및 필터링
+    if (params.pageType === 'recipe') {
+        const recipeParams = params as RecipeSearchParams;
+        switch (recipeParams.sortBy) {
+            case 'popular':
+                query = query.order('bookmark_count', { ascending: false });
+                break;
+            case 'recommended':
+                query = query.order('like_count', { ascending: false });
+                break;
+            case 'recently':
+                query = query.order('created_at', { ascending: false });
+                break;
+        }
+    } else if (params.pageType === 'share') {
+        const shareParams = params as ShareSearchParams;
+        if (shareParams.shareStatus && shareParams.shareStatus !== 'all') {
+            query = query.eq('share_status', shareParams.shareStatus);
+        }
+        query = query.order('created_at', { ascending: false });
+    } else if (params.pageType === 'all') {
+        const allParams = params as AllSearchParams;
+
+        if (allParams.postType && allParams.postType !== 'all') {
+            query = query.eq('post_type', allParams.postType);
+        }
+
+        if (allParams.shareStatus && allParams.shareStatus !== 'all') {
+            query = query.or(`post_type.neq.share,share_status.eq.${allParams.shareStatus}`);
+        }
+
+        if (allParams.sortBy === 'popular') {
+            query = query.order('bookmark_count', { ascending: false });
+        } else {
+            query = query.order('like_count', { ascending: false });
+        }
+    }
+
+    return query;
+};
+
+// 기본 파라미터 생성 함수
+const createDefaultParams = (pageType: string, initialParams?: Partial<SearchParams>): SearchParams => {
+    const baseParams = { searchTerm: '', category: '' };
+
+    switch (pageType) {
+        case 'recipe':
+            return { pageType: 'recipe', ...baseParams, sortBy: 'recommended', ...initialParams };
+        case 'share':
+            return { pageType: 'share', ...baseParams, shareStatus: 'all', ...initialParams };
+        case 'all':
+            return {
+                pageType: 'all',
+                ...baseParams,
+                postType: 'all',
+                sortBy: 'recommended',
+                shareStatus: 'all',
+                ...initialParams,
+            };
+        default:
+            throw new Error(`Unsupported pageType: ${pageType}`);
+    }
+};
+
 const useSearch = (options: UseSearchOptions) => {
     const { pageType, initialParams } = options;
 
-    // 상태들
+    // 중복 실행 방지
+    const lastParamsRef = useRef<string>('');
+
+    // 상태 관리
     const [searchList, setSearchList] = useState<Tables<'posts'>[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [totalCount, setTotalCount] = useState<number>(0);
 
-    // 기본 파라미터 생성
-    const getDefaultParams = useCallback((): SearchParams => {
-        switch (pageType) {
-            case 'recipe':
-                return {
-                    pageType: 'recipe',
-                    searchTerm: '',
-                    category: '',
-                    sortBy: 'recommended',
-                };
-            case 'share':
-                return {
-                    pageType: 'share',
-                    searchTerm: '',
-                    category: '',
-                    shareStatus: 'all',
-                };
-            case 'all':
-                return {
-                    pageType: 'all',
-                    searchTerm: '',
-                    category: '',
-                    postType: 'all',
-                    sortBy: 'recommended',
-                    shareStatus: 'all',
-                };
-            default:
-                throw new Error(`Unsupported pageType: ${pageType}`);
-        }
-    }, [pageType]);
+    // 검색 파라미터 초기화
+    const [searchParams, setSearchParams] = useState<SearchParams>(() => createDefaultParams(pageType, initialParams));
 
-    // 현재 검색 파라미터
-    const [searchParams, setSearchParams] = useState<SearchParams>(() => {
-        const defaultParams = getDefaultParams();
-        return { ...defaultParams, ...initialParams } as SearchParams;
-    });
-
-    // 페이지 타입 변경 시 파라미터 초기화
-    useEffect(() => {
-        if (!initialParams || Object.keys(initialParams).length === 0) {
-            const defaultParams = getDefaultParams();
-            setSearchParams(defaultParams);
-        }
-    }, [pageType, getDefaultParams]);
-
-    // 검색 실행
+    // 검색 실행 함수
     const executeSearch = useCallback(async (params: SearchParams) => {
+        const paramsString = JSON.stringify(params);
+
+        // 중복 실행 방지
+        if (lastParamsRef.current === paramsString) {
+            return;
+        }
+
+        lastParamsRef.current = paramsString;
         setLoading(true);
         setError(null);
 
         try {
-            // 실제 API 호출 부분
-            let query = supabase.from('posts').select('*', { count: 'exact' });
-
-            // 페이지 타입별 기본 필터링
-            if (params.pageType !== 'all') {
-                query = query.eq('post_type', params.pageType);
-            }
-
-            // 검색어 필터링
-            if (params.searchTerm) {
-                query = query.or(`title.ilike.%${params.searchTerm}%`);
-            }
-
-            // 카테고리 필터링
-            if (params.category) {
-                query = query.eq('category', params.category);
-            }
-
-            // 페이지 타입별 추가 필터링 및 정렬
-            if (params.pageType === 'recipe') {
-                if (params.sortBy === 'popular') {
-                    query = query.order('bookmark_count', { ascending: false });
-                } else if (params.sortBy === 'recommended') {
-                    query = query.order('like_count', { ascending: false });
-                } else if (params.sortBy === 'recently') {
-                    query = query.order('created_at', { ascending: false });
-                }
-            } else if (params.pageType === 'share') {
-                if (params.shareStatus && params.shareStatus !== 'all') {
-                    query = query.eq('share_status', params.shareStatus);
-                }
-                query = query.order('created_at', { ascending: false });
-            } else if (params.pageType === 'all') {
-                if (params.postType && params.postType !== 'all') {
-                    query = query.eq('post_type', params.postType);
-                }
-
-                if (params.shareStatus && params.shareStatus !== 'all') {
-                    query = query.or(`post_type.neq.share,share_status.eq.${params.shareStatus}`);
-                }
-
-                if (params.sortBy === 'popular') {
-                    query = query.order('bookmark_count', { ascending: false });
-                } else {
-                    query = query.order('like_count', { ascending: false });
-                }
-            }
-
+            const query = buildSearchQuery(params);
             const { data, error: searchError, count } = await query;
 
             if (searchError) throw searchError;
@@ -135,24 +138,31 @@ const useSearch = (options: UseSearchOptions) => {
         }
     }, []);
 
-    // 파라미터 변경 시 검색 실행
+    // 디바운스된 검색 실행
     useEffect(() => {
-        executeSearch(searchParams);
+        const timeoutId = setTimeout(() => {
+            executeSearch(searchParams);
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
     }, [searchParams, executeSearch]);
 
-    // 업데이트 함수들
+    // 상태 업데이트 함수들
     const updateSearchTerm = useCallback((searchTerm: string) => {
-        setSearchParams(prev => ({ ...prev, searchTerm }));
+        setSearchParams(prev => (prev.searchTerm === searchTerm ? prev : { ...prev, searchTerm }));
     }, []);
 
     const updateCategory = useCallback((category: string) => {
-        setSearchParams(prev => ({ ...prev, category }));
+        setSearchParams(prev => (prev.category === category ? prev : { ...prev, category }));
     }, []);
 
     const updateRecipeSortBy = useCallback(
         (sortBy: RecipeSortBy) => {
             if (pageType === 'recipe') {
-                setSearchParams(prev => ({ ...prev, sortBy }) as RecipeSearchParams);
+                setSearchParams(prev => {
+                    const recipeParams = prev as RecipeSearchParams;
+                    return recipeParams.sortBy === sortBy ? prev : { ...prev, sortBy };
+                });
             }
         },
         [pageType]
@@ -160,10 +170,11 @@ const useSearch = (options: UseSearchOptions) => {
 
     const updateShareStatus = useCallback(
         (shareStatus: ShareStatus) => {
-            if (pageType === 'share') {
-                setSearchParams(prev => ({ ...prev, shareStatus }) as ShareSearchParams);
-            } else if (pageType === 'all') {
-                setSearchParams(prev => ({ ...prev, shareStatus }) as AllSearchParams);
+            if (pageType === 'share' || pageType === 'all') {
+                setSearchParams(prev => {
+                    const shareParams = prev as ShareSearchParams | AllSearchParams;
+                    return shareParams.shareStatus === shareStatus ? prev : { ...prev, shareStatus };
+                });
             }
         },
         [pageType]
@@ -172,7 +183,10 @@ const useSearch = (options: UseSearchOptions) => {
     const updatePostType = useCallback(
         (postType: PostType) => {
             if (pageType === 'all') {
-                setSearchParams(prev => ({ ...prev, postType }) as AllSearchParams);
+                setSearchParams(prev => {
+                    const allParams = prev as AllSearchParams;
+                    return allParams.postType === postType ? prev : { ...prev, postType };
+                });
             }
         },
         [pageType]
@@ -181,22 +195,26 @@ const useSearch = (options: UseSearchOptions) => {
     const updateAllSortBy = useCallback(
         (sortBy: RecipeSortBy) => {
             if (pageType === 'all') {
-                setSearchParams(prev => ({ ...prev, sortBy }) as AllSearchParams);
+                setSearchParams(prev => {
+                    const allParams = prev as AllSearchParams;
+                    return allParams.sortBy === sortBy ? prev : { ...prev, sortBy };
+                });
             }
         },
         [pageType]
     );
 
+    // 유틸리티 함수들
     const resetSearch = useCallback(() => {
-        const defaultParams = getDefaultParams();
-        setSearchParams(defaultParams);
-    }, [getDefaultParams]);
+        setSearchParams(createDefaultParams(pageType));
+    }, [pageType]);
 
     const refetch = useCallback(() => {
+        lastParamsRef.current = ''; // 강제 새로고침을 위해 초기화
         executeSearch(searchParams);
     }, [executeSearch, searchParams]);
 
-    // 현재 값들 추출
+    // 현재 상태 값들
     const currentRecipeSort = pageType === 'recipe' ? (searchParams as RecipeSearchParams).sortBy : undefined;
     const currentShareStatus =
         pageType === 'share' || pageType === 'all'
@@ -206,33 +224,27 @@ const useSearch = (options: UseSearchOptions) => {
     const currentAllSort = pageType === 'all' ? (searchParams as AllSearchParams).sortBy : undefined;
 
     return {
-        // 검색 결과 데이터
+        // 데이터
         searchList,
         loading,
         error,
         totalCount,
 
-        // 현재 페이지 정보
+        // 현재 상태
         pageType,
-
-        // 현재 검색 파라미터
         searchParams,
-
-        // 페이지별 특정 파라미터
         currentRecipeSort,
         currentShareStatus,
         currentPostType,
         currentAllSort,
 
-        // 업데이트 함수들
+        // 액션 함수들
         updateSearchTerm,
         updateCategory,
         updateRecipeSortBy,
         updateShareStatus,
         updatePostType,
         updateAllSortBy,
-
-        // 유틸리티 함수들
         resetSearch,
         refetch,
     };
