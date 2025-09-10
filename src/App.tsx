@@ -10,6 +10,9 @@ import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
 import ModalTestPage from './pages/ModalTestPage.tsx';
+import Recipes from './pages/recipes/Recipes.tsx';
+import RecipeForm from './components/RecipeForm.tsx';
+import RecipeDetail from './components/RecipeDetail.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
