@@ -279,11 +279,42 @@ export type Database = {
           },
         ]
       }
+      user_levels: {
+        Row: {
+          created_at: string | null
+          current_level: number
+          id: string
+          total_posts_created: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_level?: number
+          id?: string
+          total_posts_created?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_level?: number
+          id?: string
+          total_posts_created?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      calculate_user_level: {
+        Args: { total_posts: number }
+        Returns: number
+      }
       check_user_deleted: {
         Args: { user_id: string }
         Returns: boolean
@@ -332,8 +363,20 @@ export type Database = {
           user_nickname: string
         }[]
       }
+      get_user_level: {
+        Args: { target_user_id: string }
+        Returns: {
+          current_level: number
+          total_posts_created: number
+          user_id: string
+        }[]
+      }
       soft_delete_user: {
         Args: { user_id: string }
+        Returns: undefined
+      }
+      update_user_level_on_create: {
+        Args: { target_user_id: string }
         Returns: undefined
       }
       update_user_password: {
