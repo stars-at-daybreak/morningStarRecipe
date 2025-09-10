@@ -42,7 +42,11 @@ export const fetchPost = async (id: string): Promise<RecipePost | null> => {
 
 export const deletePost = async (id: string, userId: string) => {
     try {
-        const { error } = await supabase.from('posts').delete().eq('id', id).eq('user_id', userId);
+        const { error } = await supabase
+            .from('posts')
+            .update({ is_post_active: false })
+            .eq('id', id)
+            .eq('user_id', userId);
         if (error) throw error;
         return true;
     } catch (error) {

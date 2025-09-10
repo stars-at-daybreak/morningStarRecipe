@@ -42,9 +42,9 @@ const RecipeDetail = () => {
 
     return (
         <div>
+            {recipe?.user_id},{user?.id}
             {user?.id === recipe?.user_id && <button onClick={handleUpdate}>게시물 수정</button>}
             {user?.id === recipe?.user_id && <button onClick={handleDelete}>게시물 삭제</button>}
-
             <h2>{recipe?.title}</h2>
             <p>{recipe?.content}</p>
             {id && <PostComments postId={id} />}
