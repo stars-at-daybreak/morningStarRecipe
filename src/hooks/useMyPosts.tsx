@@ -1,38 +1,18 @@
 import { useState, useCallback } from 'react';
-import supabase from '../services/supabaseClient';
 import type { MyPost, UseMyPostsReturn } from '../types/myPosts.types';
-
+import { selectMyPostsByUserId } from '../services/supabasePosts';
 export const useMyPosts = (): UseMyPostsReturn => {
     const [myPosts, setMyPosts] = useState<MyPost[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
     // 내가 작성한 게시글 목록 가져오기
     const fetchMyPosts = useCallback(async (userId: string) => {
         if (!userId) return;
-
         setLoading(true);
         setError(null);
-
         try {
-            const { data, error } = await supabase
-                .from('posts')
-                .select(
-                    `
-                    *,
-                    categories:category_id (
-                        id,
-                        name
-                    )
-                    `
-                )
-                .eq('user_id', userId)
-                .eq('is_post_active', true)
-                .eq('is_user_active', true)
-                .order('created_at', { ascending: false });
-
+            const data = await selectMyPostsByUserId(userId);
             if (error) throw error;
-
             const postsData = data as MyPost[];
             setMyPosts(postsData);
         } catch (error) {
@@ -42,14 +22,12 @@ export const useMyPosts = (): UseMyPostsReturn => {
             setLoading(false);
         }
     }, []);
-
     // 내 게시글 목록 초기화 (로그아웃 시 사용)
     const clearMyPosts = useCallback(() => {
         setMyPosts([]);
         setLoading(false);
         setError(null);
     }, []);
-
     return {
         myPosts,
         loading,

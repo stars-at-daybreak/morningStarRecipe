@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import useSearch from '../../hooks/useSearch';
 
 interface SearchPageProps {

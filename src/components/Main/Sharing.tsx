@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../../services/supabaseClient';
+import { selectRecentPostsTOP6 } from '../../services/supabasePosts';
 import type { Tables } from '../../types/supabase';
 const Sharing: React.FC = () => {
     const apiUrl: string = import.meta.env.VITE_API_BASE_URL;
@@ -10,16 +10,8 @@ const Sharing: React.FC = () => {
         try {
             setLoading(true);
             setError(null);
-
-            const { data, error } = await supabase
-                .from('posts')
-                .select(`*`)
-                .eq('post_type', 'share')
-                .order('created_at', { ascending: false })
-                .limit(3);
-
+            const data = await selectRecentPostsTOP6();
             if (error) throw error;
-
             setPosts(data || []);
         } catch (error) {
             setError('데이터를 불러오는데 실패했습니다.');

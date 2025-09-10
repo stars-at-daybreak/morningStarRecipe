@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../../services/supabaseClient';
+import { selectPostsLikeTop3 } from '../../services/supabasePosts'; // 또는 적절한 경로
 import type { Tables } from '../../types/supabase';
+
 const MainRank: React.FC = () => {
     const apiUrl: string = import.meta.env.VITE_API_BASE_URL;
-    const [posts, setPosts] = useState<Tables<'posts'>[]>([]); // 배열 타입 추가
+    const [posts, setPosts] = useState<Tables<'posts'>[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const fetchData = async () => {
         try {
             setLoading(true);
             setError(null);
-
-            const { data, error } = await supabase
-                .from('posts')
-                .select(`*`)
-                .order('like_count', { ascending: false })
-                .limit(3);
-
-            if (error) throw error;
-
-            setPosts(data || []);
+            const data = await selectPostsLikeTop3();
+            if (!data) {
+                throw new Error('데이터를 불러올 수 없습니다.');
+            }
+            setPosts(data);
         } catch (error) {
             setError('데이터를 불러오는데 실패했습니다.');
         } finally {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         fetchData();
     }, []);
+
     // 로딩 상태 렌더링
     if (loading) {
         return (
