@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import type { Tables } from '../types/supabase';
-import supabase from '../services/supabaseClient';
+import { searchPosts } from '../services/supabasePosts';
 import type {
     RecipeSortBy,
     ShareStatus,
@@ -11,64 +11,6 @@ import type {
     AllSearchParams,
     UseSearchOptions,
 } from '../types/search.types';
-
-// 쿼리 빌더 함수
-const buildSearchQuery = (params: SearchParams) => {
-    let query = supabase.from('posts').select('*', { count: 'exact' });
-
-    // 기본 필터링
-    if (params.pageType !== 'all') {
-        query = query.eq('post_type', params.pageType);
-    }
-
-    if (params.searchTerm) {
-        query = query.or(`title.ilike.%${params.searchTerm}%`);
-    }
-
-    if (params.category) {
-        query = query.eq('category', params.category);
-    }
-
-    // 페이지 타입별 정렬 및 필터링
-    if (params.pageType === 'recipe') {
-        const recipeParams = params as RecipeSearchParams;
-        switch (recipeParams.sortBy) {
-            case 'popular':
-                query = query.order('bookmark_count', { ascending: false });
-                break;
-            case 'recommended':
-                query = query.order('like_count', { ascending: false });
-                break;
-            case 'recently':
-                query = query.order('created_at', { ascending: false });
-                break;
-        }
-    } else if (params.pageType === 'share') {
-        const shareParams = params as ShareSearchParams;
-        if (shareParams.shareStatus && shareParams.shareStatus !== 'all') {
-            query = query.eq('share_status', shareParams.shareStatus);
-        }
-        query = query.order('created_at', { ascending: false });
-    } else if (params.pageType === 'all') {
-        const allParams = params as AllSearchParams;
-
-        if (allParams.postType && allParams.postType !== 'all') {
-            query = query.eq('post_type', allParams.postType);
-        }
-
-        if (allParams.shareStatus && allParams.shareStatus !== 'all') {
-            query = query.or(`post_type.neq.share,share_status.eq.${allParams.shareStatus}`);
-        }
-
-        if (allParams.sortBy === 'popular') {
-            query = query.order('bookmark_count', { ascending: false });
-        } else {
-            query = query.order('like_count', { ascending: false });
-        }
-    }
-
-    return query;
-};
 
 // 기본 파라미터 생성 함수
 const createDefaultParams = (pageType: string, initialParams?: Partial<SearchParams>): SearchParams => {
@@ -122,13 +64,14 @@ const useSearch = (options: UseSearchOptions) => {
         setError(null);
 
         try {
-            const query = buildSearchQuery(params);
-            const { data, error: searchError, count } = await query;
+            const result = await searchPosts(params);
 
-            if (searchError) throw searchError;
+            if (result.error) {
+                throw new Error(result.error);
+            }
 
-            setSearchList(data || []);
-            setTotalCount(count || 0);
+            setSearchList(result.data || []);
+            setTotalCount(result.count || 0);
         } catch (err) {
             setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
             setSearchList([]);
