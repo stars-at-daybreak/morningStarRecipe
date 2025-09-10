@@ -9,6 +9,8 @@ import Mypage from './pages/mypage/Mypage.tsx';
 import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
+import Privacy from './pages/Privacy.tsx';
+import Terms from './pages/Terms.tsx';
 import ModalTestPage from './pages/ModalTestPage.tsx';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './components/RecipeForm.tsx';
@@ -54,6 +56,8 @@ const AppRoutes = () => {
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
+                <Route path='/privacy' element={<Privacy />} />
+                <Route path='/Terms' element={<Terms />} />
             </Route>
         </Routes>
     );
