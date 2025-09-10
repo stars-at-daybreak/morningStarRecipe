@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { updatePassword } from '../services/supabaseUsers.ts';
 
 const PasswordUpdate = ({ email }: { email: string }) => {

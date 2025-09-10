@@ -48,6 +48,9 @@ const AppRoutes = () => {
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
                 <Route path='/mypage/edit' element={!user ? <Login /> : <ProfileEditForm />} />
+                <Route path='/recipes' element={<Recipes />} />
+                <Route path='/recipes/form' element={<RecipeForm />} />
+                <Route path='/recipes/:id' element={<RecipeDetail />} />
             </Route>
         </Routes>
     );

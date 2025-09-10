@@ -1,13 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import useUserStore from '../../stores/useUserStore.ts';
 import Rank from '../../components/Main/Rank.tsx';
 import Sharing from '../../components/Main/Sharing.tsx';
 import Recent from '../../components/Main/Recent.tsx';
+import SearchPage from '../search/Search.tsx';
 import PasswordFind from '../../components/PasswordFind.tsx';
+import SearchForm from '../../components/SearchForm.tsx';
+import Recipes from '../recipes/Recipes.tsx';
 
 const Home = () => {
     const { user } = useUserStore();
-
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get('query');
+    if (query) {
+        return <SearchPage query={query} />;
+    }
     return (
         <>
             {!user && (
@@ -34,9 +41,11 @@ const Home = () => {
                     </>
                 </ul>
             )}
+            <SearchForm />
             <Rank />
             <Sharing />
             <Recent />
+            <Recipes />
         </>
     );
 };

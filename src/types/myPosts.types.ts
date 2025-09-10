@@ -17,5 +17,14 @@ export interface UseMyPostsReturn {
     clearMyPosts: ClearMyPostsFunction;
 }
 
-// 스토어 상태 타입
-export interface MyPostsState extends UseMyPostsReturn {}
+//레시피
+export type RecipePost = Omit<MyPost, 'share_status' | 'pickup_location'> & {
+    post_type: 'recipe';
+    difficulty: NonNullable<MyPost['difficulty']>;
+    cooking_time: number;
+    ingredients: string;
+    servings: number;
+
+    share_status?: never;
+    pickup_location?: never;
+};
