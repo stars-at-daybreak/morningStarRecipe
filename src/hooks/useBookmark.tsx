@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import supabase from '../services/supabaseClient';
+import { selectBookmarksByUserId } from '../services/supabasePosts';
 import type { BookmarkedPost, UseBookmarksReturn } from '../types/bookmark.types';
 
 export const useBookmarks = (): UseBookmarksReturn => {
@@ -15,24 +15,13 @@ export const useBookmarks = (): UseBookmarksReturn => {
         setError(null);
 
         try {
-            const { data, error } = await supabase
-                .from('post_bookmarks')
-                .select(
-                    `*,
-                    posts:post_id (
-                        *,
-                        categories:category_id (
-                            name
-                        )
-                    )`
-                )
-                .eq('user_id', userId)
-                .order('created_at', { ascending: false });
+            const data = await selectBookmarksByUserId(userId);
 
-            if (error) throw error;
+            if (!data) {
+                throw new Error('찜 목록을 불러올 수 없습니다.');
+            }
 
-            const bookmarksData = data as BookmarkedPost[];
-            setBookmarks(bookmarksData);
+            setBookmarks(data);
         } catch (error) {
             console.error('찜 목록 조회 실패:', error);
             setError(error instanceof Error ? error.message : '찜 목록을 불러오는데 실패했습니다.');
