@@ -15,6 +15,9 @@ import ModalTestPage from './pages/ModalTestPage.tsx';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './components/RecipeForm.tsx';
 import RecipeDetail from './components/RecipeDetail.tsx';
+import Share from './pages/share/Share.tsx';
+import ShareForm from './components/ShareForm.tsx';
+import ShareDetail from './components/ShareDetail.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
@@ -58,6 +61,9 @@ const AppRoutes = () => {
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
                 <Route path='/privacy' element={<Privacy />} />
                 <Route path='/Terms' element={<Terms />} />
+                <Route path='/share' element={<Share />} />
+                <Route path='/recipes/form' element={<ShareForm />} />
+                <Route path='/share/:id' element={<ShareDetail />} />
             </Route>
         </Routes>
     );
