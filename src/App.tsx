@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import SignUp from './pages/signup/SignUp.tsx';
 import Login from './pages/login/Login.tsx';
 import Layout from './pages/Layout.tsx';
@@ -7,8 +8,19 @@ import { AuthProvider } from './providers/AuthProvider.tsx';
 import Mypage from './pages/mypage/Mypage.tsx';
 import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
+import { colorSet } from './types/colorSet.ts';
+import ModalTestPage from './pages/ModalTestPage.tsx';
 
 const App = () => {
+    // colorSet을 CSS 변수로 변환
+    useEffect(() => {
+        const root = document.documentElement;
+        Object.entries(colorSet).forEach(([key, value]) => {
+            const cssKey = key.replace(/[[\]']/g, '');
+            root.style.setProperty(`--color-${cssKey}`, value);
+        });
+    }, []);
+
     return (
         <div className='App'>
             <BrowserRouter>
@@ -29,6 +41,7 @@ const AppRoutes = () => {
 
     return (
         <Routes>
+            <Route path='/modal-test' element={<ModalTestPage />} />
             <Route path='/' element={<Layout />}>
                 <Route index path='/' element={<Home />} />
                 <Route path='/login' element={!user ? <Login /> : <Navigate to='/' replace={true} />} />
