@@ -10,6 +10,9 @@ import useUserStore from './stores/useUserStore.ts';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './components/RecipeForm.tsx';
 import RecipeDetail from './components/RecipeDetail.tsx';
+import Share from './pages/share/Share.tsx';
+import ShareForm from './components/ShareForm.tsx';
+import ShareDetail from './components/ShareDetail.tsx';
 
 const App = () => {
     return (
@@ -41,6 +44,9 @@ const AppRoutes = () => {
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
+                <Route path='/share' element={<Share />} />
+                <Route path='/share/form' element={<ShareForm />} />
+                <Route path='/share/:id' element={<ShareDetail />} />
             </Route>
         </Routes>
     );
