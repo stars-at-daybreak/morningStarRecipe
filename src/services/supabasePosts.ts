@@ -1,6 +1,6 @@
 import supabase from './supabaseClient.ts';
 import type { TablesInsert, TablesUpdate } from '../types/supabase.ts';
-import type { RecipePost } from '../types/myPosts.types.ts';
+import type { PostWithUserNickname } from '../types/posts.type.ts';
 
 export const createPost = async (post: TablesInsert<'posts'>) => {
     try {
@@ -24,16 +24,14 @@ export const updatePost = async (post: TablesUpdate<'posts'>) => {
     }
 };
 
-export const fetchPost = async (id: string): Promise<RecipePost | null> => {
+export const fetchPostWithUserNickname = async (id: string): Promise<PostWithUserNickname | null> => {
     try {
-        const { data, error } = await supabase
-            .from('posts')
-            .select('*')
-            .eq('id', id)
-            .eq('is_post_active', true)
-            .single();
+        const { data, error } = await supabase.rpc('get_post_with_user_nickname', {
+            post_id_param: id,
+        });
+
         if (error) throw error;
-        return data;
+        return data?.[0] || null;
     } catch (error) {
         console.error('게시글 상세 조회 중 에러 발생:', error);
         return null;
