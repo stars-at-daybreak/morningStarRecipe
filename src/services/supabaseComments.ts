@@ -43,7 +43,11 @@ export const updateComment = async (comment: TablesUpdate<'comments'>): Promise<
 
 export const deleteComment = async (id: string, userId: string) => {
     try {
-        const { error } = await supabase.from('comments').delete().eq('id', id).eq('user_id', userId);
+        const { error } = await supabase
+            .from('comments')
+            .update({ is_comment_active: false })
+            .eq('id', id)
+            .eq('user_id', userId);
         if (error) throw error;
         return true;
     } catch (error) {
