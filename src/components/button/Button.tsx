@@ -10,7 +10,7 @@ const Button = ({
     disabled = false,
     className,
 }: ButtonType) => {
-    const buttonClass = [styles.button, styles[variant], styles[size], className].filter(Boolean).join(' ');
+    const buttonClass = [styles.button, styles[`button--${variant}`], styles[`button--${size}`], className].filter(Boolean).join(' ');
 
     return (
         <button type={type} className={buttonClass} onClick={onClick} disabled={disabled}>

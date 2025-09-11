@@ -4,12 +4,12 @@ import Button from '../button/Button.tsx';
 
 const Input = ({ label, id, state, type, inputHandler, placeholder, rightButton }: InputType) => {
     return (
-        <div className={styles['input-wrapper']}>
-            <label htmlFor={id}>{label}</label>
-            <div className={styles['input-group']}>
+        <div className={styles['input']}>
+            <label htmlFor={id} className={styles['input__label']}>{label}</label>
+            <div className={styles['input__group']}>
                 <input
                     id={id}
-                    className={styles['input']}
+                    className={styles['input__field']}
                     type={type}
                     value={state}
                     onChange={inputHandler}
