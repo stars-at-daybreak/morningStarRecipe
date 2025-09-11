@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch';
+import PostItem from '../../components/postItem/PostItem';
 
 interface SearchPageProps {
     query: string;
@@ -13,6 +15,8 @@ const SearchPage = ({ query }: SearchPageProps) => {
         };
     }, [query]);
     const { searchList, loading, error, updateSearchTerm, updatePostType } = useSearch(searchConfig);
+    const navigate = useNavigate();
+
     return (
         <div style={{ padding: '20px' }}>
             <div>
@@ -46,7 +50,7 @@ const SearchPage = ({ query }: SearchPageProps) => {
                 {searchList.length > 0 && (
                     <div>
                         <h3>검색 결과 ({searchList.length}개)</h3>
-                        {searchList.map((item, index) => (
+                        {/* {searchList.map((item, index) => (
                             <div
                                 key={item.id}
                                 style={{
@@ -57,6 +61,19 @@ const SearchPage = ({ query }: SearchPageProps) => {
                             >
                                 {index + 1}. {item.title}
                             </div>
+                        ))} */}
+
+                        {searchList.map(item => (
+                            <PostItem
+                                key={item.id}
+                                post={item}
+                                type={item.post_type as 'recipe' | 'share'}
+                                onClick={postId => {
+                                    // 게시물 타입에 따라 다른 경로로 이동
+                                    const basePath = item.post_type === 'recipe' ? '/recipes' : '/share';
+                                    navigate(`${basePath}/${postId}`);
+                                }}
+                            />
                         ))}
                     </div>
                 )}
