@@ -1,14 +1,11 @@
 import HeaderUserProfile from './HeaderUserProfile.tsx';
-//import { useHeaderStore } from '../stores/useHeaderStore.ts';
+import { usePageStore } from '../stores/usePageStore';
 const Header = () => {
-    //const title = useHeaderStore(state => state.title);
-    //const deviceType = useHeaderStore(state => state.deviceType);
-    //const showBackButton = useHeaderStore(state => state.showBackButton);
-
-    //const isMobile = deviceType === 'mobile';
-    //const isTablet = deviceType === 'tablet';
+    const { title, showBackButton, isLoading } = usePageStore();
     return (
-        <header>
+        <header className='header'>
+            {showBackButton && <button onClick={() => window.history.back()}>← 뒤로</button>}
+            <h1>{title}</h1>
             <HeaderUserProfile />
         </header>
     );
