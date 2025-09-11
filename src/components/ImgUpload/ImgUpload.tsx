@@ -3,7 +3,11 @@ import { useFileUpload } from '../../hooks/useImageUpload';
 import plus_icon from '../../assets/plus_icon.png';
 import styles from './ImgUpload.module.css';
 
-export const ResponsiveFileUpload = () => {
+interface ResponsiveFileUploadProps {
+    onFileUpload?: (filename: string | null) => void;
+}
+
+export const ResponsiveFileUpload = ({ onFileUpload }: ResponsiveFileUploadProps) => {
     const { uploadFile, isUploading } = useFileUpload();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,7 +16,9 @@ export const ResponsiveFileUpload = () => {
 
         const filename = await uploadFile(file);
         if (filename) {
-            console.log('업로드된 파일명:', filename);
+            onFileUpload?.(filename);
+        } else {
+            onFileUpload?.(null);
         }
     };
 

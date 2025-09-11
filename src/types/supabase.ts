@@ -141,6 +141,41 @@ export type Database = {
         }
         Relationships: []
       }
+      files: {
+        Row: {
+          created_at: string | null
+          file_type: Database["public"]["Enums"]["file_type_enum"]
+          filename: string
+          id: string
+          post_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          file_type: Database["public"]["Enums"]["file_type_enum"]
+          filename: string
+          id?: string
+          post_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          file_type?: Database["public"]["Enums"]["file_type_enum"]
+          filename?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "files_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_bookmarks: {
         Row: {
           created_at: string | null
@@ -318,9 +353,21 @@ export type Database = {
         Args: { total_posts: number }
         Returns: number
       }
+      change_vote_counts: {
+        Args: {
+          new_vote_type: string
+          old_vote_type: string
+          post_id_param: string
+        }
+        Returns: undefined
+      }
       check_user_deleted: {
         Args: { user_id: string }
         Returns: boolean
+      }
+      decrement_post_count: {
+        Args: { count_type: string; post_id: string }
+        Returns: undefined
       }
       delete_user: {
         Args: Record<PropertyKey, never>
@@ -339,6 +386,14 @@ export type Database = {
           user_id: string
           user_level_title: string
           user_nickname: string
+        }[]
+      }
+      get_post_thumbnails: {
+        Args: { p_post_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          stored_filename: string
         }[]
       }
       get_post_with_user_nickname: {
@@ -376,6 +431,26 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_user_profile_image: {
+        Args: { p_user_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          stored_filename: string
+        }[]
+      }
+      increment_post_count: {
+        Args: { count_type: string; increment_value: number; post_id: string }
+        Returns: undefined
+      }
+      save_uploaded_file: {
+        Args: {
+          p_file_type: Database["public"]["Enums"]["file_type_enum"]
+          p_post_id?: string
+          p_stored_filename: string
+        }
+        Returns: string
+      }
       soft_delete_user: {
         Args: { user_id: string }
         Returns: undefined
@@ -391,6 +466,7 @@ export type Database = {
     }
     Enums: {
       difficulty_enum: "top" | "middle" | "bottom"
+      file_type_enum: "profile" | "thumbnail"
       image_type_enum: "share" | "recipe" | "profile" | "etc"
       item_condition_enum: "new" | "like_new" | "good" | "fair" | "poor"
       post_type_enum: "recipe" | "share"
@@ -525,6 +601,7 @@ export const Constants = {
   public: {
     Enums: {
       difficulty_enum: ["top", "middle", "bottom"],
+      file_type_enum: ["profile", "thumbnail"],
       image_type_enum: ["share", "recipe", "profile", "etc"],
       item_condition_enum: ["new", "like_new", "good", "fair", "poor"],
       post_type_enum: ["recipe", "share"],

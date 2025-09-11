@@ -6,13 +6,16 @@ import useUserStore from '../stores/useUserStore.ts';
 import type { PostWithUserNickname } from '../types/posts.type.ts';
 import { handlePostVote, getUserVoteStatus } from '../services/supabasePostVotes.ts';
 import type { VoteType } from '../types/postVotes.type.ts';
+import { getPostThumbnails } from '../services/supabaseFiles.ts';
 
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [recipe, setRecipe] = useState<PostWithUserNickname | null>(null);
     const [userVoteType, setUserVoteType] = useState<VoteType | null>(null);
+    const [thumbnail, setThumbnail] = useState('');
     const { user } = useUserStore();
+    const apiUrl: string = import.meta.env.VITE_API_BASE_URL;
 
     const fetchData = async (id: string): Promise<void> => {
         const detail = await fetchPostWithUserNickname(id);
@@ -21,6 +24,12 @@ const RecipeDetail = () => {
             const userVoteType = await getUserVoteStatus(id, user?.id);
             setUserVoteType(userVoteType);
         }
+    };
+
+    const fetchThumbnail = async (id: string) => {
+        const { filename } = await getPostThumbnails(id);
+        setThumbnail(filename);
+        console.log(filename);
     };
 
     const handleUpdate = () => {
@@ -58,6 +67,7 @@ const RecipeDetail = () => {
     useEffect(() => {
         if (id) {
             fetchData(id);
+            fetchThumbnail(id);
         }
     }, []);
 
@@ -69,6 +79,7 @@ const RecipeDetail = () => {
                     <button onClick={handleDelete}>게시물 삭제</button>
                 </>
             )}
+            {thumbnail && <img src={`${apiUrl}/${thumbnail}`} alt='썸네일' crossOrigin='anonymous' />}
             <h2>{recipe?.title}</h2>
             <p>
                 {recipe?.user_nickname}
