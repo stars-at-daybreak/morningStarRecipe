@@ -23,7 +23,7 @@
     width: 0.7rem;
     height: 1.4rem;
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
     .header {
         padding: 3.2rem;
     }
