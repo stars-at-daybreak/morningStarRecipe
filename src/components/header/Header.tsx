@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { usePageStore } from '../../stores/usePageStore';
-import logo from '../../assets/logo.png';
-import logo_tablet from '../../assets/logo_tablet.png';
+import logo from '../../assets/logo.svg';
 import prev from '../../assets/prev_icon.png';
 import styles from './Header.module.css';
 
@@ -34,10 +33,7 @@ const Header = () => {
             ) : (
                 <Link to='/' className={styles.header__homeLink} aria-label='홈으로 이동'>
                     <h1 className={styles.header__logoWrapper}>
-                        <picture>
-                            <source media='(min-width: 76.8rem)' srcSet={logo_tablet} />
-                            <img src={logo} alt='사이트 로고' className={styles.header__logo} />
-                        </picture>
+                        <img src={logo} alt='사이트 로고' className={styles.header__logo} />
                     </h1>
                 </Link>
             )}
