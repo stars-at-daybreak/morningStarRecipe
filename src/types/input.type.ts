@@ -1,3 +1,5 @@
+import type { ButtonType } from './button.type.ts';
+
 export interface InputType {
     label: string;
     id: string;
@@ -5,8 +7,5 @@ export interface InputType {
     type: string;
     inputHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder: string;
-    rightButton?: {
-        text: string;
-        onClick: () => void;
-    };
+    rightButton?: ButtonType;
 }

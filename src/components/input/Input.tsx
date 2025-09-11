@@ -1,5 +1,6 @@
 import styles from './input.module.css';
 import type { InputType } from '../../types/input.type.ts';
+import Button from '../button/Button.tsx';
 
 const Input = ({ label, id, state, type, inputHandler, placeholder, rightButton }: InputType) => {
     return (
@@ -15,9 +16,14 @@ const Input = ({ label, id, state, type, inputHandler, placeholder, rightButton 
                     placeholder={placeholder}
                 />
                 {rightButton && (
-                    <button type='button' onClick={rightButton.onClick}>
-                        {rightButton.text}
-                    </button>
+                    <Button
+                        type={rightButton.type}
+                        text={rightButton.text}
+                        onClick={rightButton.onClick}
+                        variant={rightButton.variant}
+                        size={rightButton.size}
+                        disabled={rightButton.disabled}
+                    />
                 )}
             </div>
         </div>

@@ -18,6 +18,7 @@ import RecipeDetail from './components/RecipeDetail.tsx';
 import Share from './pages/share/Share.tsx';
 import ShareForm from './components/ShareForm.tsx';
 import ShareDetail from './components/ShareDetail.tsx';
+import PasswordFind from './components/PasswordFind.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
@@ -53,6 +54,7 @@ const AppRoutes = () => {
             <Route path='/' element={<Layout />}>
                 <Route index path='/' element={<Home />} />
                 <Route path='/login' element={!user ? <Login /> : <Navigate to='/' replace={true} />} />
+                <Route path='/password' element={<PasswordFind />} />
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
                 <Route path='/mypage/edit' element={!user ? <Login /> : <ProfileEditForm />} />
