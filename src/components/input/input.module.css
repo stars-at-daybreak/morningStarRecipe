@@ -1,5 +1,6 @@
 .input-wrapper {
-    width: 32rem;
+    width: 100%;
+    max-width: 73.6rem;
 }
 
 label {
@@ -31,10 +32,6 @@ input::placeholder {
 }
 
 @media (min-width: 1024px) {
-    .input-wrapper {
-        width: 73.6rem;
-    }
-
     label {
         display: block;
         font-size: 1.8em;
