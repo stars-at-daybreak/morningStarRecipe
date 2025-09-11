@@ -1,54 +1,54 @@
-.input-wrapper {
+.input {
     width: 100%;
     max-width: 73.6rem;
 }
 
-label {
+.input__label {
     display: block;
     font-size: clamp(1.2rem, 1.2rem + (100vw - 39rem) * 0.01, 1.8rem);
     line-height: 1.2rem;
     color: var(--color-gray);
 }
-.input-group {
+.input__group {
     display: flex;
     gap: 1rem;
     margin-top: 1.4rem;
 }
 
-input {
+.input__field {
     flex: 1;
     border: none;
     border-bottom: 0.1rem solid var(--color-gray-300);
     padding-bottom: 0.8rem;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 39rem) * 0.013, 2.2rem);
 }
-input:focus {
+.input__field:focus {
     border-bottom: 0.1rem solid var(--color-green);
     outline: none;
 }
 
-input::placeholder {
+.input__field::placeholder {
     line-height: 1.4rem;
     color: var(--color-gray-300);
 }
-.input-wrapper:not(:first-child) {
+.input:not(:first-child) {
     margin-top: 1.6rem;
 }
 
 @media (min-width: 1024px) {
-    label {
+    .input__label {
         display: block;
         font-size: 1.8em;
         line-height: 1.8rem;
         color: var(--color-gray);
     }
-    .input-group {
+    .input__group {
         display: flex;
         gap: 1rem;
         margin-top: 2rem;
     }
 
-    input {
+    .input__field {
         flex: 1;
         border: none;
         border-bottom: 0.1rem solid var(--color-gray-300);
@@ -57,7 +57,7 @@ input::placeholder {
         line-height: 2.2rem;
     }
 
-    .input-wrapper:not(:first-child) {
+    .input:not(:first-child) {
         margin-top: 3.2rem;
     }
 }
