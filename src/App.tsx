@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import SignUp from './pages/signup/SignUp.tsx';
 import Login from './pages/login/Login.tsx';
-import Layout from './pages/Layout.tsx';
+import Layout from './pages/Layout/Layout.tsx';
 import Home from './pages/home/Home.tsx';
 import { AuthProvider } from './providers/AuthProvider.tsx';
 import Mypage from './pages/mypage/Mypage.tsx';

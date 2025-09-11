@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/header/Header.tsx';
-import Main from './Main.tsx';
-import Footer from '../components/footer/Footer.tsx';
-import Nav from '../components/nav/Nav.tsx';
-import styles from '../pages/Layout/Layout.module.css';
+import Header from '../../components/header/Header.tsx';
+import Main from '../Main.tsx';
+import Footer from '../../components/footer/Footer.tsx';
+import Nav from '../../components/nav/Nav.tsx';
+import styles from './Layout.module.css';
 
 const Layout = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
