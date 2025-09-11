@@ -8,7 +8,14 @@ import PasswordFind from '../../components/PasswordFind.tsx';
 import SearchForm from '../../components/SearchForm.tsx';
 import Recipes from '../recipes/Recipes.tsx';
 import { Bookmark } from '../../components/Bookmark.tsx';
+import { usePageSetup } from '../../hooks/usePageSetup';
+
 const Home = () => {
+    usePageSetup({
+        title: '홈',
+        pageName: 'mypage',
+        showBackButton: true, // 뒤로가기 버튼 표시
+    });
     const { user } = useUserStore();
     const [searchParams] = useSearchParams();
     const query = searchParams.get('query');
