@@ -10,6 +10,7 @@
 .header__logoWrapper,
 .header__title {
     justify-self: center;
+    text-align: center;
     width: 9.1rem;
     height: 2.2rem;
 }

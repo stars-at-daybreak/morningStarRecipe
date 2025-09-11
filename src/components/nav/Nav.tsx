@@ -9,6 +9,7 @@ import heartIcon from '../../assets/heart_icon.svg';
 import heartActIcon from '../../assets/heart_icon_active.svg';
 import userIcon from '../../assets/user_icon.svg';
 import userActIcon from '../../assets/user_icon_active.svg';
+import face from '../../assets/face.svg';
 interface NavItem {
     href: string; // 링크 주소 (예: '/', '/recipes')
     label: string; // 표시될 텍스트 (예: 'Home', '모두의 레시피')
@@ -19,7 +20,6 @@ interface NavItem {
 const Nav = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
     const { title } = usePageStore();
-    console.log('Current Page Title:', title); // 현재 페이지 타이틀 확인용 로그
     useEffect(() => {
         const handleResize = () => {
             setIsDesktop(window.innerWidth >= 1024);
@@ -32,7 +32,7 @@ const Nav = () => {
     const navItems = [
         {
             href: '/',
-            label: '메인페이지',
+            label: '홈',
             titleMatch: '', // 또는 메인 페이지의 title 값
             icon: homeIcon,
             activeIcon: homeActIcon,
@@ -67,6 +67,13 @@ const Nav = () => {
     const navContent = (
         <nav className={styles.nav}>
             <ul className={styles.nav__list}>
+                {isDesktop ? (
+                    <li className={styles.nav__item}>
+                        <a href={'/'} className={`${styles.nav__link} ${styles.nav__link_logo}`}>
+                            <img src={face} className={styles.nav__icon} alt='Logo icon' />
+                        </a>
+                    </li>
+                ) : null}
                 {navItems.map(item => (
                     <li
                         key={item.href}
@@ -76,7 +83,11 @@ const Nav = () => {
                             href={item.href}
                             className={`${styles.nav__link} ${isActive(item) ? styles.nav__link_active : ''}`}
                         >
-                            <img src={isActive(item) ? item.activeIcon : item.icon} alt={`${item.label} icon`} />
+                            <img
+                                src={isActive(item) ? item.activeIcon : item.icon}
+                                className={styles.nav__icon}
+                                alt={`${item.label} icon`}
+                            />
                             {item.label}
                         </a>
                     </li>
