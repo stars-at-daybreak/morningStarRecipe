@@ -1,7 +1,7 @@
 import HeaderUserProfile from './HeaderUserProfile.tsx';
 import { usePageStore } from '../stores/usePageStore';
 const Header = () => {
-    const { title, showBackButton, isLoading } = usePageStore();
+    const { title, showBackButton } = usePageStore();
     return (
         <header className='header'>
             {showBackButton && <button onClick={() => window.history.back()}>← 뒤로</button>}
