@@ -7,7 +7,7 @@ import SearchPage from '../search/Search.tsx';
 import PasswordFind from '../../components/PasswordFind.tsx';
 import SearchForm from '../../components/SearchForm.tsx';
 import Recipes from '../recipes/Recipes.tsx';
-
+import { Bookmark } from '../../components/Bookmark.tsx';
 const Home = () => {
     const { user } = useUserStore();
     const [searchParams] = useSearchParams();
@@ -17,6 +17,7 @@ const Home = () => {
     }
     return (
         <>
+            <Bookmark postId='73e7e5cc-4df9-40a1-a8d1-a3e5c69a07b5' userId={user?.id?.toString() ?? ''} />
             {!user && (
                 <ul>
                     <>
