@@ -36,7 +36,7 @@ const Login = () => {
     });
 
     return (
-        <div className={styles['main']}>
+        <div className={styles['login']}>
             <section>
                 <h2>
                     <picture>
@@ -45,7 +45,7 @@ const Login = () => {
                     </picture>
                 </h2>
             </section>
-            <form onSubmit={signInHandler}>
+            <form onSubmit={signInHandler} className={styles['login__form']}>
                 <Input
                     label='이메일'
                     id='email'
@@ -68,9 +68,10 @@ const Login = () => {
                     variant={isDisabled ? 'secondary' : 'primary'}
                     size='responsive'
                     disabled={isDisabled}
+                    className={styles['login__submit-button']}
                 />
             </form>
-            <section className={styles['link-group']}>
+            <section className={styles['login__link-group']}>
                 <Link to='/signup'>회원가입</Link>
                 <Link to='/password'>비밀번호 찾기</Link>
             </section>
