@@ -1,11 +1,13 @@
 import Header from '../components/Header.tsx';
 import Main from './Main.tsx';
+import Footer from '../components/footer/Footer';
 
 const Layout = () => {
     return (
         <>
             <Header />
             <Main />
+            <Footer />
         </>
     );
 };
