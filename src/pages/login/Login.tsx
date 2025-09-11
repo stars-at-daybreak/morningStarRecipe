@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { signin } from '../../services/supabaseUsers.ts';
 import loginLogoMobile from '../../assets/login_logo_mobile.svg';
+import loginLogoTablet from '../../assets/login_logo_tablet.svg';
 import styles from './login.module.css';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 import Input from '../../components/input/Input.tsx';
@@ -38,7 +39,10 @@ const Login = () => {
         <div className={styles['main']}>
             <section>
                 <h2>
-                    <img src={loginLogoMobile} alt='모두의 부엌 로고' />
+                    <picture>
+                        <source media="(min-width: 1024px)" srcSet={loginLogoTablet} />
+                        <img src={loginLogoMobile} alt='모두의 부엌 로고' />
+                    </picture>
                 </h2>
             </section>
             <form onSubmit={signInHandler}>
@@ -62,7 +66,7 @@ const Login = () => {
                     type='submit'
                     text='로그인'
                     variant={isDisabled ? 'secondary' : 'primary'}
-                    size='medium'
+                    size='free'
                     disabled={isDisabled}
                 />
             </form>
