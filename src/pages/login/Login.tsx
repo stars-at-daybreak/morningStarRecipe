@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { signin } from '../../services/supabaseUsers.ts';
 import loginLogoMobile from '../../assets/login_logo_mobile.svg';
 import styles from './login.module.css';
-import { usePageSetup } from '../../hooks/useHeaderSetup.tsx';
+import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 import Input from '../../components/input/Input.tsx';
 import Button from '../../components/button/Button.tsx';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isDisabled, setIsDisabled] = useState(true);
 
     const signInHandler = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,6 +20,12 @@ const Login = () => {
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.type === 'email') setEmail(e.target.value);
         if (e.target.type === 'password') setPassword(e.target.value);
+
+        if (email && password) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
     };
 
     usePageSetup({
@@ -51,7 +58,13 @@ const Login = () => {
                     inputHandler={inputHandler}
                     placeholder='비밀번호를 입력해주세요'
                 />
-                <Button type='submit' text='로그인' variant='secondary' size='medium' disabled={true} />
+                <Button
+                    type='submit'
+                    text='로그인'
+                    variant={isDisabled ? 'secondary' : 'primary'}
+                    size='medium'
+                    disabled={isDisabled}
+                />
             </form>
             <section className={styles['link-group']}>
                 <Link to='/signup'>회원가입</Link>
