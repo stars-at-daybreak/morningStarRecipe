@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './nav.module.css';
 import { usePageStore } from '../../stores/usePageStore';
 import homeIcon from '../../assets/home_icon.svg';

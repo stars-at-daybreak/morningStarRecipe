@@ -29,7 +29,6 @@ const RecipeDetail = () => {
     const fetchThumbnail = async (id: string) => {
         const { filename } = await getPostThumbnails(id);
         setThumbnail(filename);
-        console.log(filename);
     };
 
     const handleUpdate = () => {
