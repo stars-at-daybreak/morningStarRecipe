@@ -64,7 +64,7 @@ const AppRoutes = () => {
                 <Route path='/privacy' element={<Privacy />} />
                 <Route path='/Terms' element={<Terms />} />
                 <Route path='/share' element={<Share />} />
-                <Route path='/recipes/form' element={<ShareForm />} />
+                <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
             </Route>
         </Routes>

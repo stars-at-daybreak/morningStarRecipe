@@ -40,7 +40,7 @@
     height: 1.2rem;
 }
 
-@media screen and (min-width: 76.8rem) {
+@media screen and (min-width: 1024px) {
     .image-upload__plus-icon {
         width: 4rem;
         height: 4rem;
