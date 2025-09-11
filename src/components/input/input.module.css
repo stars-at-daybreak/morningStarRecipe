@@ -1,0 +1,29 @@
+.input-wrapper {
+    padding: 0 0 0.8rem;
+}
+
+label {
+    display: block;
+    font-size: 1.2em;
+    line-height: 1.2rem;
+    color: var(--color-gray);
+}
+.input-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.4rem;
+}
+
+input {
+    flex: 1;
+    border: none;
+    border-bottom: 0.1rem solid var(--color-gray-300);
+}
+input::placeholder {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    color: var(--color-gray-300);
+}
+.input-wrapper:not(:first-child) {
+    margin-top: 1.6rem;
+}
