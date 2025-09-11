@@ -40,7 +40,7 @@ const Login = () => {
             <section>
                 <h2>
                     <picture>
-                        <source media="(min-width: 1024px)" srcSet={loginLogoTablet} />
+                        <source media='(min-width: 1024px)' srcSet={loginLogoTablet} />
                         <img src={loginLogoMobile} alt='모두의 부엌 로고' />
                     </picture>
                 </h2>
@@ -66,7 +66,7 @@ const Login = () => {
                     type='submit'
                     text='로그인'
                     variant={isDisabled ? 'secondary' : 'primary'}
-                    size='free'
+                    size='responsive'
                     disabled={isDisabled}
                 />
             </form>
