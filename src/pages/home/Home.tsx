@@ -23,8 +23,8 @@ const Home = () => {
             <SearchForm />
             <Recommendation />
             <Rank />
-            <Sharing />
-            <Recent />
+            {/* <Sharing />
+            <Recent /> */}
         </div>
     );
 };
