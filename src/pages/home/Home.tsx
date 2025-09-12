@@ -3,8 +3,7 @@ import Rank from '../../components/main/Rank.tsx';
 import Sharing from '../../components/main/Sharing.tsx';
 import Recent from '../../components/main/Recent.tsx';
 import SearchPage from '../search/Search.tsx';
-import SearchForm from '../../components/SearchForm.tsx';
-import Recipes from '../recipes/Recipes.tsx';
+import SearchForm from '../../components/search/SearchForm.tsx';
 import { usePageSetup } from '../../hooks/usePageSetup';
 
 const Home = () => {
@@ -24,7 +23,6 @@ const Home = () => {
             <Rank />
             <Sharing />
             <Recent />
-            <Recipes />
         </>
     );
 };
