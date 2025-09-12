@@ -1,5 +1,5 @@
 /* 나눔&레시피 공통 */
-.postItem {
+.post__item {
     width: calc(100% - 3.2rem);
     max-width: 128rem;
     display: flex;
@@ -12,7 +12,7 @@
     color: var(--color-gray);
 }
 
-.thumbnail {
+.post__thumbnail {
     width: 35%;
     min-width: 11rem;
     height: 8.5rem;
@@ -24,13 +24,13 @@
     transition: 0.1s ease-in;
 }
 
-.thumbnail img {
+.post__thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.title {
+.post__title {
     font-size: 1.6rem;
     font-weight: bold;
     line-height: 2rem;
@@ -39,7 +39,7 @@
 }
 
 /* 레시피 목록 */
-.recipeContent {
+.post__recipe__content {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -47,12 +47,12 @@
     gap: 1rem;
 }
 
-.recipeActions {
+.post__recipe__actions {
     display: flex;
     justify-content: space-between;
 }
 
-.vote {
+.post__vote {
     display: flex;
     justify-content: space-between;
     background-color: var(--color-gray-100);
@@ -61,7 +61,7 @@
     padding: 0.3rem 1rem;
 }
 
-.voteBtn {
+.post__vote__btn {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -73,69 +73,75 @@
 
 /* 공통 */
 /* 추천+비추천 숫자 */
-.activeText,
-.inactiveText {
+.post__vote__text__active,
+.post__vote__text__inactive {
     font-size: 1rem;
     margin-left: 0.2rem;
     transition: 0.1s ease-in;
 }
-.inactiveText {
+.post__vote__text__inactive {
     color: var(--color-gray);
 }
-.activeText {
+.post__vote__text__active {
     color: var(--color-green);
 }
 
 /* 추천+비추천 아이콘 */
-.likeIcon,
-.dislikeIcon {
+.post__like__icon,
+.post__dislike__icon {
     width: 1.2rem;
     height: 1.2rem;
     transition: 0.1s ease-in;
 }
-.dislikeIcon {
+.post__dislike__icon {
     margin-top: 0.3rem;
 }
 
 /* 추천 아이콘 */
-.likeIcon.likeInactive {
+.post__like__icon__inactive {
     background: url('../../assets/추천_icon.svg') no-repeat center / cover;
 }
 
 /* 비추천 아이콘 */
-.dislikeIcon.dislikeInactive {
+.post__dislike__icon__inactive {
     background: url('../../assets/비추천_icon.svg') no-repeat center / cover;
 }
 
-/* avtive 상태 */
+/* active 상태 */
 /* 추천 아이콘 */
-.likeIcon.likeActive {
+.post__like__icon__active {
     background: url('../../assets/추천_icon_active.svg') no-repeat center / cover;
 }
-.dislikeIcon.dislikeActive {
+.post__dislike__icon__active {
     background: url('../../assets/비추천_icon_active.svg') no-repeat center / cover;
 }
 
 /* 북마크 - 기본상태 */
 /* 공통 */
-.bookmarkIcon {
+.post__bookmark__icon {
     width: 1.2rem;
     height: 1.2rem;
     transition: 0.1s ease-in;
 }
 
+.post__bookmark__btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
 /* 기본상태 */
-.bookmarkInactive {
+.post__bookmark__inactive {
     background: url('../../assets/bookmark_icon.svg') no-repeat center / cover;
 }
 /* active 상태 */
-.bookmarkActive {
+.post__bookmark__active {
     background: url('../../assets/bookmark_icon_active.svg') no-repeat center / cover;
 }
 
 /* 나눔 목록 */
 /* 나눔 상태 공통 스타일 */
-.shareContent {
+.post__share__content {
     width: 100%;
     margin-left: 2rem;
     display: flex;
@@ -143,14 +149,14 @@
     align-items: center;
 }
 
-.shareActions {
+.post__share__actions {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 }
 
 /* 나눔상태 */
-.statusBtn {
+.post__status__btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,21 +174,28 @@
 
 /* 나눔상태별 스타일 정의 */
 /* 나눔중 상태 */
-.statusAvailable {
+.post__status__available {
     border-color: var(--color-green);
     color: var(--color-green);
     background-color: var(--color-green-100);
 }
 
 /* 예약중 상태 */
-.statusReserved {
+.post__status__reserved {
     border-color: var(--color-lv1);
     color: var(--color-lv1);
     background-color: var(--color-lv1-bg);
 }
 
 /* 나눔완료 상태 */
-.statusCompleted {
+.post__status__completed {
+    border-color: var(--color-gray-300);
+    color: var(--color-gray-400);
+    background-color: var(--color-gray-100);
+}
+
+/* 취소됨 상태 */
+.post__status__cancelled {
     border-color: var(--color-gray-300);
     color: var(--color-gray-400);
     background-color: var(--color-gray-100);
@@ -190,58 +203,58 @@
 
 @media (min-width: 768px) {
     /* 나눔&레시피 공통 */
-    .postItem {
+    .post__item {
         padding-bottom: 3.2rem;
     }
 
-    .thumbnail {
+    .post__thumbnail {
         max-width: 18rem;
         height: 13.2rem;
         border-radius: 3rem;
         margin-right: 3.2rem;
     }
 
-    .title {
+    .post__title {
         font-size: 2rem;
     }
 
     /* 레시피 */
     /* 공통 */
-    .recipeContent {
+    .post__recipe__content {
         gap: 2rem;
     }
-    .vote {
+    .post__vote {
         padding: 0.5rem 1.2rem;
         margin-right: 2rem;
     }
 
-    .recipeActions {
+    .post__recipe__actions {
         justify-content: start;
     }
 
     /* 추천+비추천 숫자 */
-    .activeText,
-    .inactiveText {
+    .post__vote__text__active,
+    .post__vote__text__inactive {
         font-size: 1.6rem;
         margin-left: 0.4rem;
     }
 
     /* 추천+비추천 아이콘 */
-    .likeIcon,
-    .dislikeIcon {
+    .post__like__icon,
+    .post__dislike__icon {
         width: 1.8rem;
         height: 1.8rem;
     }
 
     /* 북마크 - 기본상태 */
     /* 공통 */
-    .bookmarkIcon {
+    .post__bookmark__icon {
         width: 2.4rem;
         height: 2.4rem;
     }
 
     /* 나눔 목록 */
-    .statusBtn {
+    .post__status__btn {
         font-size: 1.8rem;
         border-width: 2px;
     }
@@ -249,12 +262,12 @@
 
 @media (min-width: 1024px) {
     /* 나눔&레시피 공통 */
-    .title {
+    .post__title {
         font-size: 2.4rem;
     }
 
     /* 나눔 목록 */
-    .statusBtn {
+    .post__status__btn {
         font-size: 2.2rem;
     }
 }

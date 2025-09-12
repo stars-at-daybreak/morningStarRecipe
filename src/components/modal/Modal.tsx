@@ -61,39 +61,39 @@ export default function Modal({ isOpen, type, onClose, onConfirm }: ModalProps) 
 
     // 확인 버튼 클래스명 결정
     const getConfirmButtonClass = () => {
-        let className = `${styles.button}`;
+        let className = `${styles.modal__button}`;
 
         if (type === 'PROMPT_VERIFICATION_CODE') {
             // 인증번호 모달: 특별한 스타일 적용
-            className += ` ${styles.confirmButtonVerify}`;
+            className += ` ${styles.modal__button__confirm__verify}`;
             if (isCodeComplete) {
-                className += ` ${styles.active}`;
+                className += ` ${styles.modal__button__confirm__verify__active}`;
             }
         } else {
             // 일반 모달: 기본 초록색 스타일
-            className += ` ${styles.confirmButton}`;
+            className += ` ${styles.modal__button__confirm}`;
         }
 
         return className;
     };
 
     return (
-        <div className={styles.backdrop}>
+        <div className={styles.modal__backdrop}>
             <div className={styles.modal}>
-                <div className={styles.content}>
-                    <h2 className={styles.title}>{modalConfig.title}</h2>
+                <div className={styles.modal__content}>
+                    <h2 className={styles.modal__title}>{modalConfig.title}</h2>
 
                     {/* 인증번호 모달만 특별한 컴포넌트 렌더링 */}
                     {type === 'PROMPT_VERIFICATION_CODE' ? (
                         <VerifyCodeContent ref={verifyRef} onCodeComplete={handleCodeComplete} />
                     ) : (
-                        modalConfig.message && <p className={styles.message}>{modalConfig.message}</p>
+                        modalConfig.message && <p className={styles.modal__message}>{modalConfig.message}</p>
                     )}
                 </div>
 
-                <div className={styles.buttonArea}>
+                <div className={styles.modal__button__area}>
                     {modalConfig.hasCancel && (
-                        <button onClick={onClose} className={`${styles.button} ${styles.cancelButton}`}>
+                        <button onClick={onClose} className={`${styles.modal__button} ${styles.modal__button__cancel}`}>
                             {modalConfig.cancelText}
                         </button>
                     )}

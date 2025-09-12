@@ -1,5 +1,5 @@
 /* Modal 백드롭 */
-.backdrop {
+.modal__backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -20,7 +20,7 @@
 }
 
 /* 모달 제목 - 모바일 기본값 */
-.title {
+.modal__title {
     margin-bottom: 0.8rem;
     font-size: 1.6rem;
     line-height: 2rem;
@@ -31,12 +31,12 @@
 }
 
 /* 모달 내용 영역 */
-.content {
+.modal__content {
     margin: 2.4rem 2.7rem;
 }
 
 /* 모달 메시지 - 모바일 기본값 */
-.message {
+.modal__message {
     text-align: center;
     line-height: 1.6rem;
     white-space: pre-line;
@@ -46,7 +46,7 @@
 }
 
 /* 버튼 영역 */
-.buttonArea {
+.modal__button__area {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -55,7 +55,7 @@
 }
 
 /* 공통 버튼 스타일 - 모바일 기본값 */
-.button {
+.modal__button {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -67,18 +67,18 @@
 }
 
 /* 취소 버튼 */
-.cancelButton {
+.modal__button__cancel {
     color: var(--color-gray-400);
     border-right: none;
 }
 
 /* 확인 버튼 - 기본값 */
-.confirmButton {
+.modal__button__confirm {
     color: var(--color-green);
 }
 
 /* 인증번호 입력 컴포넌트 스타일 */
-.verifyContainer {
+.modal__verify__container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -87,14 +87,14 @@
 }
 
 /* 10분 타이머 */
-.verifyTimer {
+.modal__verify__timer {
     font-size: 1.6rem;
     font-family: Pretendard;
     color: var(--color-black);
 }
 
 /* 인증번호 입력 필드*/
-.verifyCodeInput {
+.modal__verify__code__input {
     width: 15.7rem;
     font-size: 2rem;
     line-height: 2rem;
@@ -108,30 +108,33 @@
     padding-bottom: 0.8rem;
     padding-left: 1rem;
 }
+
 /* 인증번호 모달 전용 확인 버튼 - 기본 상태 (회색) */
-.button.confirmButtonVerify {
+.modal__button.modal__button__confirm__verify {
     color: var(--color-gray-400); /* 특이성 높음 */
 }
 
 /* 6자리 완성 시 */
-.verifyCodeInput.completed {
+.modal__verify__code__input__completed {
     border-bottom-color: var(--color-green);
     color: var(--color-green);
 }
-.confirmButton.active {
+
+.modal__button__confirm__active {
     color: var(--color-green);
 }
-.button.confirmButtonVerify.active {
+
+.modal__button.modal__button__confirm__verify__active {
     color: var(--color-green); /* 가장 높은 특이성 */
 }
 
 /* 에러 상태 */
-.verifyCodeInput.error {
+.modal__verify__code__input__error {
     border-bottom-color: var(--color-gray-400);
 }
 
 /* 에러 메시지 */
-.errorMessage {
+.modal__error__message {
     color: var(--color-red);
     font-size: 1.2rem;
     margin-top: 8px;
@@ -146,40 +149,40 @@
     }
 
     /* 모달 내용 영역 */
-    .content {
+    .modal__content {
         margin: 4.2rem 6rem;
     }
 
-    .title {
+    .modal__title {
         font-size: 2.6rem;
         line-height: 3.4rem;
         margin-bottom: 1.2rem;
     }
 
-    .message {
+    .modal__message {
         font-size: 2rem;
         line-height: 2.8rem;
     }
 
     /* 버튼 영역 */
-    .buttonArea {
+    .modal__button__area {
         border-radius: 0 0 3.2rem 3.2rem;
     }
 
-    /* 공통 버튼 스타일 - 모바일 기본값 */
-    .button {
+    /* 공통 버튼 스타일 - 태블릿 */
+    .modal__button {
         height: 7.6rem;
         font-size: 2.2rem;
     }
 
     /* 인증번호 입력 컴포넌트 스타일 */
     /* 10분 타이머 */
-    .verifyTimer {
+    .modal__verify__timer {
         font-size: 2.6rem;
     }
 
     /* 인증번호 입력 필드*/
-    .verifyCodeInput {
+    .modal__verify__code__input {
         width: 25.7rem;
         font-size: 3.2rem;
         letter-spacing: 2rem;
@@ -187,7 +190,7 @@
     }
 
     /* 에러 메시지 */
-    .errorMessage {
+    .modal__error__message {
         font-size: 2rem;
     }
 }
