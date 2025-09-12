@@ -1,0 +1,22 @@
+.recommendation {
+    width: 100%;
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    justify-content: center;
+    margin-top: 1rem;
+}
+.item {
+    padding: 0.8rem 1.6rem;
+    background-color: #e9f8d4;
+    color: #68b43f;
+    border-radius: 0.7rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 1024px) {
+    .recommendation {
+        margin-top: 2rem;
+    }
+}
