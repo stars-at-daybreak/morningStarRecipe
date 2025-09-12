@@ -10,9 +10,10 @@ import heartActIcon from '../../assets/heart_icon_active.svg';
 import userIcon from '../../assets/user_icon.svg';
 import userActIcon from '../../assets/user_icon_active.svg';
 import face from '../../assets/face.svg';
-import useUserStore from '../../stores/useUserStore';
+import { Link } from 'react-router-dom';
 import { useModal } from '../../hooks/useModal';
 import Modal from '../modal/Modal';
+import useUserStore from '../../stores/useUserStore';
 interface NavItem {
     href: string; // 링크 주소 (예: '/', '/recipes')
     label: string; // 표시될 텍스트 (예: 'Home', '모두의 레시피')
@@ -82,9 +83,9 @@ const Nav = () => {
             <ul className={styles.nav__list}>
                 {isDesktop ? (
                     <li className={styles.nav__item}>
-                        <a href={'/'} className={`${styles.nav__link} ${styles.nav__link_logo}`}>
+                        <Link to={'/'} className={`${styles.nav__link} ${styles.nav__link_logo}`}>
                             <img src={face} className={styles.nav__icon} alt='Logo icon' />
-                        </a>
+                        </Link>
                     </li>
                 ) : null}
                 {navItems.map(item => (
@@ -92,8 +93,8 @@ const Nav = () => {
                         key={item.href}
                         className={`${styles.nav__item} ${isActive(item) ? styles.nav__item_active : ''}`}
                     >
-                        <a
-                            href={item.href === '/mypage' && !user ? '#' : item.href}
+                        <Link
+                            to={item.href === '/mypage' && !user ? '#' : item.href}
                             onClick={
                                 item.href === '/mypage' && !user
                                     ? e => {
@@ -110,7 +111,7 @@ const Nav = () => {
                                 alt={`${item.label} icon`}
                             />
                             {item.label}
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </ul>
