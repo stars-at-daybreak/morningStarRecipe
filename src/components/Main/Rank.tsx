@@ -181,7 +181,7 @@ const RankingItem: React.FC<RankingItemProps> = React.memo(({ post, index, apiUr
     );
 
     return (
-        <li className={styles.rankingItem}>
+        <li className={`${styles.rankingItem} ${styles.fadeSlideIn} ${styles[`delay${index}`]}`}>
             {/* 순위 뱃지 */}
             <div className={`${styles.rankBadge} ${getRankBadgeClass(index)}`}>
                 <span aria-label={`${index + 1}위`} className={`${styles.rankText} `}>
