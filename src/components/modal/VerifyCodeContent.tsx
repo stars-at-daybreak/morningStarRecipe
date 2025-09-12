@@ -67,21 +67,24 @@ const VerifyCodeContent = forwardRef<VerifyCodeContentRef, VerifyCodeContentProp
 
     // input 클래스명 결정
     const getInputClassName = () => {
+        let className = styles.modal__verify__code__input;
+
         if (isError) {
-            return `${styles.verifyCodeInput} ${styles.error}`;
+            className += ` ${styles.modal__verify__code__input__error}`;
         } else if (code.length === 6) {
-            return `${styles.verifyCodeInput} ${styles.completed}`;
+            className += ` ${styles.modal__verify__code__input__completed}`;
         }
-        return styles.verifyCodeInput;
+
+        return className;
     };
 
     return (
-        <div className={styles.verifyContainer}>
+        <div className={styles.modal__verify__container}>
             {/* 10분 타이머 */}
-            <div className={styles.verifyTimer}>{formatTime(timeLeft)}</div>
+            <div className={styles.modal__verify__timer}>{formatTime(timeLeft)}</div>
 
             {/* 인증번호 입력 필드 */}
-            <div className={styles.verifyInputContainer}>
+            <div className={styles.modal__verify__input__container}>
                 <input
                     type='text'
                     value={code}
@@ -92,7 +95,7 @@ const VerifyCodeContent = forwardRef<VerifyCodeContentRef, VerifyCodeContentProp
                 />
 
                 {/* 에러 메시지 */}
-                {isError && <div className={styles.errorMessage}>{errorMessage}</div>}
+                {isError && <div className={styles.modal__error__message}>{errorMessage}</div>}
             </div>
         </div>
     );
