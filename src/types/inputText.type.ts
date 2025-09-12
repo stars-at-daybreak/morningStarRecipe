@@ -6,4 +6,5 @@ export interface InputTextType {
     type: string;
     handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder: string;
+    isRequired?: boolean;
 }

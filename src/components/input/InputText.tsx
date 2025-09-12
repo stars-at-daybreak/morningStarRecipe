@@ -1,7 +1,7 @@
 import styles from './inputText.module.css';
 import type { InputTextType } from '../../types/inputText.type.ts';
 
-const InputText = ({ label, id, name, state, type, handleInput, placeholder }: InputTextType) => {
+const InputText = ({ label, id, name, state, type, handleInput, placeholder, isRequired }: InputTextType) => {
     return (
         <div className={styles['input']}>
             <label htmlFor={id} className={styles['input__label']}>
@@ -16,6 +16,7 @@ const InputText = ({ label, id, name, state, type, handleInput, placeholder }: I
                     value={state}
                     onChange={handleInput}
                     placeholder={placeholder}
+                    required={isRequired}
                 />
             </div>
         </div>

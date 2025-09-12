@@ -8,7 +8,7 @@ export interface SignupData {
         name: string;
         birthDate: string;
         gender: string;
-        isForeigner: boolean;
+        isForeigner: boolean | null;
         agreeToTerms: boolean;
     };
 }
