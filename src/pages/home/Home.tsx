@@ -5,7 +5,8 @@ import Recent from '../../components/main/Recent.tsx';
 import SearchPage from '../search/Search.tsx';
 import SearchForm from '../../components/search/SearchForm.tsx';
 import { usePageSetup } from '../../hooks/usePageSetup';
-
+import styles from './Home.module.css';
+import Recommendation from '../../components/main/Recommendation.tsx';
 const Home = () => {
     usePageSetup({
         title: '',
@@ -18,12 +19,13 @@ const Home = () => {
         return <SearchPage query={query} />;
     }
     return (
-        <>
+        <div className={styles.home}>
             <SearchForm />
+            <Recommendation />
             <Rank />
             <Sharing />
             <Recent />
-        </>
+        </div>
     );
 };
 

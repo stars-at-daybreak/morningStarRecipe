@@ -1,17 +1,17 @@
 /* 키보드 버튼 스타일 */
 .keyboard__button {
     position: absolute;
-    right: 45px; /* 검색 버튼 옆에 위치 */
+    right: 3rem; /* 검색 버튼 옆에 위치 */
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    padding: 8px;
+    padding: 0.8rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 0.4rem;
     transition: background-color 0.2s ease;
 }
 
@@ -24,8 +24,8 @@
 }
 
 .keyboard__icon {
-    width: 18px;
-    height: 18px;
+    width: 2.4rem;
+    height: 2rem;
     opacity: 0.7;
     transition: opacity 0.2s ease;
 }
@@ -33,31 +33,6 @@
 .keyboard__button:hover .keyboard__icon {
     opacity: 1;
 }
-
-/* 입력창 래퍼 상대 위치 설정 */
-.search__input_wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-/* 검색 버튼 위치 조정 (키보드 버튼 공간 확보) */
-.search__button {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-}
-
 /* 키보드 컨테이너 스타일 */
 .keyboard__container {
     position: fixed;
@@ -68,43 +43,75 @@
     border-top: 1px solid #e0e0e0;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    padding: 16px;
+    padding: 1.6rem;
     max-height: 50vh;
     overflow-y: auto;
 }
 
-/* 모바일에서 키보드 스타일 조정 */
-@media (max-width: 768px) {
-    .keyboard__container {
-        padding: 12px;
-        max-height: 60vh;
-    }
+.search {
+    margin: 3rem auto 0;
+    border: 2px solid #68b43f;
+    border-radius: 5rem;
+    padding: 1.2rem 2rem;
+}
 
-    .keyboard__button {
-        right: 40px;
-    }
+/* 입력창 래퍼 상대 위치 설정 */
+.search__input_wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.search__input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.6rem;
+    padding-right: 4rem; /* 키보드 버튼 공간 확보 */
+}
+.search__input:focus {
+    border: none;
+}
+.search__input::placeholder {
+    color: #c5c5c5;
+}
 
-    .keyboard__icon {
-        width: 16px;
-        height: 16px;
-    }
+/* 검색 버튼 위치 조정 (키보드 버튼 공간 확보) */
+.search__button {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+.search__icon {
+    width: 2rem;
+    height: 2rem;
 }
 
 /* react-simple-keyboard 커스텀 스타일 */
 :global(.hg-theme-default) {
     background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 12px;
+    border-radius: 0.8rem;
+    padding: 1.2rem;
 }
 
 :global(.hg-theme-default .hg-button) {
     background: white;
     border: 1px solid #dee2e6;
     color: #212529;
-    border-radius: 6px;
+    border-radius: 0.6rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.15s ease;
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 500;
 }
 
@@ -145,5 +152,17 @@
 
 /* 스페이스바 스타일 */
 :global(.hg-button[data-skbtn='{space}']) {
-    min-width: 200px;
+    min-width: 20rem;
+}
+@media screen and (min-width: 768px) {
+    .search {
+        margin: 3rem auto 0;
+        max-width: 73.6rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .search {
+        margin-top: 6rem;
+    }
 }

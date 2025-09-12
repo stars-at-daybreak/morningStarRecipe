@@ -1,0 +1,8 @@
+.home {
+    margin: 0 1.6rem;
+}
+@media screen and (min-width: 1024px) {
+    .home {
+        padding-top: 2rem;
+    }
+}
