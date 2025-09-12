@@ -152,7 +152,7 @@ const SignUp = () => {
                     <ResponsiveLogo />
                 </h2>
             </section>
-            <form onSubmit={signUpHandler}>
+            <form className={styles['signup__form']} onSubmit={signUpHandler}>
                 <InputText
                     label='이메일'
                     id='email'
