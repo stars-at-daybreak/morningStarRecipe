@@ -1,9 +1,18 @@
 import { useState } from 'react';
 
 interface UploadResponse {
-    filename: string;
+    message: string;
+    info: {
+        fieldname: string;
+        originalname: string;
+        encoding: string;
+        mimetype: string;
+        destination: string;
+        filename: string;
+        path: string;
+        size: number;
+    };
 }
-
 interface UseFileUploadReturn {
     uploadFile: (file: File) => Promise<string | null>;
     isUploading: boolean;
@@ -22,7 +31,6 @@ export const useFileUpload = (): UseFileUploadReturn => {
         setError(null);
 
         try {
-            // 파일 크기 체크 (10MB = 10 * 1024 * 1024 bytes)
             const MAX_FILE_SIZE = 10 * 1024 * 1024;
             if (file.size > MAX_FILE_SIZE) {
                 throw new Error('파일 크기는 10MB를 초과할 수 없습니다.');
@@ -40,10 +48,9 @@ export const useFileUpload = (): UseFileUploadReturn => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data: UploadResponse[] = await response.json();
+            const data: UploadResponse = await response.json();
 
-            // 첫 번째 파일명 반환
-            return data[0]?.filename || null;
+            return data?.info.filename || null;
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : '파일 업로드 중 오류가 발생했습니다.';
             setError(errorMessage);

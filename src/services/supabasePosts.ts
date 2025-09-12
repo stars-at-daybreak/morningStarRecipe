@@ -5,14 +5,14 @@ import type { PostWithUserNickname } from '../types/posts.type.ts';
 import type { BookmarkedPost } from '../types/bookmark.types';
 import type { Tables } from '../types/supabase';
 type Post = Tables<'posts'>;
-export const createPost = async (post: TablesInsert<'posts'>) => {
+export const createPost = async (post: TablesInsert<'posts'>): Promise<string | null> => {
     try {
-        const { error } = await supabase.from('posts').insert(post);
+        const { data, error } = await supabase.from('posts').insert(post).select('id').single();
         if (error) throw error;
-        return true;
+        return data?.id || null;
     } catch (error) {
         console.error('게시글 등록 중 에러 발생:', error);
-        return false;
+        return null;
     }
 };
 

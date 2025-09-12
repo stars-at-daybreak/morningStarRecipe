@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { createPost, updatePost } from '../services/supabasePosts.ts';
 import useUserStore from '../stores/useUserStore.ts';
 import { useLocation } from 'react-router-dom';
+import { ResponsiveFileUpload } from './ImgUpload/ImgUpload.tsx';
+import { saveThumbnailImage } from '../services/supabaseFiles.ts';
 
 const RecipeForm = () => {
     const location = useLocation();
@@ -15,6 +17,7 @@ const RecipeForm = () => {
         ingredients: '',
         content: '',
     });
+    const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
     const { user } = useUserStore();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,17 +34,40 @@ const RecipeForm = () => {
             user_id: user.id,
         };
 
-        let isSuccess;
+        try {
+            if (type === 'create') {
+                const postId = await createPost(recipeData);
 
-        if (type === 'create') {
-            isSuccess = await createPost(recipeData);
-        } else if (type === 'update' && recipeId) {
-            isSuccess = await updatePost({ ...recipeData, id: recipeId });
-        }
+                if (postId && uploadedFilename) {
+                    await saveThumbnailImage(uploadedFilename, postId);
+                }
 
-        if (isSuccess) {
-            alert('레시피 저장을 완료하였습니다.');
+                if (postId) {
+                    alert('레시피 저장을 완료하였습니다.');
+                } else {
+                    alert('레시피 저장에 실패했습니다.');
+                }
+            } else if (type === 'update' && recipeId) {
+                const isSuccess = await updatePost({ ...recipeData, id: recipeId });
+
+                if (isSuccess && uploadedFilename) {
+                    await saveThumbnailImage(uploadedFilename, recipeId);
+                }
+
+                if (isSuccess) {
+                    alert('레시피 수정을 완료하였습니다.');
+                } else {
+                    alert('레시피 수정에 실패했습니다.');
+                }
+            }
+        } catch (error) {
+            console.error('레시피 저장 실패:', error);
+            alert('레시피 저장 중 오류가 발생했습니다.');
         }
+    };
+
+    const handleFileUpload = (filename: string | null) => {
+        setUploadedFilename(filename);
     };
 
     return (
@@ -123,6 +149,8 @@ const RecipeForm = () => {
                         onChange={e => setFormData({ ...formData, content: e.target.value })}
                     ></textarea>
                 </div>
+
+                <ResponsiveFileUpload onFileUpload={handleFileUpload} />
 
                 <button type='submit'>작성 완료</button>
             </form>
