@@ -11,7 +11,6 @@ import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
 import Privacy from './pages/Privacy.tsx';
 import Terms from './pages/Terms.tsx';
-import ModalTestPage from './pages/ModalTestPage.tsx';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './components/RecipeForm.tsx';
 import RecipeDetail from './components/RecipeDetail.tsx';
@@ -51,7 +50,6 @@ const AppRoutes = () => {
 
     return (
         <Routes>
-            <Route path='/modal-test' element={<ModalTestPage />} />
             <Route path='/' element={<Layout />}>
                 <Route index path='/' element={<Home />} />
                 <Route path='/login' element={!user ? <Login /> : <Navigate to='/' replace={true} />} />

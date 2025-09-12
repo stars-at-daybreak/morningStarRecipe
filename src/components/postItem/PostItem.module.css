@@ -99,21 +99,21 @@
 
 /* 추천 아이콘 */
 .post__like__icon__inactive {
-    background: url('../../assets/추천_icon.svg') no-repeat center / cover;
+    background: url('../../assets/like_icon.svg') no-repeat center / cover;
 }
 
 /* 비추천 아이콘 */
 .post__dislike__icon__inactive {
-    background: url('../../assets/비추천_icon.svg') no-repeat center / cover;
+    background: url('../../assets/dislike_icon.svg') no-repeat center / cover;
 }
 
 /* active 상태 */
 /* 추천 아이콘 */
 .post__like__icon__active {
-    background: url('../../assets/추천_icon_active.svg') no-repeat center / cover;
+    background: url('../../assets/like_icon_active.svg') no-repeat center / cover;
 }
 .post__dislike__icon__active {
-    background: url('../../assets/비추천_icon_active.svg') no-repeat center / cover;
+    background: url('../../assets/dislike_icon_active.svg') no-repeat center / cover;
 }
 
 /* 북마크 - 기본상태 */
