@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { signin } from '../../services/supabaseUsers.ts';
-import loginLogoMobile from '../../assets/login_logo_mobile.svg';
-import loginLogoTablet from '../../assets/login_logo_tablet.svg';
 import styles from './login.module.css';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
-import Input from '../../components/input/Input.tsx';
+import InputText from '../../components/input/InputText.tsx';
 import Button from '../../components/button/Button.tsx';
 import { Link } from 'react-router-dom';
+import ResponsiveLogo from '../../components/logo/ResponsiveLogo.tsx';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -18,7 +17,7 @@ const Login = () => {
         await signin(email, password);
     };
 
-    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.type === 'email') setEmail(e.target.value);
         if (e.target.type === 'password') setPassword(e.target.value);
 
@@ -39,27 +38,24 @@ const Login = () => {
         <div className={styles['login']}>
             <section>
                 <h2>
-                    <picture>
-                        <source media='(min-width: 1024px)' srcSet={loginLogoTablet} />
-                        <img src={loginLogoMobile} alt='모두의 부엌 로고' />
-                    </picture>
+                    <ResponsiveLogo />
                 </h2>
             </section>
             <form onSubmit={signInHandler} className={styles['login__form']}>
-                <Input
+                <InputText
                     label='이메일'
                     id='email'
                     state={email}
                     type='email'
-                    inputHandler={inputHandler}
+                    handleInput={handleInput}
                     placeholder='이메일을 입력해주세요'
                 />
-                <Input
+                <InputText
                     label='비밀번호'
                     id='password'
                     state={password}
                     type='password'
-                    inputHandler={inputHandler}
+                    handleInput={handleInput}
                     placeholder='비밀번호를 입력해주세요'
                 />
                 <Button
