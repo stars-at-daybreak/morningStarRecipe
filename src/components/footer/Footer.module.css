@@ -1,4 +1,4 @@
-footer {
+.footer {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -9,7 +9,7 @@ footer {
     margin-top: 6rem;
 }
 
-.container {
+.footer__container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -18,24 +18,30 @@ footer {
     margin-bottom: 1.6rem;
 }
 
-.footer-links {
+.footer__links {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 2rem;
 }
-.bar {
+
+.footer__bar {
     display: inline-block;
     width: 0.1rem;
     height: 1.2rem;
     background-color: var(--color-gray-200);
 }
-.container p {
+
+.footer__copyright {
     width: 100%;
 }
 
-.github-section a {
+.footer__github-section {
+    /* github-section 스타일이 필요하다면 여기에 추가 */
+}
+
+.footer__github__button {
     display: inline-block;
     width: 12.7rem;
     height: 3.6rem;
@@ -47,25 +53,27 @@ footer {
 }
 
 @media (min-width: 1024px) {
-    footer {
+    .footer {
         font-size: 1.8rem;
         margin-bottom: 8rem;
         margin-top: 10rem;
     }
-    .container {
+
+    .footer__container {
         flex-direction: row;
         margin-bottom: 3.2rem;
         gap: 3.2rem;
     }
 
-    .footer-links {
-        width: auto;
-    }
-    .container p {
+    .footer__links {
         width: auto;
     }
 
-    .github-section a {
+    .footer__copyright {
+        width: auto;
+    }
+
+    .footer__github__button {
         width: 21.2rem;
         height: 6.2rem;
         background: url('../../assets/gitbut_btn_tablet.png') no-repeat center / cover;

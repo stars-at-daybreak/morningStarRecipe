@@ -113,9 +113,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
     if (type === 'recipe') {
         return (
             <>
-                <div className={styles.postItem} onClick={() => onClick && onClick(post.id)}>
+                <div className={styles.post__item} onClick={() => onClick && onClick(post.id)}>
                     {/* 썸네일 */}
-                    <div className={styles.thumbnail}>
+                    <div className={styles.post__thumbnail}>
                         <img
                             src={
                                 post.thumbnail_filename
@@ -127,47 +127,65 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
                         />
                     </div>
 
-                    <div className={styles.recipeContent}>
+                    <div className={styles.post__recipe__content}>
                         {/* 제목 */}
-                        <div className={styles.title}>
+                        <div className={styles.post__title}>
                             <h3>{post.title}</h3>
                         </div>
 
-                        <div className={styles.recipeActions}>
+                        <div className={styles.post__recipe__actions}>
                             {/* 추천+비추천 (표시만, 클릭 불가) */}
-                            <div className={styles.vote}>
+                            <div className={styles.post__vote}>
                                 {/* 추천 */}
-                                <div className={styles.voteBtn}>
+                                <div className={styles.post__vote__btn}>
                                     <div
-                                        className={`${styles.likeIcon} ${
-                                            user?.id && isLiked ? styles.likeActive : styles.likeInactive
+                                        className={`${styles.post__like__icon} ${
+                                            user?.id && isLiked
+                                                ? styles.post__like__icon__active
+                                                : styles.post__like__icon__inactive
                                         }`}
                                         aria-label='추천'
                                     />
-                                    <span className={user?.id && isLiked ? styles.activeText : styles.inactiveText}>
+                                    <span
+                                        className={
+                                            user?.id && isLiked
+                                                ? styles.post__vote__text__active
+                                                : styles.post__vote__text__inactive
+                                        }
+                                    >
                                         {post.like_count || 0}
                                     </span>
                                 </div>
 
                                 {/* 비추천 */}
-                                <div className={styles.voteBtn}>
+                                <div className={styles.post__vote__btn}>
                                     <div
-                                        className={`${styles.dislikeIcon} ${
-                                            user?.id && isDisliked ? styles.dislikeActive : styles.dislikeInactive
+                                        className={`${styles.post__dislike__icon} ${
+                                            user?.id && isDisliked
+                                                ? styles.post__dislike__icon__active
+                                                : styles.post__dislike__icon__inactive
                                         }`}
                                         aria-label='비추천'
                                     />
-                                    <span className={user?.id && isDisliked ? styles.activeText : styles.inactiveText}>
+                                    <span
+                                        className={
+                                            user?.id && isDisliked
+                                                ? styles.post__vote__text__active
+                                                : styles.post__vote__text__inactive
+                                        }
+                                    >
                                         {post.dislike_count || 0}
                                     </span>
                                 </div>
                             </div>
 
                             {/* 북마크 */}
-                            <button className={styles.bookmarkBtn} onClick={handleBookmark} disabled={loading}>
+                            <button className={styles.post__bookmark__btn} onClick={handleBookmark} disabled={loading}>
                                 <div
-                                    className={`${styles.bookmarkIcon} ${
-                                        user?.id && isBookmarked ? styles.bookmarkActive : styles.bookmarkInactive
+                                    className={`${styles.post__bookmark__icon} ${
+                                        user?.id && isBookmarked
+                                            ? styles.post__bookmark__active
+                                            : styles.post__bookmark__inactive
                                     }`}
                                     aria-label='북마크'
                                 />
@@ -184,15 +202,15 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
     const getShareStatusClass = (status: ShareStatus): string => {
         switch (status) {
             case 'available':
-                return styles.statusAvailable;
+                return styles.post__status__available;
             case 'reserved':
-                return styles.statusReserved;
+                return styles.post__status__reserved;
             case 'completed':
-                return styles.statusCompleted;
+                return styles.post__status__completed;
             case 'cancelled':
-                return styles.statusCancelled;
+                return styles.post__status__cancelled;
             default:
-                return styles.statusAvailable;
+                return styles.post__status__available;
         }
     };
 
@@ -216,9 +234,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
     if (type === 'share') {
         return (
             <>
-                <div className={styles.postItem} onClick={() => onClick && onClick(post.id)}>
+                <div className={styles.post__item} onClick={() => onClick && onClick(post.id)}>
                     {/* 썸네일 */}
-                    <div className={styles.thumbnail}>
+                    <div className={styles.post__thumbnail}>
                         <img
                             src={
                                 post.thumbnail_filename
@@ -230,16 +248,16 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
                         />
                     </div>
 
-                    <div className={styles.shareContent}>
+                    <div className={styles.post__share__content}>
                         {/* 제목 */}
-                        <div className={styles.title}>
+                        <div className={styles.post__title}>
                             <h3>{post.title}</h3>
                         </div>
 
                         {/* 나눔 상태 버튼 */}
-                        <div className={styles.shareActions}>
+                        <div className={styles.post__share__actions}>
                             <div
-                                className={`${styles.statusBtn} ${getShareStatusClass(post.share_status || 'available')}`}
+                                className={`${styles.post__status__btn} ${getShareStatusClass(post.share_status || 'available')}`}
                             >
                                 <span>{getShareStatusText(post.share_status || 'available')}</span>
                             </div>
