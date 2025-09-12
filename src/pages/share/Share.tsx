@@ -1,8 +1,10 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { ShareStatus } from '../../types/search.types.ts';
+import PostItem from '../../components/postItem/PostItem.tsx';
 
 const Share = ({ query }: { query?: string }) => {
+    const navigate = useNavigate();
     const { searchList, loading, updateSearchTerm, updateShareStatus } = useSearch({
         pageType: 'share',
         initialParams: {
@@ -29,13 +31,14 @@ const Share = ({ query }: { query?: string }) => {
                 <div>로딩 중...</div>
             ) : (
                 <>
-                    <ul>
-                        {searchList.map(item => (
-                            <li key={item.id}>
-                                <Link to={`/share/${item.id}`}>{item.title}</Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {searchList.map(item => (
+                        <PostItem
+                            key={item.id}
+                            post={item}
+                            type='share'
+                            onClick={postId => navigate(`/share/${postId}`)}
+                        />
+                    ))}
                 </>
             )}
         </div>

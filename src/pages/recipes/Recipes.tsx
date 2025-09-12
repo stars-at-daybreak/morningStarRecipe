@@ -1,8 +1,10 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { RecipeSortBy } from '../../types/search.types.ts';
+import PostItem from '../../components/postItem/PostItem.tsx';
 
 const Recipes = ({ query }: { query?: string }) => {
+    const navigate = useNavigate();
     const { searchList, loading, updateSearchTerm, updateRecipeSortBy } = useSearch({
         pageType: 'recipe',
         initialParams: {
@@ -29,13 +31,16 @@ const Recipes = ({ query }: { query?: string }) => {
                 <div>로딩 중...</div>
             ) : (
                 <>
-                    <ul>
+                    <div>
                         {searchList.map(item => (
-                            <li key={item.id}>
-                                <Link to={`/recipes/${item.id}`}>{item.title}</Link>
-                            </li>
+                            <PostItem
+                                key={item.id}
+                                post={item}
+                                type='recipe'
+                                onClick={postId => navigate(`/recipes/${postId}`)}
+                            />
                         ))}
-                    </ul>
+                    </div>
                 </>
             )}
         </div>
