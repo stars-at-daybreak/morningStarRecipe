@@ -1,3 +1,4 @@
+import styles from './inputRadio.module.css';
 const InputRadio = ({
     label,
     id,
@@ -14,9 +15,19 @@ const InputRadio = ({
     handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
     return (
-        <div>
-            <label htmlFor={id}>{label}</label>
-            <input type='radio' id={id} name={name} value={value} onChange={handleInput} required={isRequired} />
+        <div className={styles['radio-group']}>
+            <label htmlFor={id} className={styles['radio-group__label']}>
+                <input
+                    type='radio'
+                    id={id}
+                    name={name}
+                    className={styles['radio-group__input']}
+                    value={value}
+                    onChange={handleInput}
+                    required={isRequired}
+                />
+                {label}
+            </label>
         </div>
     );
 };

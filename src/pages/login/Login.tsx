@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signin } from '../../services/supabaseUsers.ts';
 import styles from './login.module.css';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
@@ -20,12 +20,6 @@ const Login = () => {
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.type === 'email') setEmail(e.target.value);
         if (e.target.type === 'password') setPassword(e.target.value);
-
-        if (email && password) {
-            setIsDisabled(false);
-        } else {
-            setIsDisabled(true);
-        }
     };
 
     usePageSetup({
@@ -33,6 +27,10 @@ const Login = () => {
         pageName: 'login',
         showBackButton: true,
     });
+
+    useEffect(() => {
+        setIsDisabled(!(email && password));
+    }, [email, password]);
 
     return (
         <div className={styles['login']}>

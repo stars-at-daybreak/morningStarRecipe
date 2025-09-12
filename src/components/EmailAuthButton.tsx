@@ -33,11 +33,9 @@ const EmailAuthButton = ({ email }: { email: string }) => {
     }
 
     return (
-        <div>
-            <button type='button' onClick={handleEmailAuth} disabled={isLoading}>
-                {isLoading ? '전송 중...' : '인증'}
-            </button>
-        </div>
+        <button type='button' onClick={handleEmailAuth} disabled={isLoading}>
+            {isLoading ? '전송 중...' : '인증하기'}
+        </button>
     );
 };
 
