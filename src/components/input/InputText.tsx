@@ -11,10 +11,11 @@ const InputText = ({
     placeholder,
     isRequired,
     isDisabled,
+    className,
 }: InputTextType) => {
     return (
         <div className={styles['input']}>
-            <label htmlFor={id} className={styles['input__label']}>
+            <label htmlFor={id} className={`${styles['input__label']} ${className && styles[className]}`}>
                 {label}
             </label>
             <div className={styles['input__group']}>

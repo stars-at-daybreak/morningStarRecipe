@@ -35,12 +35,27 @@
     margin-top: 1.6rem;
 }
 
+.input__label:after {
+    content: '';
+    display: inline-block;
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    margin-left: 0.2rem;
+    background-color: var(--color-gray);
+    mask: url('../../assets/circle_check.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+}
+.input__label--active:after {
+    background-color: var(--color-green);
+}
+
 @media (min-width: 1024px) {
     .input__label {
-        display: block;
         font-size: 1.8em;
         line-height: 1.8rem;
-        color: var(--color-gray);
     }
     .input__group {
         display: flex;

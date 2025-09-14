@@ -1,0 +1,34 @@
+.validation-text--hidden {
+    display: none;
+}
+.validation-text--warn {
+    display: block;
+    font-weight: 400;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    color: var(--color-red);
+    margin-top: 1rem;
+}
+.validation-text {
+    display: block;
+    font-weight: 400;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    color: var(--color-green);
+    margin-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+    .validation-text--warn {
+        font-size: 2.2rem;
+        line-height: 2.2rem;
+        color: var(--color-red);
+        margin-top: 1.6rem;
+    }
+    .validation-text {
+        font-size: 2.2rem;
+        line-height: 2.2rem;
+        color: var(--color-green);
+        margin-top: 1.6rem;
+    }
+}

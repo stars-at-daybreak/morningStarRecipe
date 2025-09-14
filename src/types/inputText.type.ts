@@ -8,4 +8,5 @@ export interface InputTextType {
     placeholder: string;
     isRequired?: boolean;
     isDisabled?: boolean;
+    className?: string;
 }

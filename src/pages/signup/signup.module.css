@@ -16,38 +16,19 @@
     align-items: center;
 }
 
-.signup__form
-    label:not([for*='male']):not([for*='female']):not([for*='korean']):not([for*='foreigner']):not(
-        [for*='agreeTo']
-    ):after {
-    font-size: 1.2rem;
-    line-height: 1.2rem;
-    color: var(--color-gray);
-}
-.signup__form
-    label:not([for*='male']):not([for*='female']):not([for*='korean']):not([for*='foreigner']):not(
-        [for*='agreeTo']
-    ):after {
-    content: '';
-    display: inline-block;
-    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
-    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
-    margin-left: 0.2rem;
-    background-color: var(--color-gray);
-    mask: url('../../assets/circle_check.svg') no-repeat center;
-    mask-size: contain;
-    -webkit-mask-size: contain;
-}
-
-.signup__email-box,
 .signup__nickname-box {
+    width: 100%;
+    margin-top: 1.6rem;
+}
+.signup__email-box,
+.signup__nickname-contents {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-end;
 }
-.signup__email-box button,
-.signup__nickname-box button {
+
+.signup__email-box button {
     min-width: 9.7rem;
     width: clamp(8.7rem, 8.7rem + (100vw - 390px) * 0.1, 14.9rem);
     height: clamp(3.6rem, 3.6rem + (100vw - 390px) * 0.05, 6.2rem);
@@ -65,9 +46,6 @@
 .signup__password-group,
 .signup__personal-group {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin-top: 1.2rem;
 }
 
@@ -81,18 +59,31 @@
         font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
         line-height: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
     }
-    legend:after {
-        content: '';
-        display: inline-block;
-        width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
-        height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
-        margin-left: 0.2rem;
-        background-color: var(--color-gray);
-        mask: url('../../assets/circle_check.svg') no-repeat center;
-        mask-size: contain;
-        -webkit-mask-size: contain;
-    }
 }
+.signup__radio-legend:after {
+    content: '';
+    display: inline-block;
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    margin-left: 0.2rem;
+    background-color: var(--color-gray);
+    mask: url('../../assets/circle_check.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+}
+.signup__radio-legend--active:after {
+    content: '';
+    display: inline-block;
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    margin-left: 0.2rem;
+    background-color: var(--color-green);
+
+    mask: url('../../assets/circle_check.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+}
+
 .signup__gender-group {
     margin-top: 3rem;
 }
