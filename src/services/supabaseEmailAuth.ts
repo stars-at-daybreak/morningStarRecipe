@@ -30,10 +30,9 @@ export const sendVerificationCode = async (
         );
 
         if (functionError) {
-            console.error('Edge Function 호출 실패:', functionError);
             return {
                 success: false,
-                message: `이메일 발송 실패: ${functionError.message}`,
+                message: `이메일 발송을 실패하였습니다.`,
             };
         }
 
@@ -43,7 +42,6 @@ export const sendVerificationCode = async (
             code: functionData?.developmentCode || undefined, // 개발 모드에서만
         };
     } catch (error) {
-        console.error('예상치 못한 오류:', error);
         return {
             success: false,
             message: `예상치 못한 오류가 발생했습니다: ${error instanceof Error ? error.message : '알 수 없는 오류'}`,
@@ -58,23 +56,22 @@ export const verifyEmailCode = async (email: string, code: string): Promise<bool
             .select('*')
             .eq('email', email)
             .eq('code', code)
+            .eq('verified', false)
             .gt('expires_at', new Date().toISOString())
             .single();
 
         if (error || !data) {
             console.error('인증번호 검증 실패:', error);
-            alert('인증번호가 만료되었거나 잘못되었습니다.');
             return false;
         }
 
-        const { error: deleteError } = await supabase
+        const { error: updateError } = await supabase
             .from('email_verifications')
-            .delete()
-            .eq('email', email)
-            .eq('code', code);
+            .update({ verified: true })
+            .eq('id', data.id);
 
-        if (deleteError) {
-            console.error('사용된 인증번호 삭제 실패:', deleteError);
+        if (updateError) {
+            console.error('인증번호 상태 업데이트 실패:', updateError);
         }
 
         alert('이메일 인증이 완료되었습니다.');

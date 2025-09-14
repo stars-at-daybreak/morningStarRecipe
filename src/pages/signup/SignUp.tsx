@@ -9,10 +9,13 @@ import Button from '../../components/button/Button.tsx';
 import InputRadio from '../../components/input/InputRadio.tsx';
 import { privacyPolicy, termsOfService } from '../../data/termsOfService.ts';
 import type { SignupData } from '../../types/users.ts';
+import EmailAuthModal from '../../components/modal/EmailAuthModal.tsx';
 
 const SignUp = () => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [checkedItems, setCheckedItems] = useState(new Set());
+    const [isOpen, setIsOpen] = useState(false);
+    const [isAuthConfirm, setIsAuthConfirm] = useState(false);
 
     const [formData, setFormData] = useState<
         SignupData & {
@@ -131,9 +134,14 @@ const SignUp = () => {
         }
     };
 
+    const handleAuthConfirm = (isConfirm: boolean) => {
+        setIsAuthConfirm(isConfirm);
+    };
+
     useEffect(() => {
         const isFormValid =
             formData.email &&
+            isAuthConfirm &&
             formData.options.nickname &&
             formData.password &&
             formData.password2 &&
@@ -146,7 +154,7 @@ const SignUp = () => {
             checkedItems.has('agreeToTerms2');
 
         setIsDisabled(!isFormValid);
-    }, [formData, checkedItems]);
+    }, [formData, isAuthConfirm, checkedItems]);
 
     usePageSetup({
         title: '회원가입',
@@ -156,11 +164,9 @@ const SignUp = () => {
 
     return (
         <div className={styles['signup']}>
-            <section>
-                <h2>
-                    <ResponsiveLogo />
-                </h2>
-            </section>
+            <div>
+                <ResponsiveLogo />
+            </div>
 
             <form className={styles['signup__form']} onSubmit={signUpHandler}>
                 <fieldset className={styles['signup__email-box']}>
@@ -175,8 +181,13 @@ const SignUp = () => {
                         handleInput={handleInput}
                         placeholder='이메일 주소를 입력해주세요.'
                         isRequired={true}
+                        isDisabled={isAuthConfirm}
                     />
-                    <EmailAuthButton email={formData.email} />
+                    <EmailAuthButton
+                        handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
+                        isConfirm={isAuthConfirm}
+                        email={formData.email}
+                    />
                 </fieldset>
 
                 <fieldset className={styles['signup__nickname-box']}>
@@ -332,6 +343,14 @@ const SignUp = () => {
                     className={styles['login__submit-button']}
                 />
             </form>
+
+            {isOpen && (
+                <EmailAuthModal
+                    handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
+                    handleAuthConfirm={(isConfirm: boolean) => handleAuthConfirm(isConfirm)}
+                    email={formData.email}
+                />
+            )}
         </div>
     );
 };

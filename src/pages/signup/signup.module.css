@@ -48,6 +48,7 @@
 }
 .signup__email-box button,
 .signup__nickname-box button {
+    min-width: 9.7rem;
     width: clamp(8.7rem, 8.7rem + (100vw - 390px) * 0.1, 14.9rem);
     height: clamp(3.6rem, 3.6rem + (100vw - 390px) * 0.05, 6.2rem);
 
