@@ -98,6 +98,7 @@
 .ranking__profiles {
     display: flex;
     justify-content: center;
+    padding-top: 1rem;
     gap: 8vw;
 }
 .profile {
@@ -160,7 +161,7 @@
         transform: translateY(30px) scale(0.9);
     }
     to {
-        transform: translateY(0) scale(1.1);
+        transform: translateY(-10px) scale(1.1);
     }
 }
 .profile__delay--0 {
@@ -189,6 +190,9 @@
 @media screen and (min-width: 768px) {
     .ranking__container {
         min-height: 55rem;
+    }
+    .ranking__profiles {
+        padding-top: 2rem;
     }
     .ranking__title {
         font-size: 2.6rem;
@@ -252,6 +256,9 @@
 @media screen and (min-width: 1024px) {
     .ranking__container {
         min-height: 73rem;
+    }
+    .ranking__profiles {
+        padding-top: 3rem;
     }
     .ranking__title {
         font-size: 3.2rem;
