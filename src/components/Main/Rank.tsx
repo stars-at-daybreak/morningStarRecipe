@@ -5,24 +5,29 @@ import styles from './Rank.module.css';
 import { getUserProfileImage, getPostThumbnails } from '../../services/supabaseFiles';
 import NoneProfileImageUrl from '../../assets/none-profile.svg';
 import NoneThumbnailImageUrl from '../../assets/none-thumbnail.svg';
-
-const MAX_DISPLAY_POSTS = 10;
+import rank_1 from '../../assets/rank_1.svg';
+import rank_2 from '../../assets/rank_2.svg';
+import rank_3 from '../../assets/rank_3.svg';
+import { getUserNickname } from '../../services/supabaseUsers';
 
 interface PostWithProfileThumbnail extends Tables<'posts'> {
     profileImageUrl?: string;
     thumbnailImageUrl?: string;
+    userNickname?: string;
 }
+
+const rankImages: Record<string, string> = {
+    1: rank_1,
+    2: rank_2,
+    3: rank_3,
+};
 
 const MainRank: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
     const [posts, setPosts] = useState<PostWithProfileThumbnail[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     // 🔄 데이터 패치 - 프로필과 썸네일을 동시에 처리
     const fetchData = useCallback(async () => {
-        setLoading(true);
-        setError(null);
         try {
             const data = await selectPostsLikeTop3();
             if (!data) throw new Error('데이터를 불러올 수 없습니다.');
@@ -40,19 +45,20 @@ const MainRank: React.FC = () => {
 
                     const thumbnailImageUrl =
                         thumbnailResult.status === 'fulfilled' ? thumbnailResult.value?.filename : undefined;
+
+                    const userNickname = await getUserNickname(post.user_id);
+
                     return {
                         ...post,
                         profileImageUrl,
                         thumbnailImageUrl,
+                        userNickname,
                     };
                 })
             );
             setPosts(enrichedPosts);
         } catch (err) {
             console.error('Failed to fetch ranking data:', err);
-            setError('데이터를 불러오는데 실패했습니다.');
-        } finally {
-            setLoading(false);
         }
     }, []);
 
@@ -60,26 +66,7 @@ const MainRank: React.FC = () => {
         fetchData();
     }, [fetchData]);
 
-    // 메모화된 유틸리티 함수들
-    const formatLikeCount = useCallback((count: number | null): string => {
-        if (!count || count === 0) return '0';
-        return count.toLocaleString('ko-KR');
-    }, []);
-
-    const formatDate = useCallback((dateString: string | null): string => {
-        if (!dateString) return '-';
-        try {
-            return new Date(dateString).toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-            });
-        } catch {
-            return '-';
-        }
-    }, []);
-
-    const displayPosts = useMemo(() => posts.slice(0, MAX_DISPLAY_POSTS), [posts]);
+    const displayPosts = useMemo(() => posts.slice(0, 3), [posts]);
 
     // 이미지 에러 핸들러
     const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>, fallbackSrc: string) => {
@@ -87,53 +74,33 @@ const MainRank: React.FC = () => {
         target.src = fallbackSrc;
     }, []);
 
-    // 렌더링 분기 처리
-    if (loading) {
-        return (
-            <div className={styles.loadingContainer} role='status' aria-live='polite'>
-                <div className={styles.loadingText}>로딩 중...</div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className={styles.errorContainer} role='alert'>
-                <p className={styles.errorMessage}>{error}</p>
-                <button onClick={fetchData} className={styles.retryButton} type='button'>
-                    다시 시도
-                </button>
-            </div>
-        );
-    }
-
-    if (displayPosts.length === 0) {
-        return (
-            <section className={styles.container}>
-                <h2 className={styles.title}>실시간 인기 랭킹</h2>
-                <div className={styles.emptyState} role='status'>
-                    게시물이 없습니다.
-                </div>
-            </section>
-        );
-    }
-
     return (
-        <section className={styles.container}>
-            <h2 className={styles.title}>실시간 인기 랭킹</h2>
-            <ol className={styles.rankingList}>
-                {displayPosts.map((post, index) => (
-                    <RankingItem
-                        key={post.id}
-                        post={post}
-                        index={index}
-                        apiUrl={apiUrl}
-                        formatLikeCount={formatLikeCount}
-                        formatDate={formatDate}
-                        onImageError={handleImageError}
-                    />
-                ))}
-            </ol>
+        <section className={styles.ranking}>
+            <h2 className={styles.ranking__title}>실시간 인기 랭킹</h2>
+            <div className={styles.ranking__container}>
+                <ol className={styles.ranking__profiles}>
+                    {displayPosts.map((post, index) => (
+                        <RankingProfile
+                            key={post.id}
+                            post={post}
+                            index={index}
+                            apiUrl={apiUrl}
+                            onImageError={handleImageError}
+                        />
+                    ))}
+                </ol>
+                <ol className={styles.ranking__posts}>
+                    {displayPosts.map((post, index) => (
+                        <RankingItem
+                            key={post.id}
+                            post={post}
+                            index={index}
+                            apiUrl={apiUrl}
+                            onImageError={handleImageError}
+                        />
+                    ))}
+                </ol>
+            </div>
         </section>
     );
 };
@@ -142,22 +109,72 @@ interface RankingItemProps {
     post: PostWithProfileThumbnail;
     index: number;
     apiUrl: string;
-    formatLikeCount: (count: number | null) => string;
-    formatDate: (dateString: string | null) => string;
     onImageError: (e: React.SyntheticEvent<HTMLImageElement>, fallbackSrc: string) => void;
 }
 
-const RankingItem: React.FC<RankingItemProps> = React.memo(({ post, index, apiUrl, onImageError }) => {
-    const getRankBadgeClass = useCallback((i: number) => {
+const RankingProfile: React.FC<RankingItemProps> = React.memo(({ post, index, apiUrl, onImageError }) => {
+    const getRankModifier = useCallback((i: number) => {
         switch (i) {
             case 0:
-                return styles.rank1;
+                return 'first';
             case 1:
-                return styles.rank2;
+                return 'second';
             case 2:
-                return styles.rank3;
+                return 'third';
             default:
-                return styles.rankOther;
+                return 'other';
+        }
+    }, []);
+
+    const profileImageUrl = useMemo(
+        () => (post.profileImageUrl ? `${apiUrl}/${post.profileImageUrl}` : null),
+        [apiUrl, post.profileImageUrl]
+    );
+
+    const rankModifier = getRankModifier(index);
+
+    return (
+        <li className={`${styles.profile} ${styles[`profile__delay--${index}`]}`}>
+            {/* 순위 뱃지 */}
+            <div className={`${styles.profile__badge} ${styles[`profile__badge--${rankModifier}`]}  `}>
+                <span aria-label={`${index + 1}위`} className={styles.profile__rank}>
+                    <img
+                        src={rankImages[(index + 1).toString()]}
+                        alt={`${index + 1}위`}
+                        className={styles.profile__rankImg}
+                    />
+                </span>
+            </div>
+
+            {/* 프로필 이미지 */}
+            <div className={styles.profile__imagewrap}>
+                <img
+                    src={profileImageUrl || NoneProfileImageUrl}
+                    alt={`${post.userNickname || '익명'} 프로필 이미지`}
+                    className={styles.profile__image}
+                    crossOrigin='anonymous'
+                    loading='lazy'
+                    onError={e => onImageError(e, NoneProfileImageUrl)}
+                />
+            </div>
+            <div className={styles.profile__name}>{post.userNickname || '익명'}</div>
+        </li>
+    );
+});
+
+RankingProfile.displayName = 'RankingProfile';
+
+const RankingItem: React.FC<RankingItemProps> = React.memo(({ post, index, apiUrl, onImageError }) => {
+    const getRankModifier = useCallback((i: number) => {
+        switch (i) {
+            case 0:
+                return 'first';
+            case 1:
+                return 'second';
+            case 2:
+                return 'third';
+            default:
+                return 'other';
         }
     }, []);
 
@@ -180,35 +197,39 @@ const RankingItem: React.FC<RankingItemProps> = React.memo(({ post, index, apiUr
         [apiUrl, post.profileImageUrl]
     );
 
+    const rankModifier = getRankModifier(index);
+
     return (
-        <li className={`${styles.rankingItem} ${styles.fadeSlideIn} ${styles[`delay${index}`]}`}>
+        <li className={`${styles.post} ${styles.fadeSlideIn} ${styles[`post--delay-${index}`]}`}>
             {/* 순위 뱃지 */}
-            <div className={`${styles.rankBadge} ${getRankBadgeClass(index)}`}>
-                <span aria-label={`${index + 1}위`} className={`${styles.rankText} `}>
+            <div className={`${styles.post__badge} ${styles[`post__badge--${rankModifier}`]}`}>
+                <span aria-label={`${index + 1}위`} className={styles.post__rank}>
                     {index + 1}
-                    {getRankSuffix(index)}
+                    {getRankSuffix(index + 1)}
                 </span>
             </div>
 
-            {/* 프로필 이미지 */}
-            <div className={styles.profileSection}>
+            {/* 프로필 섹션 */}
+            <div className={styles.post__profilesection}>
                 <img
                     src={profileImageUrl || NoneProfileImageUrl}
-                    alt='프로필 이미지'
-                    className={styles.profileImage}
+                    alt={`${post.userNickname || '익명'} 프로필 이미지`}
+                    className={styles.post__profile}
                     crossOrigin='anonymous'
                     loading='lazy'
                     onError={e => onImageError(e, NoneProfileImageUrl)}
                 />
             </div>
 
-            <h3 className={styles.postTitle}>{post.title}</h3>
-            <div className={styles.postMeta}>
-                {/* 썸네일 이미지 */}
+            {/* 포스트 제목 */}
+            <h3 className={styles.post__title}>{post.title}</h3>
+
+            {/* 포스트 메타 정보 */}
+            <div className={styles.post__meta}>
                 <img
                     src={thumbnailUrl || NoneThumbnailImageUrl}
                     alt={`${post.title} 썸네일`}
-                    className={styles.postThumbnail}
+                    className={styles.post__thumbnail}
                     crossOrigin='anonymous'
                     loading='lazy'
                     onError={e => onImageError(e, NoneThumbnailImageUrl)}

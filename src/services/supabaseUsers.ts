@@ -165,3 +165,19 @@ export const updatePassword = async (email: string, newPassword: string): Promis
         return false;
     }
 };
+type UserId = string | null | undefined;
+// 단일 유저 nickname
+export const getUserNickname = async (userId: UserId): Promise<string> => {
+    if (!userId) return '익명';
+
+    const { data, error } = await supabase.rpc('get_user_nickname', {
+        user_uuid: userId,
+    });
+
+    if (error) {
+        console.error('Error fetching nickname:', error);
+        return '익명';
+    }
+
+    return data || '익명';
+};
