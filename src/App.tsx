@@ -42,11 +42,7 @@ const App = () => {
 };
 
 const AppRoutes = () => {
-    const { user, isLoading } = useUserStore();
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+    const { user } = useUserStore();
 
     return (
         <Routes>

@@ -23,8 +23,16 @@ const Home = () => {
             <SearchForm />
             <Recommendation />
             <Rank />
-            <Sharing />
-            <Recent />
+            <a
+                className={styles.recommendationLink}
+                href='https://weather-menu-recommender.netlify.app/'
+                target='_blank'
+                rel='noreferrer'
+            >
+                <div className={styles.recommendationImages}></div>
+            </a>
+            {/* <Sharing />
+            <Recent /> */}
         </div>
     );
 };
