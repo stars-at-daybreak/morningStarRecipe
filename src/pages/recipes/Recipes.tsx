@@ -5,7 +5,7 @@ import PostItem from '../../components/postItem/PostItem.tsx';
 
 const Recipes = ({ query }: { query?: string }) => {
     const navigate = useNavigate();
-    const { searchList, loading, updateSearchTerm, updateRecipeSortBy } = useSearch({
+    const { searchList, updateSearchTerm, updateRecipeSortBy } = useSearch({
         pageType: 'recipe',
         initialParams: {
             searchTerm: query,
@@ -27,22 +27,18 @@ const Recipes = ({ query }: { query?: string }) => {
                 <label htmlFor='search'>검색어</label>
                 <input id='search' defaultValue={query} onChange={e => updateSearchTerm(e.target.value)} />
             </div>
-            {loading ? (
-                <div>로딩 중...</div>
-            ) : (
-                <>
-                    <div>
-                        {searchList.map(item => (
-                            <PostItem
-                                key={item.id}
-                                post={item}
-                                type='recipe'
-                                onClick={postId => navigate(`/recipes/${postId}`)}
-                            />
-                        ))}
-                    </div>
-                </>
-            )}
+            <>
+                <div>
+                    {searchList.map(item => (
+                        <PostItem
+                            key={item.id}
+                            post={item}
+                            type='recipe'
+                            onClick={postId => navigate(`/recipes/${postId}`)}
+                        />
+                    ))}
+                </div>
+            </>
         </div>
     );
 };

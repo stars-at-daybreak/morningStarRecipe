@@ -1,12 +1,12 @@
 import { useSearchParams } from 'react-router-dom';
-import Rank from '../../components/main/Rank.tsx';
-import Sharing from '../../components/main/Sharing.tsx';
-import Recent from '../../components/main/Recent.tsx';
-import SearchPage from '../search/Search.tsx';
-import SearchForm from '../../components/search/SearchForm.tsx';
+import MainRank from '../../components/main/Rank';
+import Sharing from '../../components/main/Sharing';
+import Recent from '../../components/main/Recent';
+import SearchPage from '../search/Search';
+import SearchForm from '../../components/search/SearchForm';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import styles from './Home.module.css';
-import Recommendation from '../../components/main/Recommendation.tsx';
+import Recommendation from '../../components/main/Recommendation';
 const Home = () => {
     const [searchParams] = useSearchParams();
     const query = searchParams.get('query');
@@ -22,7 +22,7 @@ const Home = () => {
         <div className={styles.home}>
             <SearchForm />
             <Recommendation />
-            <Rank />
+            <MainRank />
             <a
                 className={styles.recommendationLink}
                 href='https://weather-menu-recommender.netlify.app/'
