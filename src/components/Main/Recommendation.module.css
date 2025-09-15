@@ -17,15 +17,22 @@
 @media screen and (min-width: 768px) {
     .recommendation {
         margin-top: 1.5rem;
-        font-size: 1.5rem;
+
         gap: 0.65rem;
+    }
+    .item {
+        font-size: 1.5rem;
+        padding: 0.7rem;
     }
 }
 
 @media screen and (min-width: 1024px) {
     .recommendation {
         margin-top: 2rem;
-        font-size: 1.6rem;
         gap: 0.8rem;
+    }
+    .item {
+        font-size: 1.6rem;
+        padding: 0.9rem;
     }
 }
