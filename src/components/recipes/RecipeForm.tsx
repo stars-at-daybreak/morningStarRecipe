@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { createPost, updatePost } from '../services/supabasePosts.ts';
-import useUserStore from '../stores/useUserStore.ts';
+import { createPost, updatePost } from '../../services/supabasePosts.ts';
+import useUserStore from '../../stores/useUserStore.ts';
 import { useLocation } from 'react-router-dom';
-import { ResponsiveFileUpload } from './ImgUpload/ImgUpload.tsx';
-import { saveThumbnailImage } from '../services/supabaseFiles.ts';
+import { ResponsiveFileUpload } from '../ImgUpload/ImgUpload.tsx';
+import { saveThumbnailImage } from '../../services/supabaseFiles.ts';
 
 const RecipeForm = () => {
     const location = useLocation();
