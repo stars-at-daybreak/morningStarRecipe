@@ -158,11 +158,29 @@
     .search {
         margin: 3rem auto 0;
         max-width: 73.6rem;
+        padding: 1.8rem 3rem;
+    }
+    .search__input {
+        height: 1.8rem;
+        font-size: 1.6rem;
+    }
+    .search__icon {
+        width: 2.2rem;
+        height: 2.2rem;
     }
 }
 
 @media screen and (min-width: 1024px) {
     .search {
         margin-top: 6rem;
+        padding: 2.4rem 4rem;
+    }
+    .search__input {
+        height: 2.4rem;
+        font-size: 2.2rem;
+    }
+    .search__icon {
+        width: 2.4rem;
+        height: 2.4rem;
     }
 }

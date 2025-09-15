@@ -12,6 +12,7 @@ import type { Tables } from '../../types/supabase';
 import { useModal } from '../../hooks/useModal.tsx';
 import Modal from '../modal/Modal.tsx';
 import { useNavigate } from 'react-router-dom';
+import { getPostThumbnails } from '../../services/supabaseFiles.ts';
 
 // 나눔 상태 타입 정의
 type ShareStatus = 'available' | 'reserved' | 'completed' | 'cancelled';
@@ -33,7 +34,26 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
     const [isDisliked, setIsDisliked] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    // 썸네일 상태 추가
+    const [thumbnailFilename, setThumbnailFilename] = useState<string | null>(null);
+    const [thumbnailLoading, setThumbnailLoading] = useState(true);
+
     const navigate = useNavigate();
+
+    // 썸네일 정보를 가져오는 함수
+    const fetchThumbnail = useCallback(async () => {
+        try {
+            setThumbnailLoading(true);
+            const thumbnailData = await getPostThumbnails(post.id);
+            setThumbnailFilename(thumbnailData?.filename || null);
+        } catch (error) {
+            console.error('썸네일 조회 실패:', error);
+            setThumbnailFilename(null);
+        } finally {
+            setThumbnailLoading(false);
+        }
+    }, [post.id]);
 
     // 사용자 상태를 가져오는 함수
     const fetchUserStatus = useCallback(async () => {
@@ -104,10 +124,41 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
         closeModal();
     };
 
-    // 사용자나 게시물이 변경될 때마다 상태 업데이트
+    // 컴포넌트 마운트 시 데이터 가져오기
     useEffect(() => {
         fetchUserStatus();
-    }, [fetchUserStatus]);
+        fetchThumbnail();
+    }, [fetchUserStatus, fetchThumbnail]);
+
+    // 썸네일 렌더링 함수 (동기 함수로 변경)
+    const renderThumbnail = () => {
+        // 로딩 중이면 기본 아이콘 표시
+        if (thumbnailLoading) {
+            return (
+                <div className={styles.post__thumbnail__placeholder}>
+                    <div className={styles.post__thumbnail__icon} />
+                </div>
+            );
+        }
+
+        // 썸네일이 있는 경우
+        if (thumbnailFilename && thumbnailFilename.trim() !== '') {
+            return (
+                <img
+                    src={`https://dev.wenivops.co.kr/services/mandarin/${thumbnailFilename}`}
+                    alt={post.title}
+                    crossOrigin='anonymous'
+                />
+            );
+        } else {
+            // 썸네일이 없는 경우 기본 아이콘 표시
+            return (
+                <div className={styles.post__thumbnail__placeholder}>
+                    <div className={styles.post__thumbnail__icon} />
+                </div>
+            );
+        }
+    };
 
     // 레시피 게시물 레이아웃
     if (type === 'recipe') {
@@ -115,17 +166,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
             <>
                 <div className={styles.post__item} onClick={() => onClick && onClick(post.id)}>
                     {/* 썸네일 */}
-                    <div className={styles.post__thumbnail}>
-                        <img
-                            src={
-                                post.thumbnail_filename
-                                    ? `https://dev.wenivops.co.kr/services/mandarin/${post.thumbnail_filename}`
-                                    : 'https://dev.wenivops.co.kr/services/mandarin/1757564307890.jpg'
-                            }
-                            alt={post.title}
-                            crossOrigin='anonymous'
-                        />
-                    </div>
+                    <div className={styles.post__thumbnail}>{renderThumbnail()}</div>
 
                     <div className={styles.post__recipe__content}>
                         {/* 제목 */}
@@ -236,17 +277,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
             <>
                 <div className={styles.post__item} onClick={() => onClick && onClick(post.id)}>
                     {/* 썸네일 */}
-                    <div className={styles.post__thumbnail}>
-                        <img
-                            src={
-                                post.thumbnail_filename
-                                    ? `https://dev.wenivops.co.kr/services/mandarin/${post.thumbnail_filename}`
-                                    : 'https://dev.wenivops.co.kr/services/mandarin/1757564307890.jpg'
-                            }
-                            alt={post.title}
-                            crossOrigin='anonymous'
-                        />
-                    </div>
+                    <div className={styles.post__thumbnail}>{renderThumbnail()}</div>
 
                     <div className={styles.post__share__content}>
                         {/* 제목 */}
