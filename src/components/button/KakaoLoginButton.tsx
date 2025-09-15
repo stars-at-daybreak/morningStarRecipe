@@ -1,4 +1,4 @@
-import supabase from '../services/supabaseClient.ts';
+import supabase from '../../services/supabaseClient.ts';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // 혹은 Next.js useRouter
 
