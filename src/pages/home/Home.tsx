@@ -1,20 +1,20 @@
 import { useSearchParams } from 'react-router-dom';
-import Rank from '../../components/main/Rank.tsx';
-import Sharing from '../../components/main/Sharing.tsx';
-import Recent from '../../components/main/Recent.tsx';
-import SearchPage from '../search/Search.tsx';
-import SearchForm from '../../components/search/SearchForm.tsx';
+import MainRank from '../../components/main/Rank';
+import Sharing from '../../components/main/Sharing';
+import Recent from '../../components/main/Recent';
+import SearchPage from '../search/Search';
+import SearchForm from '../../components/search/SearchForm';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import styles from './Home.module.css';
-import Recommendation from '../../components/main/Recommendation.tsx';
+import Recommendation from '../../components/main/Recommendation';
 const Home = () => {
-    usePageSetup({
-        title: '',
-        pageName: 'home',
-        showBackButton: false, // 뒤로가기 버튼 표시
-    });
     const [searchParams] = useSearchParams();
     const query = searchParams.get('query');
+    usePageSetup({
+        title: query ? '검색' : '',
+        pageName: query ? 'search' : 'home',
+        showBackButton: query ? true : false,
+    });
     if (query) {
         return <SearchPage query={query} />;
     }
@@ -22,7 +22,7 @@ const Home = () => {
         <div className={styles.home}>
             <SearchForm />
             <Recommendation />
-            <Rank />
+            <MainRank />
             <a
                 className={styles.recommendationLink}
                 href='https://weather-menu-recommender.netlify.app/'
@@ -31,8 +31,8 @@ const Home = () => {
             >
                 <div className={styles.recommendationImages}></div>
             </a>
-            {/*<Sharing />
-            <Recent /> */}
+            <Sharing />
+            <Recent />
         </div>
     );
 };

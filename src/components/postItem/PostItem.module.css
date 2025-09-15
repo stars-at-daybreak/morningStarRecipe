@@ -11,6 +11,10 @@
     color: var(--color-gray);
 }
 
+.post__item:last-child {
+    margin-bottom: 0;
+}
+
 .post__thumbnail {
     width: 35%;
     min-width: 11rem;
