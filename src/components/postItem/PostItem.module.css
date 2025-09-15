@@ -1,14 +1,18 @@
 /* 나눔&레시피 공통 */
 .post__item {
-    width: calc(100% - 3.2rem);
+    width: calc(100%);
     display: flex;
     justify-content: start;
     align-items: center;
-    margin: 0 1.6rem 3.2rem;
+    margin: 0 0 3.2rem;
     padding-bottom: 2rem;
     border-bottom: 0.1rem solid var(--color-gray-200);
     cursor: pointer;
     color: var(--color-gray);
+}
+
+.post__item:last-child {
+    margin-bottom: 0;
 }
 
 .post__thumbnail {
