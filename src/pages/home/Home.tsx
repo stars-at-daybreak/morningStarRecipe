@@ -31,7 +31,7 @@ const Home = () => {
             >
                 <div className={styles.recommendationImages}></div>
             </a>
-            {/* <Sharing />
+            {/*<Sharing />
             <Recent /> */}
         </div>
     );
