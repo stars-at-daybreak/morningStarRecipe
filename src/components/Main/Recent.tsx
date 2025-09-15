@@ -73,7 +73,7 @@ const Recent: React.FC = () => {
 
             {posts.length > 0 ? (
                 <div className={styles.RecentList}>
-                    {posts.map((post, index) => (
+                    {posts.map(post => (
                         <Link to={`/recipes/${post.id}`} key={post.id} className={styles.RecentItem}>
                             <img
                                 src={`${import.meta.env.VITE_API_BASE_URL}/${post.thumbnailImageUrl}`}

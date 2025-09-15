@@ -8,13 +8,13 @@ import { usePageSetup } from '../../hooks/usePageSetup';
 import styles from './Home.module.css';
 import Recommendation from '../../components/main/Recommendation.tsx';
 const Home = () => {
-    usePageSetup({
-        title: '',
-        pageName: 'home',
-        showBackButton: false, // 뒤로가기 버튼 표시
-    });
     const [searchParams] = useSearchParams();
     const query = searchParams.get('query');
+    usePageSetup({
+        title: query ? '검색' : '',
+        pageName: query ? 'search' : 'home',
+        showBackButton: query ? true : false,
+    });
     if (query) {
         return <SearchPage query={query} />;
     }
