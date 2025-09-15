@@ -74,14 +74,14 @@ const Recent: React.FC = () => {
             {posts.length > 0 ? (
                 <div className={styles.RecentList}>
                     {posts.map((post, index) => (
-                        <div key={post.id} className={styles.RecentItem}>
+                        <Link to={`/recipes/${post.id}`} key={post.id} className={styles.RecentItem}>
                             <img
                                 src={`${import.meta.env.VITE_API_BASE_URL}/${post.thumbnailImageUrl}`}
                                 alt={post.title || '레시피 이미지'}
                                 className={styles.thumbnail}
                                 onError={e => handleImageError(e, NoneThumnailImageUrl)}
                             />
-                        </div>
+                        </Link>
                     ))}
                 </div>
             ) : (
