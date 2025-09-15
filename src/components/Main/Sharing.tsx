@@ -78,7 +78,6 @@ const Sharing: React.FC = () => {
                                 <h3 className='font-semibold text-lg mb-1'>{post.title}</h3>
                                 <p className='text-gray-600 text-sm line-clamp-2'>{post.content}</p>
                                 <div className='flex items-center mt-2 text-sm text-gray-500'>
-                                    <img src={`${apiUrl}/${post.thumbnail_filename}`} />
                                     <span>
                                         작성일: {post.created_at ? new Date(post.created_at).toLocaleDateString() : '-'}
                                     </span>
