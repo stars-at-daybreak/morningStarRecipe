@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch';
 import PostItem from '../../components/postItem/PostItem';
-
+import SearchInput from '../../components/search/SearchFromList';
 interface SearchPageProps {
     query: string;
 }
@@ -16,19 +16,17 @@ const SearchPage = ({ query }: SearchPageProps) => {
     }, [query]);
     const { searchList, loading, error, updateSearchTerm, updatePostType } = useSearch(searchConfig);
     const navigate = useNavigate();
-
+    const [inputValue, setInputValue] = useState(query);
     return (
         <div style={{ padding: '20px' }}>
             <div>
-                <input
-                    defaultValue={query}
-                    onChange={e => {
-                        updateSearchTerm(e.target.value);
+                <SearchInput
+                    value={inputValue || ''}
+                    onChange={val => {
+                        setInputValue(val);
+                        updateSearchTerm(val);
                     }}
-                    placeholder='검색어 입력'
-                    style={{ padding: '8px', marginRight: '10px', width: '200px' }}
                 />
-
                 <select
                     onChange={e => {
                         updatePostType(e.target.value as 'all' | 'recipe' | 'share');
