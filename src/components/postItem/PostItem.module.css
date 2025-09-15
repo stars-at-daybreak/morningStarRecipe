@@ -4,7 +4,7 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    margin: 0 0 2rem;
+    margin-top: 2rem;
     padding-bottom: 2rem;
     border-bottom: 0.1rem solid var(--color-gray-200);
     cursor: pointer;
@@ -223,8 +223,8 @@
 @media (min-width: 768px) {
     /* 나눔&레시피 공통 */
     .post__item {
+        margin-top: 3.2rem;
         padding-bottom: 3.2rem;
-        margin: 0 0 3.2rem;
     }
 
     .post__thumbnail {
