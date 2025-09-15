@@ -32,7 +32,7 @@ const Home = () => {
                 <div className={styles.recommendationImages}></div>
             </a>
             <Sharing />
-            {/*<Recent /> */}
+            <Recent />
         </div>
     );
 };
