@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { checkEmailExists } from '../services/supabaseUsers.ts';
-import { EmailAlreadyExistsError } from '../error/EmailAlreadyExistsError.ts';
-import { sendVerificationCode } from '../services/supabaseEmailAuth.ts';
+import { checkEmailExists } from '../../services/supabaseUsers.ts';
+import { EmailAlreadyExistsError } from '../../error/EmailAlreadyExistsError.ts';
+import { sendVerificationCode } from '../../services/supabaseEmailAuth.ts';
 
 const EmailAuthButton = ({
     handleModal,

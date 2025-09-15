@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { signup } from '../../services/supabaseUsers.ts';
-import EmailAuthButton from '../../components/EmailAuthButton.tsx';
+import EmailAuthButton from '../../components/button/EmailAuthButton.tsx';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 import styles from './signup.module.css';
 import ResponsiveLogo from '../../components/logo/ResponsiveLogo.tsx';

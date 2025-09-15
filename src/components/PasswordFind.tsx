@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import EmailAuthButton from './EmailAuthButton.tsx';
+import EmailAuthButton from './button/EmailAuthButton.tsx';
 
 const PasswordFind = () => {
     const [email, setEmail] = useState('');
