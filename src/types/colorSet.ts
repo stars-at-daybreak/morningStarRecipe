@@ -10,6 +10,7 @@ export const colorSet = {
     'gray-300': '#C5C5C5',
     'gray-400': '#999999',
     gray: '#767676',
+    'gray-700': ' #555555',
     black: '#353535',
     lv1: '#D8B21C',
     'lv1-bg': '#FFFBDD',
