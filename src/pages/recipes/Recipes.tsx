@@ -1,11 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { RecipeSortBy } from '../../types/search.types.ts';
-import PostItem from '../../components/postItem/PostItem.tsx';
+import { getRecipesWithPagination } from '../../services/supabasePosts';
+import InfinitePostList from '../../components/infiniteScroll/InfiniteScroll.tsx';
 
 const Recipes = ({ query }: { query?: string }) => {
     const navigate = useNavigate();
-    const { searchList, updateSearchTerm, updateRecipeSortBy } = useSearch({
+    const { updateSearchTerm, updateRecipeSortBy } = useSearch({
         pageType: 'recipe',
         initialParams: {
             searchTerm: query,
@@ -14,6 +15,10 @@ const Recipes = ({ query }: { query?: string }) => {
 
     const handleFilter = (filter: RecipeSortBy) => {
         updateRecipeSortBy(filter);
+    };
+
+    const handlePostClick = (postId: string) => {
+        navigate(`/recipes/${postId}`);
     };
 
     return (
@@ -27,18 +32,8 @@ const Recipes = ({ query }: { query?: string }) => {
                 <label htmlFor='search'>검색어</label>
                 <input id='search' defaultValue={query} onChange={e => updateSearchTerm(e.target.value)} />
             </div>
-            <>
-                <div>
-                    {searchList.map(item => (
-                        <PostItem
-                            key={item.id}
-                            post={item}
-                            type='recipe'
-                            onClick={postId => navigate(`/recipes/${postId}`)}
-                        />
-                    ))}
-                </div>
-            </>
+
+            <InfinitePostList type='recipe' fetchFunction={getRecipesWithPagination} onPostClick={handlePostClick} />
         </div>
     );
 };

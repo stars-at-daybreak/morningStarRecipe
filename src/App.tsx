@@ -19,6 +19,7 @@ import ShareForm from './components/ShareForm.tsx';
 import ShareDetail from './components/ShareDetail.tsx';
 import PasswordFind from './components/PasswordFind.tsx';
 import DeleteAccount from './pages/DeleteAccount.tsx';
+import NotFound from './pages/404/404.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
@@ -62,6 +63,7 @@ const AppRoutes = () => {
                 <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
                 <Route path='/DeleteAccount' element={<DeleteAccount />} />
+                <Route path='/404' element={<NotFound />} />
             </Route>
         </Routes>
     );
