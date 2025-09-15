@@ -188,7 +188,7 @@ const buildSearchQuery = (params: SearchParams, options?: { page?: number; pageS
     }
 
     if (params.category) {
-        query = query.eq('category', params.category);
+        query = query.eq('category_id', params.category);
     }
 
     // 페이지 타입별 정렬 및 필터링

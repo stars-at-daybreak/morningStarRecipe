@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { deletePost, fetchPostWithUserNickname } from '../services/supabasePosts.ts';
+import { deletePost, fetchPostWithUserNickname } from '../../services/supabasePosts.ts';
 import { useParams, useNavigate } from 'react-router-dom';
-import PostComments from './PostComments.tsx';
-import useUserStore from '../stores/useUserStore.ts';
-import type { PostWithUserNickname } from '../types/posts.type.ts';
-import { handlePostVote, getUserVoteStatus } from '../services/supabasePostVotes.ts';
-import type { VoteType } from '../types/postVotes.type.ts';
-import { getPostThumbnails } from '../services/supabaseFiles.ts';
+import PostComments from '../PostComments.tsx';
+import useUserStore from '../../stores/useUserStore.ts';
+import type { PostWithUserNickname } from '../../types/posts.type.ts';
+import { handlePostVote, getUserVoteStatus } from '../../services/supabasePostVotes.ts';
+import type { VoteType } from '../../types/postVotes.type.ts';
+import { getPostThumbnails } from '../../services/supabaseFiles.ts';
 
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
