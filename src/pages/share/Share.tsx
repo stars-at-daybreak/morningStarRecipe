@@ -1,11 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { ShareStatus } from '../../types/search.types.ts';
-import PostItem from '../../components/postItem/PostItem.tsx';
+import { getRecipesWithPagination } from '../../services/supabasePosts';
+import InfinitePostList from '../../components/infiniteScroll/InfiniteScroll.tsx';
 
 const Share = ({ query }: { query?: string }) => {
     const navigate = useNavigate();
-    const { searchList, loading, updateSearchTerm, updateShareStatus } = useSearch({
+    const { updateSearchTerm, updateShareStatus } = useSearch({
         pageType: 'share',
         initialParams: {
             searchTerm: query,
@@ -14,6 +15,10 @@ const Share = ({ query }: { query?: string }) => {
 
     const handleFilter = (filter: ShareStatus) => {
         updateShareStatus(filter);
+    };
+
+    const handlePostClick = (postId: string) => {
+        navigate(`/recipes/${postId}`);
     };
 
     return (
@@ -27,20 +32,7 @@ const Share = ({ query }: { query?: string }) => {
                 <label htmlFor='search'>검색어</label>
                 <input id='search' defaultValue={query} onChange={e => updateSearchTerm(e.target.value)} />
             </div>
-            {loading ? (
-                <div>로딩 중...</div>
-            ) : (
-                <>
-                    {searchList.map(item => (
-                        <PostItem
-                            key={item.id}
-                            post={item}
-                            type='share'
-                            onClick={postId => navigate(`/share/${postId}`)}
-                        />
-                    ))}
-                </>
-            )}
+            <InfinitePostList type='share' fetchFunction={getRecipesWithPagination} onPostClick={handlePostClick} />
         </div>
     );
 };

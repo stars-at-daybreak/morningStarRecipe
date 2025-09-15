@@ -262,3 +262,51 @@ export const searchPosts = async (
         };
     }
 };
+
+/**
+ * 레시피 게시물 페이지네이션 조회
+ */
+export const getRecipesWithPagination = async (page: number): Promise<Tables<'posts'>[]> => {
+    try {
+        const start = page * 5;
+        const end = start + 4;
+
+        const { data, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('post_type', 'recipe')
+            .eq('is_post_active', true)
+            .range(start, end)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        console.error('레시피 페이지네이션 조회 중 오류 발생:', error);
+        return [];
+    }
+};
+
+/**
+ * 나눔 게시물 페이지네이션 조회
+ */
+export const getSharesWithPagination = async (page: number): Promise<Tables<'posts'>[]> => {
+    try {
+        const start = page * 5;
+        const end = start + 4;
+
+        const { data, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('post_type', 'share')
+            .eq('is_post_active', true)
+            .range(start, end)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        console.error('나눔 페이지네이션 조회 중 오류 발생:', error);
+        return [];
+    }
+};

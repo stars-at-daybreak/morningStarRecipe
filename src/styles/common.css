@@ -9,17 +9,3 @@
     clip-path: polygon(0 0, 0 0, 0 0); /* inset(50%) 와 동일한 표현 */
     border: 0;
 }
-
-/* 스크롤바 숨기기 (스크롤 기능은 유지) */
-html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE, Edge */
-
-    /* 기본 폰트사이즈 10px */
-    font-size: 62.5%;
-}
-
-/* Chrome, Safari, Opera */
-html::-webkit-scrollbar {
-    display: none;
-}

@@ -1,5 +1,4 @@
 import type { ModalType } from '../../hooks/useModal';
-import VerifyCodeContent from './VerifyCodeContent';
 
 // 각 모달 타입별 정보를 정의하는 함수
 const getModalContent = (type: ModalType) => {
@@ -38,17 +37,6 @@ const getModalContent = (type: ModalType) => {
                 hasCancel: true,
                 confirmText: '계속 작성하기',
                 cancelText: '나가기',
-            };
-
-        case 'PROMPT_VERIFICATION_CODE':
-            return {
-                title: '인증번호를 입력해주세요',
-                message: '',
-                renderContent: () => <VerifyCodeContent />,
-                hasCancel: false,
-                confirmText: '확인',
-                cancelText: '',
-                isVerifyModal: true,
             };
 
         case 'NOTIFY_ACCOUNT_EXISTS':

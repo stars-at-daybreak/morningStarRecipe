@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '../../components/header/Header.tsx';
 import Main from '../Main.tsx';
 import Footer from '../../components/footer/Footer.tsx';
@@ -8,6 +9,17 @@ import FloatingButtons from '../../components/FloatingButtons/FloatingButtons.ts
 
 const Layout = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+    const location = useLocation();
+
+    // 푸터를 숨길 페이지들만 정의 (EmptyState가 사용되는 페이지들 추가)
+    const hideFooterPaths = [
+        '/404',
+        // EmptyState를 사용하는 페이지들의 경로를 여기에 추가
+        // 예: '/empty-page', '/no-content' 등
+    ];
+
+    // 현재 경로가 푸터를 숨길 페이지인지 확인
+    const shouldHideFooter = hideFooterPaths.includes(location.pathname);
 
     useEffect(() => {
         const handleResize = () => {
@@ -27,9 +39,11 @@ const Layout = () => {
             <div className={isDesktop ? styles.main_desktop : ''}>
                 <Main />
             </div>
-            <div className={isDesktop ? styles.footer_desktop : ''}>
-                <Footer />
-            </div>
+            {!shouldHideFooter && (
+                <div className={isDesktop ? styles.footer_desktop : ''}>
+                    <Footer />
+                </div>
+            )}
             <FloatingButtons />
         </>
     );
