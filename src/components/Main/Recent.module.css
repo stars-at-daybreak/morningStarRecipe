@@ -33,7 +33,6 @@
     gap: 1rem;
 }
 .RecentItem {
-    min-height: 8.6rem;
     aspect-ratio: 112/86;
     background-color: #e5e5e5;
     border-radius: 1.5rem;

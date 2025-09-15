@@ -43,12 +43,14 @@ const SearchPage = ({ query }: SearchPageProps) => {
                 loadMore();
             }
         },
-        [hasMore, loadingMore, loadMore]
+        [hasMore, loadingMore, loadMore, searchList.length] // searchList.length 추가
     );
 
     useEffect(() => {
         const element = observerRef.current;
-        if (!element) return;
+        if (!element) {
+            return;
+        }
 
         const observer = new IntersectionObserver(handleObserver, {
             threshold: 0.1,
@@ -58,7 +60,9 @@ const SearchPage = ({ query }: SearchPageProps) => {
         observer.observe(element);
 
         return () => {
-            if (element) observer.unobserve(element);
+            if (element) {
+                observer.unobserve(element);
+            }
         };
     }, [handleObserver]);
 
@@ -101,13 +105,15 @@ const SearchPage = ({ query }: SearchPageProps) => {
             </header>
 
             <section className={styles.searchPage__results} aria-live='polite'>
-                {searchList.length === 0 && <div className={styles.searchPage__noResults}>검색 결과가 없습니다.</div>}
+                {searchList.length === 0 && !loadingMore && (
+                    <div className={styles.searchPage__noResults}>검색 결과가 없습니다.</div>
+                )}
 
                 {searchList.length > 0 && (
                     <div className={styles.searchPage__resultsContainer}>
                         <ul className={styles.searchPage__resultsList}>
-                            {searchList.map(item => (
-                                <li key={item.id} className={styles.searchPage__resultsItem}>
+                            {searchList.map((item, index) => (
+                                <li key={`${item.id}-${index}`} className={styles.searchPage__resultsItem}>
                                     <PostItem
                                         post={item}
                                         type={item.post_type as 'recipe' | 'share'}
@@ -120,15 +126,27 @@ const SearchPage = ({ query }: SearchPageProps) => {
                             ))}
                         </ul>
 
+                        {/* 무한스크롤 트리거 영역 - hasMore가 true일 때만 렌더링 */}
                         {hasMore && (
-                            <div ref={observerRef} className={styles.searchPage__loadTrigger} aria-hidden='true'>
-                                {loadingMore && <div className={styles.searchPage__loading}></div>}
-                            </div>
+                            <div
+                                ref={observerRef}
+                                className={styles.searchPage__loadTrigger}
+                                aria-hidden='true'
+                                style={{
+                                    height: '20px',
+                                    backgroundColor: 'transparent',
+                                    border: '1px dashed #ccc', // 디버깅용 - 나중에 제거
+                                    margin: '10px 0',
+                                }}
+                            ></div>
                         )}
 
                         {!hasMore && searchList.length > 0 && <div className={styles.searchPage__endMessage}></div>}
                     </div>
                 )}
+
+                {/* 첫 로딩 상태 */}
+                {searchList.length === 0 && loadingMore && <div className={styles.searchPage__initialLoading}></div>}
             </section>
         </main>
     );

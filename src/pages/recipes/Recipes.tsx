@@ -10,6 +10,8 @@ import styles from './recipes.module.css';
 import { useModal } from '../../hooks/useModal.tsx';
 import Modal from '../../components/modal/Modal.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
+import { getRecipesWithPagination } from '../../services/supabasePosts';
+import InfinitePostList from '../../components/infiniteScroll/InfiniteScroll.tsx';
 
 const Recipes = ({ query }: { query?: string }) => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
@@ -25,6 +27,10 @@ const Recipes = ({ query }: { query?: string }) => {
 
     const handleFilter = (filter: RecipeSortBy) => {
         updateRecipeSortBy(filter);
+    };
+
+    const handlePostClick = (postId: string) => {
+        navigate(`/recipes/${postId}`);
     };
 
     const getCategories = async () => {

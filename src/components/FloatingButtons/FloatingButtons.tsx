@@ -1,10 +1,8 @@
-// components/FloatingButtons/FloatingButtons.tsx
 import { useState, useEffect } from 'react';
 import styles from './FloatingButtons.module.css';
 
 const FloatingButtons = () => {
     const [fontSizePercent, setFontSizePercent] = useState<number>(62.5);
-    const [showTopButton, setShowTopButton] = useState(false);
 
     // 컴포넌트 마운트 시 sessionStorage에서 폰트 크기 불러오기 (새로고침/재접속 시 초기화)
     useEffect(() => {
@@ -23,24 +21,6 @@ const FloatingButtons = () => {
         sessionStorage.setItem('fontSizePercent', fontSizePercent.toString());
         document.documentElement.style.fontSize = `${fontSizePercent}%`;
     }, [fontSizePercent]);
-
-    // 스크롤 위치에 따라 Top 버튼 표시/숨김
-    useEffect(() => {
-        const toggleTopButtonVisibility = () => {
-            // 200px 이상 스크롤하면 버튼 표시
-            if (window.scrollY > 200) {
-                setShowTopButton(true);
-            } else {
-                setShowTopButton(false);
-            }
-        };
-
-        // 페이지 로드 시 한 번 체크 (이미 스크롤된 상태일 수 있음)
-        toggleTopButtonVisibility();
-
-        window.addEventListener('scroll', toggleTopButtonVisibility);
-        return () => window.removeEventListener('scroll', toggleTopButtonVisibility);
-    }, []);
 
     // 폰트 크기 증가 (최대 80%)
     const increaseFontSize = () => {
@@ -62,7 +42,7 @@ const FloatingButtons = () => {
 
     return (
         <div className={styles['floating-buttons']}>
-            {/* 폰트 크기 조절 버튼들 - 항상 표시 */}
+            {/* 폰트 크기 조절 버튼들 */}
             <div className={styles['floating-buttons__font-controls']}>
                 <button
                     className={`${styles['floating-buttons__font-btn']} ${styles['floating-buttons__font-btn--increase']}`}
@@ -80,12 +60,10 @@ const FloatingButtons = () => {
                 </button>
             </div>
 
-            {/* Top 버튼 - 200px 이상 스크롤시 표시 */}
-            {showTopButton && (
-                <button className={styles['floating-buttons__top-btn']} onClick={scrollToTop} title='맨 위로 가기'>
-                    {/* 아이콘은 CSS에서 background-image로 처리 */}
-                </button>
-            )}
+            {/* Top 버튼 */}
+            <button className={styles['floating-buttons__top-btn']} onClick={scrollToTop} title='맨 위로 가기'>
+                {/* 아이콘은 CSS에서 background-image로 처리 */}
+            </button>
         </div>
     );
 };
