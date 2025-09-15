@@ -171,13 +171,13 @@ export const selectMyPostsByUserId = async (userId: string): Promise<Post[] | nu
         return null;
     }
 };
-
 /**
  * 검색 쿼리 빌더
  */
-const buildSearchQuery = (params: SearchParams) => {
+const buildSearchQuery = (params: SearchParams, options?: { page?: number; pageSize?: number }) => {
     let query = supabase.from('posts').select('*', { count: 'exact' });
     query = query.eq('is_post_active', true);
+
     // 기본 필터링
     if (params.pageType !== 'all') {
         query = query.eq('post_type', params.pageType);
@@ -229,6 +229,13 @@ const buildSearchQuery = (params: SearchParams) => {
         }
     }
 
+    // 페이지네이션 적용
+    if (options?.page && options?.pageSize) {
+        const from = (options.page - 1) * options.pageSize;
+        const to = from + options.pageSize - 1;
+        query = query.range(from, to);
+    }
+
     return query;
 };
 
@@ -236,14 +243,15 @@ const buildSearchQuery = (params: SearchParams) => {
  * 게시물 검색 실행
  */
 export const searchPosts = async (
-    params: SearchParams
+    params: SearchParams,
+    options?: { page?: number; pageSize?: number }
 ): Promise<{
     data: Tables<'posts'>[] | null;
     count: number | null;
     error: string | null;
 }> => {
     try {
-        const query = buildSearchQuery(params);
+        const query = buildSearchQuery(params, options);
         const { data, error: searchError, count } = await query;
 
         if (searchError) {

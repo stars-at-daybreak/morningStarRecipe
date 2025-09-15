@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch';
 import PostItem from '../../components/postItem/PostItem';
@@ -12,16 +12,20 @@ interface SearchPageProps {
 const SearchPage = ({ query }: SearchPageProps) => {
     const [currentPostType, setCurrentPostType] = useState<'all' | 'recipe' | 'share'>('all');
     const [inputValue, setInputValue] = useState(query);
+    const observerRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     const searchConfig = useMemo(() => {
         return {
             pageType: 'all' as const,
             initialParams: { searchTerm: query },
+            enableInfiniteScroll: true,
+            pageSize: 5,
         };
     }, [query]);
 
-    const { searchList, loading, error, updateSearchTerm, updatePostType } = useSearch(searchConfig);
-    const navigate = useNavigate();
+    const { searchList, loadingMore, updateSearchTerm, totalCount, updatePostType, hasMore, loadMore } =
+        useSearch(searchConfig);
 
     const updateQuery = (query: string) => {
         if (query) navigate(`/?query=${query}`);
@@ -31,6 +35,32 @@ const SearchPage = ({ query }: SearchPageProps) => {
         setCurrentPostType(value);
         updatePostType(value);
     };
+
+    const handleObserver = useCallback(
+        (entries: IntersectionObserverEntry[]) => {
+            const [target] = entries;
+            if (target.isIntersecting && hasMore && !loadingMore) {
+                loadMore();
+            }
+        },
+        [hasMore, loadingMore, loadMore]
+    );
+
+    useEffect(() => {
+        const element = observerRef.current;
+        if (!element) return;
+
+        const observer = new IntersectionObserver(handleObserver, {
+            threshold: 0.1,
+            rootMargin: '100px',
+        });
+
+        observer.observe(element);
+
+        return () => {
+            if (element) observer.unobserve(element);
+        };
+    }, [handleObserver]);
 
     return (
         <main className={styles.searchPage}>
@@ -46,7 +76,7 @@ const SearchPage = ({ query }: SearchPageProps) => {
                     />
                 </div>
                 <h2 className={styles.searchPage__resultsTitle}>
-                    <strong>{inputValue}</strong> 검색 결과 총<strong>{searchList.length}건</strong> 입니다.
+                    <strong>{inputValue}</strong> 검색 결과 총 <strong>{totalCount}건</strong> 입니다.
                 </h2>
                 <nav className={styles.searchPage__filter} role='tablist' aria-label='게시물 타입 필터'>
                     {[
@@ -67,12 +97,11 @@ const SearchPage = ({ query }: SearchPageProps) => {
                         </button>
                     ))}
                 </nav>
+                <hr className={styles.searchPage__divider} />
             </header>
 
             <section className={styles.searchPage__results} aria-live='polite'>
-                {!loading && searchList.length === 0 && (
-                    <div className={styles.searchPage__noResults}>검색 결과가 없습니다.</div>
-                )}
+                {searchList.length === 0 && <div className={styles.searchPage__noResults}>검색 결과가 없습니다.</div>}
 
                 {searchList.length > 0 && (
                     <div className={styles.searchPage__resultsContainer}>
@@ -90,6 +119,14 @@ const SearchPage = ({ query }: SearchPageProps) => {
                                 </li>
                             ))}
                         </ul>
+
+                        {hasMore && (
+                            <div ref={observerRef} className={styles.searchPage__loadTrigger} aria-hidden='true'>
+                                {loadingMore && <div className={styles.searchPage__loading}></div>}
+                            </div>
+                        )}
+
+                        {!hasMore && searchList.length > 0 && <div className={styles.searchPage__endMessage}></div>}
                     </div>
                 )}
             </section>
