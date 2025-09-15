@@ -1,0 +1,89 @@
+.sharePage__inputWrapper {
+    margin: 0 1.6rem;
+}
+.sharePage__filterWrapper {
+    margin: 3rem 1.6rem 0;
+}
+.sharePage__filterBtn,
+.sharePage__filterBtn_active {
+    font-weight: 400;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 0.7rem;
+    background-color: #f8f8f8;
+    border: 0.1rem solid #e5e5e5;
+    color: #999999;
+    margin-right: 0.5rem;
+}
+.sharePage__filterBtn_active {
+    background-color: #e9f8d4;
+    border: 0.1rem solid #68b43f;
+    color: #68b43f;
+}
+.sharePage__register {
+    display: flex;
+    font-weight: 400;
+    font-size: 1.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.7rem;
+    background-color: #68b43f;
+    border: 0.1rem solid #68b43f;
+    color: #ffffff;
+    float: right;
+}
+.sharePage__icon {
+    width: 1.4rem;
+    width: 1.4rem;
+    margin-right: 0.4rem;
+}
+.sharePage__results {
+    margin: 0 1.6rem;
+    margin-top: 1.8rem;
+}
+
+@media screen and (max-width: 406px) {
+    .sharePage__register {
+        margin-top: 0.5rem;
+        float: left;
+    }
+    .sharePage__results {
+        margin-top: 5rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .sharePage__filterList {
+        margin: 0 auto;
+        max-width: 73.6rem;
+    }
+    .sharePage__results {
+        margin: 0 auto;
+        max-width: 73.6rem;
+    }
+    .sharePage__filterWrapper {
+        margin-top: 6rem;
+    }
+    .sharePage__filterBtn,
+    .sharePage__filterBtn_active {
+        font-size: 2.2rem;
+        padding: 0.8rem;
+        border-radius: 1.1rem;
+        border: 0.18rem solid #e5e5e5;
+        margin-right: 0.8rem;
+    }
+    .sharePage__register {
+        font-size: 2.2rem;
+        padding: 0.5rem 1rem;
+        border-radius: 1.1rem;
+        border: 0.18rem solid #68b43f;
+    }
+    .sharePage__icon {
+        width: 2.2rem;
+        width: 2.2rem;
+        margin-right: 0.6rem;
+    }
+    .sharePage__results {
+        margin-top: 3rem;
+    }
+}

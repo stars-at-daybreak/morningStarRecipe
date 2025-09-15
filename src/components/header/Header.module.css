@@ -11,13 +11,12 @@
 .header__title {
     justify-self: center;
     text-align: center;
-    width: 9.1rem;
     height: 2.2rem;
 }
 .header__title {
     height: auto;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 1.6rem;
     padding: 0.3rem 0;
 }
 .header nav {
