@@ -1,7 +1,6 @@
 /* 나눔&레시피 공통 */
 .post__item {
     width: calc(100% - 3.2rem);
-    max-width: 128rem;
     display: flex;
     justify-content: start;
     align-items: center;
