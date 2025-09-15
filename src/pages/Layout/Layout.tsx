@@ -4,6 +4,7 @@ import Main from '../Main.tsx';
 import Footer from '../../components/footer/Footer.tsx';
 import Nav from '../../components/nav/Nav.tsx';
 import styles from './Layout.module.css';
+import FloatingButtons from '../../components/FloatingButtons/FloatingButtons.tsx';
 
 const Layout = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
@@ -29,6 +30,7 @@ const Layout = () => {
             <div className={isDesktop ? styles.footer_desktop : ''}>
                 <Footer />
             </div>
+            <FloatingButtons />
         </>
     );
 };

@@ -9,6 +9,7 @@ import rank_1 from '../../assets/rank_1.svg';
 import rank_2 from '../../assets/rank_2.svg';
 import rank_3 from '../../assets/rank_3.svg';
 import { getUserNickname } from '../../services/supabaseUsers';
+import { Link } from 'react-router-dom';
 
 interface PostWithProfileThumbnail extends Tables<'posts'> {
     profileImageUrl?: string;
@@ -201,40 +202,42 @@ const RankingItem: React.FC<RankingItemProps> = React.memo(({ post, index, apiUr
 
     return (
         <li className={`${styles.post} ${styles.fadeSlideIn} ${styles[`post--delay-${index}`]}`}>
-            {/* 순위 뱃지 */}
-            <div className={`${styles.post__badge} ${styles[`post__badge--${rankModifier}`]}`}>
-                <span aria-label={`${index + 1}위`} className={styles.post__rank}>
-                    {index + 1}
-                    {getRankSuffix(index + 1)}
-                </span>
-            </div>
+            <Link to={`${post.post_type === 'recipe' ? '/recipes' : '/share'}/${post.id}`}>
+                {/* 순위 뱃지 */}
+                <div className={`${styles.post__badge} ${styles[`post__badge--${rankModifier}`]}`}>
+                    <span aria-label={`${index + 1}위`} className={styles.post__rank}>
+                        {index + 1}
+                        {getRankSuffix(index + 1)}
+                    </span>
+                </div>
 
-            {/* 프로필 섹션 */}
-            <div className={styles.post__profilesection}>
-                <img
-                    src={profileImageUrl || NoneProfileImageUrl}
-                    alt={`${post.userNickname || '익명'} 프로필 이미지`}
-                    className={styles.post__profile}
-                    crossOrigin='anonymous'
-                    loading='lazy'
-                    onError={e => onImageError(e, NoneProfileImageUrl)}
-                />
-            </div>
+                {/* 프로필 섹션 */}
+                <div className={styles.post__profilesection}>
+                    <img
+                        src={profileImageUrl || NoneProfileImageUrl}
+                        alt={`${post.userNickname || '익명'} 프로필 이미지`}
+                        className={styles.post__profile}
+                        crossOrigin='anonymous'
+                        loading='lazy'
+                        onError={e => onImageError(e, NoneProfileImageUrl)}
+                    />
+                </div>
 
-            {/* 포스트 제목 */}
-            <h3 className={styles.post__title}>{post.title}</h3>
+                {/* 포스트 제목 */}
+                <h3 className={styles.post__title}>{post.title}</h3>
 
-            {/* 포스트 메타 정보 */}
-            <div className={styles.post__meta}>
-                <img
-                    src={thumbnailUrl || NoneThumbnailImageUrl}
-                    alt={`${post.title} 썸네일`}
-                    className={styles.post__thumbnail}
-                    crossOrigin='anonymous'
-                    loading='lazy'
-                    onError={e => onImageError(e, NoneThumbnailImageUrl)}
-                />
-            </div>
+                {/* 포스트 메타 정보 */}
+                <div className={styles.post__meta}>
+                    <img
+                        src={thumbnailUrl || NoneThumbnailImageUrl}
+                        alt={`${post.title} 썸네일`}
+                        className={styles.post__thumbnail}
+                        crossOrigin='anonymous'
+                        loading='lazy'
+                        onError={e => onImageError(e, NoneThumbnailImageUrl)}
+                    />
+                </div>
+            </Link>
         </li>
     );
 });

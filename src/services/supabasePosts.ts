@@ -84,6 +84,7 @@ export const selectRecentPostsTOP6 = async (): Promise<Post[] | null> => {
             .from('posts')
             .select(`*`)
             .eq('is_post_active', true)
+            .eq('post_type', 'recipe')
             .order('created_at', { ascending: false })
             .limit(6);
 
