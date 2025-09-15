@@ -47,3 +47,42 @@ export function useModal<T = unknown>() {
         closeModal,
     };
 }
+
+/* 모달 사용법
+
+// 1. import
+import { useModal } from '../hooks/useModal';
+import useUserStore from '../stores/useUserStore';
+import Modal from '../components/modal/Modal';
+
+// 2. 훅 사용
+const { user } = useUserStore();
+const { isOpen, type, openModal, closeModal } = useModal();
+
+// 3. 핸들러 함수
+const handleModalConfirm = () => {
+    if (type === 'LOGIN') {
+        navigate('/login');
+    }
+    closeModal();
+};
+
+// 4. 모달 열기 방법들
+// 방법 1: 단순하게 열기
+openModal('LOGIN');
+
+// 방법 2: 조건부로 열기 (클릭 이벤트에서)
+onClick={!user ? (e) => {
+    e.preventDefault();
+    openModal('LOGIN');
+} : undefined}
+
+
+// 5. JSX에 추가
+<Modal 
+    isOpen={isOpen} 
+    type={type} 
+    onClose={closeModal} 
+    onConfirm={handleModalConfirm} 
+/>
+*/
