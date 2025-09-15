@@ -9,16 +9,22 @@ export type PostType = 'recipe' | 'share' | 'all';
 interface BaseSearchParams {
     searchTerm?: string;
     category?: string;
+    page?: number; // 추가
+    pageSize?: number; // 추가
 }
 
 export interface RecipeSearchParams extends BaseSearchParams {
     pageType: 'recipe';
     sortBy?: RecipeSortBy;
+    page?: number; // 추가
+    pageSize?: number; // 추가
 }
 
 export interface ShareSearchParams extends BaseSearchParams {
     pageType: 'share';
     shareStatus?: ShareStatus;
+    page?: number; // 추가
+    pageSize?: number; // 추가
 }
 
 export interface AllSearchParams extends BaseSearchParams {
@@ -26,13 +32,17 @@ export interface AllSearchParams extends BaseSearchParams {
     postType?: PostType;
     sortBy?: RecipeSortBy;
     shareStatus?: ShareStatus;
+    page?: number; // 추가
+    pageSize?: number; // 추가
 }
 
 export type SearchParams = RecipeSearchParams | ShareSearchParams | AllSearchParams;
 
 export interface UseSearchOptions {
-    pageType: PageType;
+    pageType: string;
     initialParams?: Partial<SearchParams>;
+    enableInfiniteScroll?: boolean;
+    pageSize?: number;
 }
 
 export const getShareStatusLabel = (status: ShareStatus): string => {

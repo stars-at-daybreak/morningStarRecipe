@@ -36,55 +36,100 @@ const createDefaultParams = (pageType: string, initialParams?: Partial<SearchPar
 };
 
 const useSearch = (options: UseSearchOptions) => {
-    const { pageType, initialParams } = options;
+    const { pageType, initialParams, enableInfiniteScroll = false, pageSize = 20 } = options;
 
     // 중복 실행 방지
     const lastParamsRef = useRef<string>('');
 
     // 상태 관리
     const [searchList, setSearchList] = useState<Tables<'posts'>[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [totalCount, setTotalCount] = useState<number>(0);
+
+    // 무한 스크롤 관련 상태
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
     // 검색 파라미터 초기화
     const [searchParams, setSearchParams] = useState<SearchParams>(() => createDefaultParams(pageType, initialParams));
 
     // 검색 실행 함수
-    const executeSearch = useCallback(async (params: SearchParams) => {
-        const paramsString = JSON.stringify(params);
+    // executeSearch 함수 수정
+    const executeSearch = useCallback(
+        async (params: SearchParams, page: number = 1, append: boolean = false) => {
+            const paramsString = JSON.stringify({ ...params, page });
 
-        // 중복 실행 방지
-        if (lastParamsRef.current === paramsString) {
+            if (!append && lastParamsRef.current === paramsString) {
+                return;
+            }
+
+            if (!append) {
+                lastParamsRef.current = paramsString;
+            } else {
+                setLoadingMore(true);
+            }
+
+            setError(null);
+
+            try {
+                const paginationOptions = enableInfiniteScroll ? { page, pageSize } : undefined;
+
+                const result = await searchPosts(params, paginationOptions);
+
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                const newData = result.data || [];
+
+                if (append) {
+                    setSearchList(prev => [...prev, ...newData]);
+                } else {
+                    setSearchList(newData);
+                }
+
+                setTotalCount(result.count || 0);
+
+                if (enableInfiniteScroll) {
+                    // 받아온 데이터 길이로 판단
+                    const hasMoreData = newData.length === pageSize;
+                    setHasMore(hasMoreData);
+                }
+            } catch (err) {
+                setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
+                if (!append) {
+                    setSearchList([]);
+                    setTotalCount(0);
+                    setHasMore(false);
+                }
+            } finally {
+                if (append) {
+                    setLoadingMore(false);
+                }
+            }
+        },
+        [enableInfiniteScroll, pageSize]
+    );
+
+    // 더 많은 데이터 로드
+    const loadMore = useCallback(() => {
+        if (!enableInfiniteScroll || loadingMore || !hasMore) {
             return;
         }
 
-        lastParamsRef.current = paramsString;
-        setLoading(true);
-        setError(null);
-
-        try {
-            const result = await searchPosts(params);
-
-            if (result.error) {
-                throw new Error(result.error);
-            }
-
-            setSearchList(result.data || []);
-            setTotalCount(result.count || 0);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
-            setSearchList([]);
-            setTotalCount(0);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+        const nextPage = currentPage + 1;
+        setCurrentPage(nextPage);
+        executeSearch(searchParams, nextPage, true);
+    }, [enableInfiniteScroll, loadingMore, hasMore, currentPage, searchParams, executeSearch]);
 
     // 디바운스된 검색 실행
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            executeSearch(searchParams);
+            // 새로운 검색이므로 페이지를 1로 리셋
+            setCurrentPage(1);
+            setHasMore(true);
+            executeSearch(searchParams, 1, false);
         }, 500);
 
         return () => clearTimeout(timeoutId);
@@ -150,11 +195,15 @@ const useSearch = (options: UseSearchOptions) => {
     // 유틸리티 함수들
     const resetSearch = useCallback(() => {
         setSearchParams(createDefaultParams(pageType));
+        setCurrentPage(1);
+        setHasMore(true);
     }, [pageType]);
 
     const refetch = useCallback(() => {
         lastParamsRef.current = ''; // 강제 새로고침을 위해 초기화
-        executeSearch(searchParams);
+        setCurrentPage(1);
+        setHasMore(true);
+        executeSearch(searchParams, 1, false);
     }, [executeSearch, searchParams]);
 
     // 현재 상태 값들
@@ -169,9 +218,14 @@ const useSearch = (options: UseSearchOptions) => {
     return {
         // 데이터
         searchList,
-        loading,
+        loadingMore,
         error,
         totalCount,
+
+        // 무한 스크롤 관련
+        hasMore,
+        loadMore,
+        currentPage,
 
         // 현재 상태
         pageType,
