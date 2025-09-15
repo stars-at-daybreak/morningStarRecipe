@@ -1,0 +1,14 @@
+.duplicate-check__btn {
+    min-width: 9.7rem;
+    width: clamp(8.7rem, 8.7rem + (100vw - 390px) * 0.1, 14.9rem);
+    height: clamp(3.6rem, 3.6rem + (100vw - 390px) * 0.05, 6.2rem);
+
+    margin-left: 1rem;
+    border: 1px solid var(--color-green);
+    border-radius: 50rem;
+
+    color: var(--color-green);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.01, 2.2rem);
+    line-height: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.01, 2.2rem);
+}

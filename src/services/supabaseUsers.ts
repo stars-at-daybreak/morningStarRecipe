@@ -4,6 +4,14 @@ import type { Signup, SignupData, UpdateUser, UpdateUserData } from '../types/us
 export const signup: Signup = async (signupData: SignupData) => {
     try {
         const { email, password, options } = signupData;
+
+        // 닉네임 중복 체크
+        const nicknameExists = await checkNicknameExists(options.nickname);
+        if (nicknameExists) {
+            alert('이미 사용중인 닉네임입니다. 다른 닉네임을 선택해주세요.');
+            return;
+        }
+
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
@@ -180,4 +188,46 @@ export const getUserNickname = async (userId: UserId): Promise<string> => {
     }
 
     return data || '익명';
+};
+
+/**
+ * 이메일 인증시 이미 가입되어있는 이메일인지 체크하기 위한 이메일 조회
+ */
+export const checkEmailExists = async (email: string): Promise<boolean> => {
+    try {
+        const { data, error } = await supabase.rpc('check_email_exists', {
+            user_email: email,
+        });
+
+        if (error) {
+            console.error('이메일 존재 확인 실패:', error);
+            return false;
+        }
+
+        return data || false;
+    } catch (error) {
+        console.error('이메일 존재 확인 예외:', error);
+        return false;
+    }
+};
+
+/**
+ * 닉네임 중복 체크
+ */
+export const checkNicknameExists = async (nickname: string): Promise<boolean> => {
+    try {
+        const { data, error } = await supabase.rpc('check_nickname_exists', {
+            user_nickname: nickname,
+        });
+
+        if (error) {
+            console.error('닉네임 중복 확인 실패:', error);
+            return false;
+        }
+
+        return data || false;
+    } catch (error) {
+        console.error('닉네임 중복 확인 예외:', error);
+        return false;
+    }
 };

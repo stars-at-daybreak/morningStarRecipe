@@ -9,10 +9,25 @@ import Button from '../../components/button/Button.tsx';
 import InputRadio from '../../components/input/InputRadio.tsx';
 import { privacyPolicy, termsOfService } from '../../data/termsOfService.ts';
 import type { SignupData } from '../../types/users.ts';
+import EmailAuthModal from '../../components/modal/EmailAuthModal.tsx';
+import NicknameButton from '../../components/button/NicknameButton.tsx';
+import ValidationText from '../../components/validation/ValidationText.tsx';
 
 const SignUp = () => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [checkedItems, setCheckedItems] = useState(new Set());
+    const [isOpen, setIsOpen] = useState(false);
+    const [isAuthConfirm, setIsAuthConfirm] = useState(false);
+    const [isValidatedState, setIsValidatedState] = useState<{
+        nickname: boolean | null;
+        password: boolean | null;
+        birthDate: boolean | null;
+    }>({
+        nickname: null,
+        password: null,
+        birthDate: null,
+    });
+
     const [formData, setFormData] = useState<
         SignupData & {
             password2: string;
@@ -34,6 +49,11 @@ const SignUp = () => {
     const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (formData.password !== formData.password2) {
+            setIsValidatedState(prev => ({ ...prev, password: false }));
+            return;
+        }
+
         await signup(formData);
     };
 
@@ -49,6 +69,15 @@ const SignUp = () => {
 
             return newSet;
         });
+    };
+
+    const handleAllAgree = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            handleCheck('agreeToTerms1');
+            handleCheck('agreeToTerms2');
+        } else {
+            setCheckedItems(new Set());
+        }
     };
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,30 +102,32 @@ const SignUp = () => {
             case 'password':
                 setFormData(prevState => ({
                     ...prevState,
-                    password: value,
+                    password: value.slice(0, 15),
                 }));
                 break;
             case 'password2':
                 setFormData(prevState => ({
                     ...prevState,
-                    password2: value,
+                    password2: value.slice(0, 15),
                 }));
                 break;
-            case 'name':
+            case 'name': {
+                const filteredValue = value.replace(/[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\s]/g, '');
                 setFormData(prevState => ({
                     ...prevState,
                     options: {
                         ...prevState.options,
-                        name: value,
+                        name: filteredValue,
                     },
                 }));
                 break;
+            }
             case 'birthDate':
                 setFormData(prevState => ({
                     ...prevState,
                     options: {
                         ...prevState.options,
-                        birthDate: value,
+                        birthDate: value.slice(0, 6).replace(/[^0-9]/g, ''),
                     },
                 }));
                 break;
@@ -121,23 +152,45 @@ const SignUp = () => {
         }
     };
 
+    const validatePassword = (password: string): boolean => {
+        const hasLetter = /[a-zA-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const isValidLength = password.length >= 8 && password.length <= 15;
+
+        return hasLetter && hasNumber && hasSpecialChar && isValidLength;
+    };
+
+    const handleAuthConfirm = (isConfirm: boolean) => {
+        setIsAuthConfirm(isConfirm);
+    };
+
     useEffect(() => {
         const isFormValid =
             formData.email &&
+            isAuthConfirm &&
             formData.options.nickname &&
+            isValidatedState.nickname &&
             formData.password &&
             formData.password2 &&
-            formData.password === formData.password2 &&
+            isValidatedState.password &&
             formData.options.name &&
             formData.options.birthDate &&
+            isValidatedState.birthDate &&
             formData.options.gender &&
             typeof formData.options.isForeigner === 'boolean' &&
             checkedItems.has('agreeToTerms1') &&
             checkedItems.has('agreeToTerms2');
-
         setIsDisabled(!isFormValid);
-        console.log('formData', formData);
-    }, [formData, checkedItems]);
+        if (formData.password.length !== 0 && formData.password2.length !== 0) {
+            const isPasswordValid = validatePassword(formData.password);
+            const isPasswordMatch = formData.password === formData.password2;
+            setIsValidatedState(prev => ({ ...prev, password: isPasswordValid && isPasswordMatch }));
+        }
+        if (formData.options.birthDate.length > 0 && formData.options.birthDate.length <= 6) {
+            setIsValidatedState(prev => ({ ...prev, birthDate: formData.options.birthDate.length === 6 }));
+        }
+    }, [formData, isAuthConfirm, isValidatedState.nickname, checkedItems]);
 
     usePageSetup({
         title: '회원가입',
@@ -147,126 +200,214 @@ const SignUp = () => {
 
     return (
         <div className={styles['signup']}>
-            <section>
-                <h2>
-                    <ResponsiveLogo />
-                </h2>
-            </section>
-            <form className={styles['signup__form']} onSubmit={signUpHandler}>
-                <InputText
-                    label='이메일'
-                    id='email'
-                    name='email'
-                    state={formData.email}
-                    type='email'
-                    handleInput={handleInput}
-                    placeholder='이메일 주소를 입력해주세요.'
-                    isRequired={true}
-                />
-                <EmailAuthButton email={formData.email} />
-                <InputText
-                    label='닉네임'
-                    id='nickname'
-                    name='nickname'
-                    state={formData.options.nickname}
-                    type='text'
-                    handleInput={handleInput}
-                    placeholder='닉네임을 입력해주세요.'
-                    isRequired={true}
-                />
-                <InputText
-                    label='비밀번호 입력'
-                    id='password'
-                    name='password'
-                    state={formData.password}
-                    type='password'
-                    handleInput={handleInput}
-                    placeholder='영문, 숫자, 특수문자 포함 8-15자로 입력해주세요.'
-                    isRequired={true}
-                />
-                <InputText
-                    label='비밀번호 확인'
-                    id='password2'
-                    name='password2'
-                    state={formData.password2}
-                    type='password'
-                    handleInput={handleInput}
-                    placeholder='확인을 위해 비밀번호를 한 번 더 입력해주세요.'
-                    isRequired={true}
-                />
-                <InputText
-                    label='이름'
-                    id='name'
-                    name='name'
-                    state={formData.options.name}
-                    type='text'
-                    handleInput={handleInput}
-                    placeholder='실명을 입력해주세요'
-                    isRequired={true}
-                />
-                <InputText
-                    label='생년월일'
-                    id='birthDate'
-                    name='birthDate'
-                    state={formData.options.birthDate}
-                    type='text'
-                    handleInput={handleInput}
-                    placeholder='생년월일을 입력해주세요'
-                    isRequired={true}
-                />
-                <InputRadio
-                    id='male'
-                    name='gender'
-                    value='M'
-                    label='남성'
-                    handleInput={handleInput}
-                    isRequired={true}
-                />
-                <InputRadio
-                    id='female'
-                    name='gender'
-                    value='F'
-                    label='여성'
-                    handleInput={handleInput}
-                    isRequired={true}
-                />
-                <InputRadio
-                    id='korean'
-                    name='isForeigner'
-                    value='false'
-                    label='내국인'
-                    handleInput={handleInput}
-                    isRequired={true}
-                />
-                <InputRadio
-                    id='foreigner'
-                    name='isForeigner'
-                    value='true'
-                    label='외국인'
-                    handleInput={handleInput}
-                    isRequired={true}
-                />
+            <div>
+                <ResponsiveLogo />
+            </div>
 
-                <div>
-                    <label htmlFor='agreeToTerms2'>서비스 이용약관.(필수)</label>
-                    <input
-                        type='checkbox'
-                        id='agreeToTerms2'
-                        name='agreeToTerms2'
-                        onChange={() => handleCheck('agreeToTerms2')}
-                        required
+            <form className={styles['signup__form']} onSubmit={signUpHandler}>
+                <fieldset className={styles['signup__email-box']}>
+                    <legend className='sr-only'>이메일 인증</legend>
+
+                    <InputText
+                        label='이메일'
+                        id='email'
+                        name='email'
+                        state={formData.email}
+                        type='email'
+                        handleInput={handleInput}
+                        placeholder='이메일 주소를 입력해주세요.'
+                        isRequired={true}
+                        isDisabled={isAuthConfirm}
+                        className={isAuthConfirm ? 'input__label--active' : ''}
                     />
-                    <div className='signup__terms-box'>{termsOfService}</div>
-                    <label htmlFor='agreeToTerms1'>개인정보 수집 및 이용.(필수)</label>
+                    <EmailAuthButton
+                        handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
+                        isConfirm={isAuthConfirm}
+                        email={formData.email}
+                    />
+                </fieldset>
+
+                <fieldset className={styles['signup__nickname-box']}>
+                    <legend className='sr-only'>닉네임 중복확인</legend>
+                    <div className={styles['signup__nickname-contents']}>
+                        <InputText
+                            label='닉네임'
+                            id='nickname'
+                            name='nickname'
+                            state={formData.options.nickname}
+                            type='text'
+                            handleInput={handleInput}
+                            placeholder='닉네임을 입력해주세요.'
+                            isRequired={true}
+                            isDisabled={isValidatedState.nickname === true}
+                            className={isValidatedState.nickname ? 'input__label--active' : ''}
+                        />
+                        <NicknameButton
+                            nickname={formData.options.nickname}
+                            handleDuplicate={isDuplicated =>
+                                setIsValidatedState(prev => ({ ...prev, nickname: !isDuplicated }))
+                            }
+                        />
+                    </div>
+                    <ValidationText
+                        isPassed={isValidatedState.nickname}
+                        text={isValidatedState.nickname ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.'}
+                    />
+                </fieldset>
+
+                <fieldset className={styles['signup__password-group']}>
+                    <legend className='sr-only'>비밀번호 입력 및 확인</legend>
+
+                    <InputText
+                        label='비밀번호 입력'
+                        id='password'
+                        name='password'
+                        state={formData.password}
+                        type='password'
+                        handleInput={handleInput}
+                        placeholder='영문, 숫자, 특수문자 포함 8-15자로 입력해주세요.'
+                        isRequired={true}
+                        className={isValidatedState.password ? 'input__label--active' : ''}
+                    />
+                    <InputText
+                        label='비밀번호 확인'
+                        id='password2'
+                        name='password2'
+                        state={formData.password2}
+                        type='password'
+                        handleInput={handleInput}
+                        placeholder='확인을 위해 비밀번호를 한 번 더 입력해주세요.'
+                        isRequired={true}
+                        className={isValidatedState.password ? 'input__label--active' : ''}
+                    />
+                    <ValidationText
+                        isPassed={isValidatedState.password}
+                        text={
+                            isValidatedState.password
+                                ? '사용 가능한 비밀번호입니다.'
+                                : formData.password === formData.password2
+                                  ? '영문, 숫자, 특수문자 포함 8-15자로 입력해야합니다.'
+                                  : ' 비밀번호가 일치해야 합니다.'
+                        }
+                    />
+                </fieldset>
+
+                <fieldset className={styles['signup__personal-group']}>
+                    <legend className='sr-only'>개인 정보</legend>
+
+                    <InputText
+                        label='이름'
+                        id='name'
+                        name='name'
+                        state={formData.options.name}
+                        type='text'
+                        handleInput={handleInput}
+                        placeholder='실명을 입력해주세요'
+                        isRequired={true}
+                        className={formData.options.name ? 'input__label--active' : ''}
+                    />
+                    <InputText
+                        label='생년월일'
+                        id='birthDate'
+                        name='birthDate'
+                        state={formData.options.birthDate}
+                        type='text'
+                        handleInput={handleInput}
+                        placeholder='생년월일을 입력해주세요'
+                        isRequired={true}
+                        className={isValidatedState.birthDate ? 'input__label--active' : ''}
+                    />
+                    <ValidationText
+                        isPassed={isValidatedState.birthDate}
+                        text={isValidatedState.birthDate ? '' : '생년월일은 6자리 형식이어야 합니다.'}
+                    />
+                </fieldset>
+
+                <fieldset className={styles['signup__gender-group']}>
+                    <legend
+                        className={`${formData.options.gender ? styles['signup__radio-legend--active'] : styles['signup__radio-legend']}`}
+                    >
+                        성별
+                    </legend>
+
+                    <div className={styles['signup__radio-group']}>
+                        <InputRadio
+                            id='male'
+                            name='gender'
+                            value='M'
+                            label='남성'
+                            handleInput={handleInput}
+                            isRequired={true}
+                        />
+                        <InputRadio
+                            id='female'
+                            name='gender'
+                            value='F'
+                            label='여성'
+                            handleInput={handleInput}
+                            isRequired={true}
+                        />
+                    </div>
+                </fieldset>
+                <fieldset className={styles['signup__isForeigner-group']}>
+                    <legend
+                        className={`${formData.options.isForeigner !== null ? styles['signup__radio-legend--active'] : styles['signup__radio-legend']}`}
+                    >
+                        내국인
+                    </legend>
+
+                    <div className={styles['signup__radio-group']}>
+                        <InputRadio
+                            id='korean'
+                            name='isForeigner'
+                            value='false'
+                            label='내국인'
+                            handleInput={handleInput}
+                            isRequired={true}
+                        />
+                        <InputRadio
+                            id='foreigner'
+                            name='isForeigner'
+                            value='true'
+                            label='외국인'
+                            handleInput={handleInput}
+                            isRequired={true}
+                        />
+                    </div>
+                </fieldset>
+
+                <fieldset className={styles['signup__agree']}>
+                    <legend className='sr-only'>회원가입 약관 동의</legend>
+
+                    <input type='checkbox' id='agreeToAll' onChange={handleAllAgree} />
+                    <label htmlFor='agreeToAll'>필수 전체 약관에 동의합니다.</label>
+
+                    <div className={styles['signup__terms-box']}>
+                        <p className={styles['signup__terms-content']}>{termsOfService}</p>
+                    </div>
                     <input
                         type='checkbox'
                         id='agreeToTerms1'
-                        name='agreeToTerms1'
+                        name='agreeToTerms'
                         onChange={() => handleCheck('agreeToTerms1')}
+                        checked={checkedItems.has('agreeToTerms1')}
                         required
                     />
-                    <div className='signup__terms-box'>{privacyPolicy}</div>
-                </div>
+                    <label htmlFor='agreeToTerms1'>서비스 이용약관.(필수)</label>
+
+                    <div className={styles['signup__terms-box']}>
+                        <p className={styles['signup__terms-content']}>{privacyPolicy}</p>
+                    </div>
+                    <input
+                        type='checkbox'
+                        id='agreeToTerms2'
+                        name='agreeToTerms'
+                        onChange={() => handleCheck('agreeToTerms2')}
+                        checked={checkedItems.has('agreeToTerms2')}
+                        required
+                    />
+                    <label htmlFor='agreeToTerms2'>개인정보 수집 및 이용.(필수)</label>
+                </fieldset>
 
                 <Button
                     type='submit'
@@ -277,6 +418,14 @@ const SignUp = () => {
                     className={styles['login__submit-button']}
                 />
             </form>
+
+            {isOpen && (
+                <EmailAuthModal
+                    handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
+                    handleAuthConfirm={(isConfirm: boolean) => handleAuthConfirm(isConfirm)}
+                    email={formData.email}
+                />
+            )}
         </div>
     );
 };

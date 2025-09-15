@@ -1,0 +1,90 @@
+import React, { useEffect, useState } from 'react';
+import { verifyEmailCode } from '../../services/supabaseEmailAuth.ts';
+import styles from './emailAuthModal.module.css';
+
+const EmailAuthModal = ({
+    handleModal,
+    handleAuthConfirm,
+    email,
+}: {
+    handleModal: (isOpen: boolean) => void;
+    handleAuthConfirm: (isConfirm: boolean) => void;
+    email: string;
+}) => {
+    const [code, setCode] = useState('');
+    const [isHidden, setIsHidden] = useState(true);
+    const [timeLeft, setTimeLeft] = useState<number>(600);
+
+    const formatTime = (seconds: number): string => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    };
+
+    const handleConfirm = async () => {
+        if (!code) {
+            setIsHidden(false);
+            return;
+        }
+
+        const isSuccess = await verifyEmailCode(email, code);
+
+        if (isSuccess) {
+            handleModal(false);
+            handleAuthConfirm(true);
+        } else {
+            setIsHidden(false);
+        }
+    };
+
+    const handleInputCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputCode = e.target.value;
+        if (inputCode.length <= 6) {
+            setCode(inputCode);
+        }
+    };
+
+    useEffect(() => {
+        if (timeLeft > -1) {
+            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+            return () => clearTimeout(timer);
+        } else if (timeLeft === -1) {
+            handleModal(false);
+        }
+    }, [timeLeft]);
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, []);
+
+    return (
+        <div className={styles['modal-overlay']}>
+            <div className={styles['auth-modal']}>
+                <div className={styles['auth-modal__contents-box']}>
+                    <p className={styles['auth-modal__contents']}>인증번호를 입력해주세요</p>
+                    <time className={styles['auth-modal__timer']}>{formatTime(timeLeft)}</time>
+                    <input
+                        className={styles['auth-modal__input']}
+                        type='number'
+                        value={code}
+                        onChange={handleInputCode}
+                    />
+                    <span
+                        className={isHidden ? styles['auth-modal__input-text'] : styles['auth-modal__input-text--warn']}
+                    >
+                        인증번호가 일치하지 않습니다.
+                    </span>
+                </div>
+                <button className={styles['auth-modal__btn']} type='button' onClick={handleConfirm}>
+                    확인
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default EmailAuthModal;
