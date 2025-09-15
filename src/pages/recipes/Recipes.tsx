@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { RecipeSortBy } from '../../types/search.types.ts';
-import PostItem from '../../components/postItem/PostItem.tsx';
 import { useEffect, useState } from 'react';
 import { fetchCategories } from '../../services/supabaseCategories.ts';
 import type { Tables } from '../../types/supabase.ts';
@@ -16,7 +15,7 @@ import InfinitePostList from '../../components/infiniteScroll/InfiniteScroll.tsx
 const Recipes = ({ query }: { query?: string }) => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const navigate = useNavigate();
-    const { searchList, updateSearchTerm, updateRecipeSortBy, updateCategory } = useSearch({
+    const { updateSearchTerm, updateRecipeSortBy, updateCategory } = useSearch({
         pageType: 'recipe',
         initialParams: {
             searchTerm: query,
@@ -128,18 +127,11 @@ const Recipes = ({ query }: { query?: string }) => {
                 <section className={styles['recipe__list-box']}>
                     <h2 className='sr-only'>레시피 목록</h2>
 
-                    <ul className='recipe__list'>
-                        {searchList.map(item => (
-                            <li>
-                                <PostItem
-                                    key={item.id}
-                                    post={item}
-                                    type='recipe'
-                                    onClick={postId => navigate(`/recipes/${postId}`)}
-                                />
-                            </li>
-                        ))}
-                    </ul>
+                    <InfinitePostList
+                        type='recipe'
+                        fetchFunction={getRecipesWithPagination}
+                        onPostClick={handlePostClick}
+                    />
                 </section>
             </section>
 

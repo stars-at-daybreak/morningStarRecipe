@@ -94,9 +94,6 @@
 }
 .recipe__list-box {
     width: clamp(35.8rem, 35.8rem + (100vw - 390px), 73.6rem);
-
-    .recipe__list {
-    }
 }
 
 @media screen and (min-width: 1024px) {
