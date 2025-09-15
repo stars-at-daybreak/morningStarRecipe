@@ -97,7 +97,7 @@ const SearchPage = ({ query }: SearchPageProps) => {
                         </button>
                     ))}
                 </nav>
-                <hr className={styles.searchPage__divider} />
+                <div className={styles.searchPage__divider}></div>
             </header>
 
             <section className={styles.searchPage__results} aria-live='polite'>

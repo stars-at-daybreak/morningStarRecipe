@@ -49,7 +49,8 @@
 .searchPage__divider {
     margin: 0;
     padding: 0;
-    border: 0.5px solid #c5c5c5;
+    background-color: #c5c5c5;
+    height: 0.05rem;
 }
 @media (min-width: 768px) {
     .searchPage__inputWrapper {

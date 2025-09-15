@@ -5,7 +5,7 @@ import PostItem from '../../components/postItem/PostItem.tsx';
 
 const Share = ({ query }: { query?: string }) => {
     const navigate = useNavigate();
-    const { searchList, loading, updateSearchTerm, updateShareStatus } = useSearch({
+    const { searchList, updateSearchTerm, updateShareStatus } = useSearch({
         pageType: 'share',
         initialParams: {
             searchTerm: query,
@@ -27,20 +27,12 @@ const Share = ({ query }: { query?: string }) => {
                 <label htmlFor='search'>검색어</label>
                 <input id='search' defaultValue={query} onChange={e => updateSearchTerm(e.target.value)} />
             </div>
-            {loading ? (
-                <div>로딩 중...</div>
-            ) : (
-                <>
-                    {searchList.map(item => (
-                        <PostItem
-                            key={item.id}
-                            post={item}
-                            type='share'
-                            onClick={postId => navigate(`/share/${postId}`)}
-                        />
-                    ))}
-                </>
-            )}
+
+            <>
+                {searchList.map(item => (
+                    <PostItem key={item.id} post={item} type='share' onClick={postId => navigate(`/share/${postId}`)} />
+                ))}
+            </>
         </div>
     );
 };
