@@ -1,4 +1,4 @@
-import type { ModalType } from '../../hooks/useModal';
+import type { ModalType } from './ModalContext'; 
 import getModalContent from './getModalContent';
 import styles from './modal.module.css';
 

@@ -5,9 +5,8 @@ import { useEffect, useState } from 'react';
 import { fetchCategories } from '../../services/supabaseCategories.ts';
 import type { Tables } from '../../types/supabase.ts';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
+import { useModal } from '../../components/modal/ModalContext';
 import styles from './recipes.module.css';
-import { useModal } from '../../hooks/useModal.tsx';
-import Modal from '../../components/modal/Modal.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
 import { getRecipesWithPagination } from '../../services/supabasePosts';
 import InfinitePostList from '../../components/infiniteScroll/InfiniteScroll.tsx';
@@ -21,8 +20,8 @@ const Recipes = ({ query }: { query?: string }) => {
             searchTerm: query,
         },
     });
-    const { isOpen, type: modalType, openModal, closeModal } = useModal();
     const { user } = useUserStore();
+    const { openModal } = useModal();
 
     const handleFilter = (filter: RecipeSortBy) => {
         updateRecipeSortBy(filter);
@@ -37,12 +36,6 @@ const Recipes = ({ query }: { query?: string }) => {
         setCategories(data);
     };
 
-    const handleModalConfirm = () => {
-        if (modalType === 'LOGIN') {
-            navigate('/login');
-        }
-        closeModal();
-    };
 
     usePageSetup({
         title: '모두의 레시피',
@@ -134,8 +127,6 @@ const Recipes = ({ query }: { query?: string }) => {
                     />
                 </section>
             </section>
-
-            <Modal isOpen={isOpen} type={modalType} onClose={closeModal} onConfirm={handleModalConfirm} />
         </div>
     );
 };

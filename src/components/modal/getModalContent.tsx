@@ -1,4 +1,4 @@
-import type { ModalType } from '../../hooks/useModal';
+import type { ModalType } from './ModalContext';
 
 // 각 모달 타입별 정보를 정의하는 함수
 const getModalContent = (type: ModalType) => {
@@ -33,7 +33,7 @@ const getModalContent = (type: ModalType) => {
         case 'CONFIRM_DISCARD_POST':
             return {
                 title: '앗! 거의 다 됐는데!',
-                message: '나눔글을 저장하지 않고 나가시면,\n작성하신 내용이 모두 사라져요!',
+                message: '저장하지 않고 나가시면,\n작성하신 내용이 모두 사라져요!',
                 hasCancel: true,
                 confirmText: '계속 작성하기',
                 cancelText: '나가기',
