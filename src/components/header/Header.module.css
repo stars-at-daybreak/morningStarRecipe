@@ -31,4 +31,7 @@
         width: 14.2rem;
         height: 3.4rem;
     }
+    .header__title {
+        font-size: 3.2rem;
+    }
 }
