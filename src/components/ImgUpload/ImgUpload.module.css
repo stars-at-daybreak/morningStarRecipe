@@ -10,7 +10,7 @@
 .image-upload__trigger-button {
     width: 11.2rem;
     height: 8.5rem;
-    border: 0.1rem solid #c5c5c5;
+    border: 0.1rem solid var(--color-gray-300);
     border-radius: 1.5rem;
     cursor: pointer;
     display: flex;
@@ -21,8 +21,8 @@
 }
 
 .image-upload__trigger-button:hover {
-    border-color: #999;
-    background-color: #f9f9f9;
+    border-color: var(--color-gray-400);
+    background-color: var(--color-gray-100);
 }
 
 .image-upload__trigger-button--uploading {
@@ -31,7 +31,7 @@
 }
 
 .image-upload__trigger-button--uploading:hover {
-    border-color: #c5c5c5;
+    border-color: var(--color-gray-300);
     background-color: white;
 }
 

@@ -13,7 +13,7 @@
 .ranking__title {
     font-size: 2rem;
     font-weight: 700;
-    color: #353535;
+    color: var(--color-black);
 }
 .ranking__posts {
     margin-top: 1rem;
@@ -31,15 +31,15 @@
     height: 7.4rem;
 }
 .post {
-    background-color: #ffffff;
+    background-color: var(--color-white);
     border-radius: 1.5rem;
 }
 .post:first-child {
-    border: 0.3rem solid #68b43f;
-    box-shadow: 3px 3px 8px 0px #00000033;
+    border: 0.3rem solid var(--color-green);
+    box-shadow: 0.3rem 0.3rem 0.8rem 0 #00000033;
 }
 .post:first-child .post__rank {
-    color: #68b43f;
+    color: var(--color-green);
 }
 .post__badge {
     color: #99857a;
@@ -55,8 +55,8 @@
 .post__profilesection img {
     border-radius: 30%;
     background-color: #f0f0f0;
-    border: 0.1rem solid #ffffff;
-    box-shadow: 1px 1px 2px 0px #00000040;
+    border: 0.1rem solid var(--color-white);
+    box-shadow: 0.1rem 0.1rem 0.2rem 0px #00000040;
 }
 .post__profile {
     width: 3.3rem;
@@ -90,7 +90,7 @@
 @keyframes fadeSlideIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(2rem);
     }
     to {
         opacity: 1;
@@ -111,8 +111,8 @@
     animation: fadeUp 0.5s ease-out forwards;
 }
 .profile__image {
-    border-radius: 1.3rem;
-    background-color: #e5e5e5;
+    border-radius: 1.2rem;
+    background-color: var(--color-gray-200);
     width: 6.4rem;
     height: 6.4rem;
 }
@@ -127,13 +127,14 @@
 .profile:nth-child(1) .profile__image {
     width: 9.1rem;
     height: 9.1rem;
-    border: 0.3rem solid #68b43f;
+    border-radius: 1.3rem;
+    border: 0.2rem solid var(--color-green);
 }
 .profile:nth-child(2) .profile__image {
-    border: 0.3rem solid #c5c5c5;
+    border: 0.2rem solid var(--color-gray-300);
 }
 .profile:nth-child(3) .profile__image {
-    border: 0.3rem solid #ceb7aa;
+    border: 0.2rem solid #ceb7aa;
 }
 .profile__badge {
     position: relative;
@@ -153,17 +154,17 @@
 }
 .profile__name {
     margin-top: 0.4rem;
-    color: #767676;
+    color: var(--color-gray);
     font-weight: 700;
     font-size: 1.4rem;
 }
 
 @keyframes scaleIn {
     from {
-        transform: translateY(30px) scale(0.9);
+        transform: translateY(3rem) scale(0.9);
     }
     to {
-        transform: translateY(-10px) scale(1.1);
+        transform: translateY(-1rem) scale(1.1);
     }
 }
 .profile__delay--0 {
@@ -217,7 +218,7 @@
         height: 9.7rem;
     }
     .post {
-        background-color: #ffffff;
+        background-color: var(--color-white);
         border-radius: 1.5rem;
     }
 
@@ -239,6 +240,7 @@
     .post__meta {
         width: 7.2rem;
         height: 7.2rem;
+        border-radius: 1.3rem;
     }
     .ranking__container {
         margin-top: 1.5rem;
@@ -313,6 +315,7 @@
     .post__meta {
         width: 8.8rem;
         height: 8.8rem;
+        border-radius: 1.6rem;
     }
     .ranking__container {
         margin-top: 2rem;
@@ -332,12 +335,21 @@
         max-height: 20rem;
         width: 10.3rem;
         height: 10.3rem;
+        border-radius: 2rem;
     }
     .profile:nth-child(1) .profile__image {
         max-width: 28rem;
         max-height: 28rem;
+        border: 0.32rem solid var(--color-green);
+        border-radius: 2rem;
         width: 14.5rem;
         height: 14.5rem;
+    }
+    .profile:nth-child(2) .profile__image {
+        border: 0.32rem solid var(--color-gray-300);
+    }
+    .profile:nth-child(3) .profile__image {
+        border: 0.32rem solid #ceb7aa;
     }
     .profile__name {
         margin-top: 0.6rem;

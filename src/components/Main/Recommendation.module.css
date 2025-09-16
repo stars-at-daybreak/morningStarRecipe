@@ -8,8 +8,8 @@
 }
 .item {
     padding: 0.5rem;
-    background-color: #e9f8d4;
-    color: #68b43f;
+    background-color: var(--color-green-100);
+    color: var(--color-green);
     border-radius: 0.7rem;
     font-size: 1.4rem;
     cursor: pointer;
@@ -17,7 +17,6 @@
 @media screen and (min-width: 768px) {
     .recommendation {
         margin-top: 1.5rem;
-
         gap: 0.65rem;
     }
     .item {

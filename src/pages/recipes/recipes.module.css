@@ -30,7 +30,7 @@
     }
 }
 .recipe__categoryBtn-active {
-    border-bottom: 0.3rem solid #68b43f;
+    border-bottom: 0.3rem solid var(--color-green);
 }
 
 .recipe__category-button {
@@ -79,7 +79,7 @@
     border-radius: clamp(0.7rem, 0.7rem + (100vw - 390px) * 0.01, 1.1rem);
     background-color: var(--color-green);
     padding: clamp(0.4rem, 0.4rem + (100vw - 390px) * 0.01, 0.7rem) clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.5rem);
-    color: #fff;
+    color: var(--color-white);
     font-weight: 400;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.013, 2.2rem);
 }

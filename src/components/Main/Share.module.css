@@ -20,8 +20,8 @@
     display: inline-block;
     width: 100%;
     text-align: center;
-    color: #ffffff;
-    background-color: #68b43f;
+    color: var(--color-white);
+    background-color: var(--color-green);
     border-radius: 50rem;
     font-weight: 700;
     padding: 1.4rem 1rem;
