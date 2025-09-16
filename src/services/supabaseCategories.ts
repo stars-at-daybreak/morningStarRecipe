@@ -11,3 +11,20 @@ export const fetchCategories = async (): Promise<Tables<'categories'>[]> => {
         return [];
     }
 };
+
+export const fetchCategory = async (categoryId: string | null): Promise<Tables<'categories'> | null> => {
+    try {
+        const { data, error } = await supabase
+            .from('categories')
+            .select()
+            .eq('is_active', true)
+            .eq('id', categoryId)
+            .single();
+
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
