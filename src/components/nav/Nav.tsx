@@ -11,8 +11,7 @@ import userIcon from '../../assets/user_icon.svg';
 import userActIcon from '../../assets/user_icon_active.svg';
 import face from '../../assets/face.svg';
 import { Link } from 'react-router-dom';
-import { useModal } from '../../hooks/useModal';
-import Modal from '../modal/Modal';
+import { useModal } from '../modal/ModalContext';
 import useUserStore from '../../stores/useUserStore';
 interface NavItem {
     href: string; // 링크 주소 (예: '/', '/recipes')
@@ -25,7 +24,7 @@ const Nav = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
     const { title } = usePageStore();
     const { user } = useUserStore();
-    const { isOpen, type, openModal, closeModal } = useModal();
+    const { openModal } = useModal();
 
     useEffect(() => {
         const handleResize = () => {
@@ -35,13 +34,6 @@ const Nav = () => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const handleModalConfirm = () => {
-        if (type === 'LOGIN') {
-            window.location.href = '/login';
-        }
-        closeModal();
-    };
 
     const navItems = [
         {
@@ -118,12 +110,7 @@ const Nav = () => {
         </nav>
     );
 
-    return (
-        <>
-            {isDesktop ? <aside>{navContent}</aside> : navContent}
-            <Modal isOpen={isOpen} type={type} onClose={closeModal} onConfirm={handleModalConfirm} />
-        </>
-    );
+    return <>{isDesktop ? <aside>{navContent}</aside> : navContent}</>;
 };
 
 export default Nav;

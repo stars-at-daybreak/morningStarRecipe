@@ -9,9 +9,7 @@ import {
     deleteBookmarkRecord,
 } from '../../services/supabasePostBookmark';
 import type { Tables } from '../../types/supabase';
-import { useModal } from '../../hooks/useModal.tsx';
-import Modal from '../modal/Modal.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useModal } from '../modal/ModalContext';
 import { getPostThumbnails } from '../../services/supabaseFiles.ts';
 
 // 나눔 상태 타입 정의
@@ -26,8 +24,6 @@ interface PostItemProps {
 
 const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
     const { user } = useUserStore(); // 로그인된 사용자 정보
-    // 모달 상태 관리를 위한 useModal 훅
-    const { isOpen, type: modalType, openModal, closeModal } = useModal();
 
     // 각 게시물의 사용자 상태
     const [isLiked, setIsLiked] = useState(false);
@@ -39,7 +35,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
     const [thumbnailFilename, setThumbnailFilename] = useState<string | null>(null);
     const [thumbnailLoading, setThumbnailLoading] = useState(true);
 
-    const navigate = useNavigate();
+    const { openModal } = useModal();
 
     // 썸네일 정보를 가져오는 함수
     const fetchThumbnail = useCallback(async () => {
@@ -48,6 +44,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
             const thumbnailData = await getPostThumbnails(post.id);
             setThumbnailFilename(thumbnailData?.filename || null);
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('썸네일 조회 실패:', error);
             setThumbnailFilename(null);
         } finally {
@@ -114,14 +111,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
         } finally {
             setLoading(false);
         }
-    };
-
-    // 모달 확인 버튼 클릭 처리 함수
-    const handleModalConfirm = () => {
-        if (modalType === 'LOGIN') {
-            navigate('/login'); // 로그인 페이지로 이동
-        }
-        closeModal();
     };
 
     // 컴포넌트 마운트 시 데이터 가져오기
@@ -234,7 +223,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
                         </div>
                     </div>
                 </div>
-                <Modal isOpen={isOpen} type={modalType} onClose={closeModal} onConfirm={handleModalConfirm} />
             </>
         );
     }
@@ -295,7 +283,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
                         </div>
                     </div>
                 </div>
-                <Modal isOpen={isOpen} type={modalType} onClose={closeModal} onConfirm={handleModalConfirm} />
             </>
         );
     }

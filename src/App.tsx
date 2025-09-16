@@ -5,6 +5,7 @@ import Login from './pages/login/Login.tsx';
 import Layout from './pages/Layout/Layout.tsx';
 import Home from './pages/home/Home.tsx';
 import { AuthProvider } from './providers/AuthProvider.tsx';
+import ModalProvider from './components/modal/ModalProvider.tsx';
 import Mypage from './pages/mypage/Mypage.tsx';
 import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
@@ -35,7 +36,9 @@ const App = () => {
         <div className='App'>
             <BrowserRouter>
                 <AuthProvider>
-                    <AppRoutes />
+                    <ModalProvider>
+                        <AppRoutes />
+                    </ModalProvider>
                 </AuthProvider>
             </BrowserRouter>
         </div>

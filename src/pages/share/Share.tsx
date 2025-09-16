@@ -5,10 +5,10 @@ import useUserStore from '../../stores/useUserStore';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import PostItem from '../../components/postItem/PostItem';
 import SearchInput from '../../components/search/SearchFromList';
-import { useModal } from '../../hooks/useModal';
 import type { ShareStatus } from '../../types/search.types';
 import styles from './SharePage.module.css';
 import writeSVG from '../../assets/write_icon.svg';
+import { useModal } from '../../components/modal/ModalContext';
 
 const Share = ({ query }: { query?: string }) => {
     //페이지 설정
