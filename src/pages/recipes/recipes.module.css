@@ -17,7 +17,7 @@
     }
 
     ul {
-        max-width: 736px;
+        max-width: 73.6rem;
         width: 100%;
         text-align: center;
 
@@ -29,11 +29,18 @@
         }
     }
 }
+.recipe__categoryBtn-active {
+    border-bottom: 0.3rem solid var(--color-green);
+}
+
 .recipe__category-button {
     font-weight: 700;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.013, 2.2rem);
     line-height: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.013, 2.2rem);
     color: var(--color-gray);
+}
+.recipe__search {
+    width: 100%;
 }
 
 .recipe__button-box {
@@ -47,27 +54,32 @@
 .recipe__order {
     display: flex;
     gap: 0.5rem;
-
-    li {
-        border: 1px solid var(--color-gray-200);
-        border-radius: 0.7rem;
-        background-color: var(--color-gray-100);
-        padding: 0.5rem;
-
-        button {
-            color: var(--color-gray-400);
-            font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.013, 2.2rem);
-        }
-    }
+}
+.recipe__orderBtn,
+.recipe__orderBtn-active {
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.7rem;
+    background-color: var(--color-gray-100);
+    padding: 0.5rem;
+}
+.recipe__orderBtn button,
+.recipe__orderBtn-active button {
+    color: var(--color-gray-400);
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.013, 2.2rem);
+}
+.recipe__orderBtn-active {
+    border: 0.2rem solid var(--color-green);
+    background-color: var(--color-green-100);
+}
+.recipe__orderBtn-active button {
+    color: var(--color-green);
 }
 .recipe__write-btn {
     border: 1px solid var(--color-green);
     border-radius: clamp(0.7rem, 0.7rem + (100vw - 390px) * 0.01, 1.1rem);
     background-color: var(--color-green);
-
     padding: clamp(0.4rem, 0.4rem + (100vw - 390px) * 0.01, 0.7rem) clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.5rem);
-
-    color: #fff;
+    color: var(--color-white);
     font-weight: 400;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.013, 2.2rem);
 }
@@ -86,8 +98,6 @@
 }
 
 .recipe__contents-box {
-    width: 100%;
-    max-width: 73.6rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -95,6 +105,15 @@
 .recipe__list-box {
     width: clamp(35.8rem, 35.8rem + (100vw - 390px), 73.6rem);
 }
-
+.sharePage__results {
+    width: 100%;
+}
+.sharePage__noneresults {
+    width: 100%;
+    text-align: center;
+    margin-top: 8rem;
+    color: var(--color-gray-400);
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px), 2.2rem);
+}
 @media screen and (min-width: 1024px) {
 }

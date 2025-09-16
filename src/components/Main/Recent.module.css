@@ -20,8 +20,8 @@
     display: inline-block;
     width: 100%;
     text-align: center;
-    color: #ffffff;
-    background-color: #68b43f;
+    color: var(--color-white);
+    background-color: var(--color-green);
     border-radius: 50rem;
     font-weight: 700;
     padding: 1.4rem 1rem;
@@ -34,7 +34,7 @@
 }
 .RecentItem {
     aspect-ratio: 112/86;
-    background-color: #e5e5e5;
+    background-color: var(--color-gray-200);
     border-radius: 1.5rem;
     display: flex;
     justify-content: center;
@@ -78,7 +78,7 @@
         aspect-ratio: 232/175;
         border-radius: 2.3rem;
     }
-    .RecentItem img {
+    .RecentItem .thumbnail {
         border-radius: 2.3rem;
     }
     .RecentItem .fallbackImage {
@@ -111,7 +111,7 @@
     .RecentItem {
         border-radius: 3.1rem;
     }
-    .RecentItem img {
+    .RecentItem .thumbnail {
         border-radius: 3.1rem;
     }
     .RecentItem .fallbackImage {

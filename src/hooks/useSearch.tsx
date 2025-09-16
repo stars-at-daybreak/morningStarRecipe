@@ -237,6 +237,7 @@ const useSearch = (options: UseSearchOptions) => {
         // 현재 상태
         pageType,
         searchParams,
+        currentRecipeCategory: searchParams.category,
         currentRecipeSort,
         currentShareStatus,
         currentPostType,
