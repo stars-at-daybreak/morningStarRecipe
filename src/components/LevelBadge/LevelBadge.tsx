@@ -41,3 +41,14 @@ const LevelBadge: React.FC<LevelBadgeProps> = ({ level, size, className = '' }) 
 };
 
 export default LevelBadge;
+
+/* 사용법 */
+/*
+import LevelBadge from '../../components/LevelBadge/LevelBadge';
+
+return (
+  <>
+    <LevelBadge level={1} size='large' />
+  </>
+)
+*/
