@@ -1,66 +1,110 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { data, NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { RecipeSortBy } from '../../types/search.types.ts';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { fetchCategories } from '../../services/supabaseCategories.ts';
 import type { Tables } from '../../types/supabase.ts';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
-import styles from './recipes.module.css';
+import SearchInput from '../../components/search/SearchFromList';
 import { useModal } from '../../hooks/useModal.tsx';
 import Modal from '../../components/modal/Modal.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
-import { getRecipesWithPagination } from '../../services/supabasePosts';
-import InfinitePostList from '../../components/infiniteScroll/InfiniteScroll.tsx';
+import PostItem from '../../components/postItem/PostItem';
+import styles from './recipes.module.css';
 
 const Recipes = ({ query }: { query?: string }) => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const navigate = useNavigate();
-    const { updateSearchTerm, updateRecipeSortBy, updateCategory } = useSearch({
-        pageType: 'recipe',
-        initialParams: {
-            searchTerm: query,
-        },
-    });
     const { isOpen, type: modalType, openModal, closeModal } = useModal();
     const { user } = useUserStore();
-
-    const handleFilter = (filter: RecipeSortBy) => {
-        updateRecipeSortBy(filter);
-    };
-
-    const handlePostClick = (postId: string) => {
-        navigate(`/recipes/${postId}`);
-    };
 
     const getCategories = async () => {
         const data = await fetchCategories();
         setCategories(data);
     };
 
-    const handleModalConfirm = () => {
-        if (modalType === 'LOGIN') {
-            navigate('/login');
-        }
-        closeModal();
-    };
-
     usePageSetup({
         title: '모두의 레시피',
-        pageName: 'signup',
-        showBackButton: true,
+        pageName: 'recipes',
+        showBackButton: false,
     });
 
     useEffect(() => {
         getCategories();
     }, []);
 
+    const [inputValue, setInputValue] = useState(query);
+    const updateQuery = (query: string) => {
+        if (query) navigate(`/recipes?query=${query}`);
+    };
+    //search, List
+    const observerRef = useRef<HTMLDivElement>(null);
+    const searchConfig = useMemo(() => {
+        return {
+            pageType: 'recipe' as const,
+            initialParams: { searchTerm: query },
+            enableInfiniteScroll: true,
+            pageSize: 5,
+        };
+    }, [query]);
+
+    const {
+        searchList,
+        loadingMore,
+        updateSearchTerm,
+        totalCount,
+        currentRecipeCategory,
+        currentRecipeSort,
+        updateCategory,
+        updateRecipeSortBy,
+        hasMore,
+        loadMore,
+    } = useSearch(searchConfig);
+    console.log(currentRecipeSort);
+    const handleObserver = useCallback(
+        (entries: IntersectionObserverEntry[]) => {
+            const [target] = entries;
+            if (target.isIntersecting && hasMore && !loadingMore) {
+                loadMore();
+            }
+        },
+        [hasMore, loadingMore, loadMore, searchList.length, totalCount]
+    );
+
+    useEffect(() => {
+        const element = observerRef.current;
+        if (!element) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(handleObserver, {
+            threshold: 0.1,
+            rootMargin: '100px',
+        });
+
+        observer.observe(element);
+        return () => {
+            if (element) {
+                observer.unobserve(element);
+            }
+        };
+    }, [handleObserver]);
+    const handleFilter = (status: RecipeSortBy) => {
+        updateRecipeSortBy(status);
+    };
     return (
         <div className={styles['recipe']}>
             <section className={styles['recipe__category']}>
                 <h2 className='sr-only'>카테고리</h2>
                 <div className={styles['recipe__category-border']}>
                     <ul>
-                        <li>
+                        <li
+                            className={
+                                currentRecipeCategory === ''
+                                    ? styles['recipe__categoryBtn-active']
+                                    : styles['recipe__categoryBtn']
+                            }
+                        >
                             <button
                                 className={styles['recipe__category-button']}
                                 type='button'
@@ -70,7 +114,14 @@ const Recipes = ({ query }: { query?: string }) => {
                             </button>
                         </li>
                         {categories.map(data => (
-                            <li key={data.id}>
+                            <li
+                                key={data.id}
+                                className={
+                                    currentRecipeCategory === data.id
+                                        ? styles['recipe__categoryBtn-active']
+                                        : styles['recipe__categoryBtn']
+                                }
+                            >
                                 <button
                                     className={styles['recipe__category-button']}
                                     type='button'
@@ -86,23 +137,48 @@ const Recipes = ({ query }: { query?: string }) => {
 
             <section className={styles['recipe__contents-box']}>
                 <div className={styles['recipe__search']}>
-                    <label htmlFor='search'>검색어</label>
-                    <input id='search' defaultValue={query} onChange={e => updateSearchTerm(e.target.value)} />
+                    <SearchInput
+                        value={inputValue || ''}
+                        placeholder='오늘의 메뉴를 검색하세요'
+                        onChange={val => {
+                            setInputValue(val);
+                            updateSearchTerm(val);
+                            updateQuery(val);
+                        }}
+                    />
                 </div>
 
                 <div className={styles['recipe__button-box']}>
                     <ul className={styles['recipe__order']}>
-                        <li>
+                        <li
+                            className={
+                                currentRecipeSort == 'recently'
+                                    ? styles['recipe__orderBtn-active']
+                                    : styles['recipe__orderBtn']
+                            }
+                        >
                             <button type='button' onClick={() => handleFilter('recently')}>
                                 최신순
                             </button>
                         </li>
-                        <li>
+                        <li
+                            className={
+                                currentRecipeSort == 'recommended'
+                                    ? styles['recipe__orderBtn-active']
+                                    : styles['recipe__orderBtn']
+                            }
+                        >
                             <button type='button' onClick={() => handleFilter('recommended')}>
                                 추천순
                             </button>
                         </li>
-                        <li>
+                        <li
+                            className={
+                                currentRecipeSort == 'popular'
+                                    ? styles['recipe__orderBtn-active']
+                                    : styles['recipe__orderBtn']
+                            }
+                        >
                             <button type='button' onClick={() => handleFilter('popular')}>
                                 인기순
                             </button>
@@ -123,19 +199,29 @@ const Recipes = ({ query }: { query?: string }) => {
                         </button>
                     )}
                 </div>
+                <section className={styles.sharePage__results} aria-live='polite'>
+                    <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
+                    {/* 검색 결과 없음 */}
+                    {searchList.length === 0 && (
+                        <div>
+                            <h2 className={styles.sharePage__noneresults}>검색 결과가 없습니다</h2>
+                        </div>
+                    )}
 
-                <section className={styles['recipe__list-box']}>
-                    <h2 className='sr-only'>레시피 목록</h2>
-
-                    <InfinitePostList
-                        type='recipe'
-                        fetchFunction={getRecipesWithPagination}
-                        onPostClick={handlePostClick}
-                    />
+                    {/* 게시글 리스트 */}
+                    {searchList.map((item, index) => (
+                        <div key={`${item.id}-${index}`}>
+                            <PostItem post={item} type='recipe' onClick={postId => navigate(`/recipe/${postId}`)} />
+                        </div>
+                    ))}
+                    {/* 무한스크롤 트리거 영역 - 시각화 */}
+                    {hasMore && !loadingMore && searchList.length > 0 && (
+                        <div ref={observerRef} aria-hidden='true'>
+                            <span></span>
+                        </div>
+                    )}
                 </section>
             </section>
-
-            <Modal isOpen={isOpen} type={modalType} onClose={closeModal} onConfirm={handleModalConfirm} />
         </div>
     );
 };
