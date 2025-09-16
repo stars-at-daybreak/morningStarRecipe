@@ -2,10 +2,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
-    align-self: center;
+    align-items: center;
     padding: 1.3rem;
     border-bottom: 0.1rem solid #e5e5e5;
-    position: relative;
 }
 .header__logoWrapper,
 .header__title {
@@ -33,5 +32,9 @@
     }
     .header__title {
         font-size: 3.2rem;
+    }
+    .header nav {
+        width: 0.9rem;
+        height: 1.8rem;
     }
 }
