@@ -96,6 +96,7 @@ const Share = ({ query }: { query?: string }) => {
                 <div className={styles.sharePage__inputWrapper}>
                     <SearchInput
                         value={inputValue || ''}
+                        placeholder='오늘의 메뉴를 검색하세요'
                         onChange={val => {
                             setInputValue(val);
                             updateSearchTerm(val);
