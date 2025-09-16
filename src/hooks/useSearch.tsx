@@ -18,15 +18,14 @@ const createDefaultParams = (pageType: string, initialParams?: Partial<SearchPar
 
     switch (pageType) {
         case 'recipe':
-            return { pageType: 'recipe', ...baseParams, sortBy: 'recommended', ...initialParams };
+            return { pageType: 'recipe', ...baseParams, sortBy: 'recently', ...initialParams };
         case 'share':
             return { pageType: 'share', ...baseParams, shareStatus: 'all', ...initialParams };
         case 'all':
             return {
                 pageType: 'all',
                 ...baseParams,
-                postType: 'all',
-                sortBy: 'recommended',
+                sortBy: 'recently',
                 shareStatus: 'all',
                 ...initialParams,
             };
@@ -55,7 +54,7 @@ const useSearch = (options: UseSearchOptions) => {
     const [searchParams, setSearchParams] = useState<SearchParams>(() => createDefaultParams(pageType, initialParams));
 
     // 검색 실행 함수
-    // executeSearch 함수 수정
+
     const executeSearch = useCallback(
         async (params: SearchParams, page: number = 1, append: boolean = false) => {
             const paramsString = JSON.stringify({ ...params, page });
@@ -73,8 +72,16 @@ const useSearch = (options: UseSearchOptions) => {
             setError(null);
 
             try {
-                const paginationOptions = enableInfiniteScroll ? { page, pageSize } : undefined;
+                if (append && enableInfiniteScroll) {
+                    const requestedOffset = (page - 1) * pageSize;
+                    if (totalCount > 0 && requestedOffset >= totalCount) {
+                        setHasMore(false);
+                        setLoadingMore(false);
+                        return;
+                    }
+                }
 
+                const paginationOptions = enableInfiniteScroll ? { page, pageSize } : undefined;
                 const result = await searchPosts(params, paginationOptions);
 
                 if (result.error) {
@@ -82,18 +89,26 @@ const useSearch = (options: UseSearchOptions) => {
                 }
 
                 const newData = result.data || [];
+                const newTotalCount = result.count || 0;
 
                 if (append) {
-                    setSearchList(prev => [...prev, ...newData]);
+                    setSearchList(prev => {
+                        const existingIds = new Set(prev.map(item => item.id));
+                        const uniqueNewData = newData.filter(item => !existingIds.has(item.id));
+                        return [...prev, ...uniqueNewData];
+                    });
                 } else {
                     setSearchList(newData);
                 }
 
-                setTotalCount(result.count || 0);
+                setTotalCount(newTotalCount);
 
                 if (enableInfiniteScroll) {
-                    // 받아온 데이터 길이로 판단
-                    const hasMoreData = newData.length === pageSize;
+                    const currentTotal = append ? searchList.length + newData.length : newData.length;
+
+                    const hasMoreData =
+                        currentTotal < newTotalCount && newData.length === pageSize && newData.length > 0;
+
                     setHasMore(hasMoreData);
                 }
             } catch (err) {
@@ -109,7 +124,7 @@ const useSearch = (options: UseSearchOptions) => {
                 }
             }
         },
-        [enableInfiniteScroll, pageSize]
+        [enableInfiniteScroll, pageSize, totalCount, searchList.length] // totalCount 의존성 추가
     );
 
     // 더 많은 데이터 로드
@@ -146,9 +161,9 @@ const useSearch = (options: UseSearchOptions) => {
 
     const updateRecipeSortBy = useCallback(
         (sortBy: RecipeSortBy) => {
-            if (pageType === 'recipe') {
+            if (pageType === 'recipe' || pageType === 'all') {
                 setSearchParams(prev => {
-                    const recipeParams = prev as RecipeSearchParams;
+                    const recipeParams = prev as RecipeSearchParams | AllSearchParams;
                     return recipeParams.sortBy === sortBy ? prev : { ...prev, sortBy };
                 });
             }
@@ -180,18 +195,6 @@ const useSearch = (options: UseSearchOptions) => {
         [pageType]
     );
 
-    const updateAllSortBy = useCallback(
-        (sortBy: RecipeSortBy) => {
-            if (pageType === 'all') {
-                setSearchParams(prev => {
-                    const allParams = prev as AllSearchParams;
-                    return allParams.sortBy === sortBy ? prev : { ...prev, sortBy };
-                });
-            }
-        },
-        [pageType]
-    );
-
     // 유틸리티 함수들
     const resetSearch = useCallback(() => {
         setSearchParams(createDefaultParams(pageType));
@@ -207,13 +210,17 @@ const useSearch = (options: UseSearchOptions) => {
     }, [executeSearch, searchParams]);
 
     // 현재 상태 값들
-    const currentRecipeSort = pageType === 'recipe' ? (searchParams as RecipeSearchParams).sortBy : undefined;
+    const currentRecipeSort =
+        pageType === 'recipe' || pageType === 'all'
+            ? (searchParams as RecipeSearchParams | AllSearchParams).sortBy
+            : undefined;
+
     const currentShareStatus =
         pageType === 'share' || pageType === 'all'
             ? (searchParams as ShareSearchParams | AllSearchParams).shareStatus
             : undefined;
+
     const currentPostType = pageType === 'all' ? (searchParams as AllSearchParams).postType : undefined;
-    const currentAllSort = pageType === 'all' ? (searchParams as AllSearchParams).sortBy : undefined;
 
     return {
         // 데이터
@@ -233,7 +240,6 @@ const useSearch = (options: UseSearchOptions) => {
         currentRecipeSort,
         currentShareStatus,
         currentPostType,
-        currentAllSort,
 
         // 액션 함수들
         updateSearchTerm,
@@ -241,7 +247,6 @@ const useSearch = (options: UseSearchOptions) => {
         updateRecipeSortBy,
         updateShareStatus,
         updatePostType,
-        updateAllSortBy,
         resetSearch,
         refetch,
     };
