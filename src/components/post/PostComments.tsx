@@ -4,6 +4,8 @@ import useUserStore from '../../stores/useUserStore.ts';
 import type { CommentWithUserNickname } from '../../types/comments.type.ts';
 import styles from './postComments.module.css';
 import PostCommentInput from './PostCommentInput.tsx';
+import LevelBadge from '../LevelBadge/LevelBadge.tsx';
+import noneProfileImg from '../../assets/none-profile.svg';
 
 const PostComments = ({ postId }: { postId: string }) => {
     const [comments, setComments] = useState<CommentWithUserNickname[] | null>(null);
@@ -59,22 +61,45 @@ const PostComments = ({ postId }: { postId: string }) => {
                     user={user}
                 />
             </div>
-            <ul className={styles['comments__list']}>
-                {comments?.map(comment => (
-                    <li key={comment.id}>
-                        {comment.content}
-                        <p>
-                            닉네임: {comment.user_nickname}레벨: {comment?.user_level_title}
-                        </p>
-                        <button type='button' onClick={() => handleUpdate(comment.id, comment.content)}>
-                            수정
-                        </button>
-                        <button type='button' onClick={() => handleDelete(comment.id)}>
-                            삭제
-                        </button>
-                    </li>
-                ))}
-            </ul>
+            <div className={styles['comments__list-box']}>
+                <ul className={styles['comments__list']}>
+                    {comments?.map(comment => (
+                        <li className={styles['comments__list-item']} key={comment.id}>
+                            <div className={styles['comments__item-header']}>
+                                <div className={styles['comments__item-profile']}>
+                                    <div className={styles['comments__item-profile-img-box']}>
+                                        {comment.user_profile_img ? (
+                                            <img
+                                                src={`${import.meta.env.VITE_API_BASE_URL}/${comment.user_profile_img}`}
+                                                alt='프로필 이미지'
+                                                crossOrigin='anonymous'
+                                            />
+                                        ) : (
+                                            <img src={noneProfileImg} alt='기본 프로필 이미지' />
+                                        )}
+                                    </div>
+                                    <span className={styles['comments__item-profile-nickname']}>
+                                        {comment.user_nickname}
+                                    </span>
+                                    <LevelBadge level={comment?.current_level || 1} size='small' />
+                                </div>
+                                {user?.id === comment.user_id && (
+                                    <div className={styles['comments__item-btn-group']}>
+                                        <button type='button' onClick={() => handleUpdate(comment.id, comment.content)}>
+                                            수정
+                                        </button>
+                                        <button type='button' onClick={() => handleDelete(comment.id)}>
+                                            삭제
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className={styles['comments__item-content']}>{comment.content}</div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };

@@ -5,6 +5,77 @@
     justify-content: center;
 }
 
-.comments__list {
-    width: clamp(33.8rem, 33.8rem + (100vw - 390px) * 0.01, 69.6rem);
+.comments__list-box {
+    margin-top: clamp(3rem, 3rem + (100vw - 390px) * 0.02, 4rem);
+    display: flex;
+    justify-content: center;
+
+    .comments__list {
+        width: clamp(33.8rem, 33.8rem + (100vw - 390px) * 0.6, 69.6rem);
+        margin-bottom: 1.4rem;
+    }
+}
+
+.comments__list-item {
+    padding-bottom: clamp(2rem, 2rem + (100vw - 390px) * 0.04, 4rem);
+}
+.comments__list-item:not(:last-child) {
+    border-bottom: 1px solid var(--color-gray-200);
+}
+.comments__list-item:not(:first-child) {
+    margin-top: clamp(2rem, 2rem + (100vw - 390px) * 0.04, 4rem);
+}
+
+.comments__item-header {
+    width: 100%;
+    display: flex;
+
+    .comments__item-profile {
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        .comments__item-profile-img-box {
+            background-color: var(--color-gray-300);
+            border-radius: 50%;
+
+            width: clamp(2.4rem, 2.4rem + (100vw - 390px) * 0.1, 3.8rem);
+            height: clamp(2.4rem, 2.4rem + (100vw - 390px) * 0.1, 3.8rem);
+            margin-right: 0.4rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        }
+    }
+    .comments__item-profile-nickname {
+        font-weight: 700;
+        font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
+        margin-right: 0.6rem;
+    }
+    .comments__item-btn-group {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+
+        button {
+            font-weight: 400;
+            font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
+            color: var(--color-gray-400);
+        }
+        button:first-child:after {
+            content: '|';
+            color: var(--color-gray-200);
+            padding: 0 1rem;
+        }
+    }
+}
+
+.comments__item-content {
+    margin-top: clamp(0.8rem, 0.8rem + (100vw - 390px) * 0.01, 1.4rem);
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
 }
