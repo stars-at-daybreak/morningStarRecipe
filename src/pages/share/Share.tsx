@@ -1,15 +1,19 @@
 import { useMemo, useRef, useCallback, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch';
+import useUserStore from '../../stores/useUserStore';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import PostItem from '../../components/postItem/PostItem';
 import SearchInput from '../../components/search/SearchFromList';
+import { useModal } from '../../hooks/useModal';
 import type { ShareStatus } from '../../types/search.types';
 import styles from './SharePage.module.css';
 import writeSVG from '../../assets/write_icon.svg';
 
 const Share = ({ query }: { query?: string }) => {
     //페이지 설정
+    const { user } = useUserStore();
+    const { openModal } = useModal();
     usePageSetup({
         title: '모두의 나눔',
         pageName: 'share',
@@ -99,7 +103,6 @@ const Share = ({ query }: { query?: string }) => {
                         }}
                     />
                 </div>
-
                 <div className={styles.sharePage__filterWrapper}>
                     <div className={styles.sharePage__filterList}>
                         {filterOptions.map(option => (
@@ -116,10 +119,29 @@ const Share = ({ query }: { query?: string }) => {
                                 {option.label}
                             </button>
                         ))}
-                        <NavLink to='/share/form' className={styles.sharePage__register}>
-                            <img src={writeSVG} className={styles.sharePage__icon} alt='write' />
-                            나눔글 작성하기
-                        </NavLink>
+                        {user ? (
+                            <NavLink
+                                to='/share/form'
+                                className={styles.sharePage__register}
+                                aria-label='새 나눔글 작성하기'
+                            >
+                                <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
+                                나눔글 작성하기
+                            </NavLink>
+                        ) : (
+                            <button
+                                type='button'
+                                onClick={e => {
+                                    e.preventDefault();
+                                    openModal('LOGIN');
+                                }}
+                                className={styles.sharePage__register}
+                                aria-label='로그인 후 나눔글 작성하기'
+                            >
+                                <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
+                                나눔글 작성하기
+                            </button>
+                        )}
                     </div>
                 </div>
             </header>
@@ -128,18 +150,17 @@ const Share = ({ query }: { query?: string }) => {
                 <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
                 {/* 검색 결과 없음 */}
                 {searchList.length === 0 && (
-                    <div className='text-center py-12'>
-                        <h2 className='text-lg font-medium text-gray-900 mb-2'>검색 결과가 없습니다</h2>
+                    <div>
+                        <h2 className={styles.sharePage__noneresults}>검색 결과가 없습니다</h2>
                     </div>
                 )}
 
                 {/* 게시글 리스트 */}
                 {searchList.map((item, index) => (
-                    <div key={`${item.id}-${index}`} className='transform transition-transform hover:scale-[1.02]'>
+                    <div key={`${item.id}-${index}`}>
                         <PostItem post={item} type='share' onClick={postId => navigate(`/share/${postId}`)} />
                     </div>
                 ))}
-
                 {/* 무한스크롤 트리거 영역 - 시각화 */}
                 {hasMore && !loadingMore && searchList.length > 0 && (
                     <div ref={observerRef} aria-hidden='true'>

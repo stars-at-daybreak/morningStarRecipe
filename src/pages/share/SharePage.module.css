@@ -41,7 +41,13 @@
     margin: 0 1.6rem;
     margin-top: 1.8rem;
 }
-
+.sharePage__noneresults {
+    width: 100%;
+    text-align: center;
+    margin-top: 8rem;
+    color: #999999;
+    font-size: 1.4rem;
+}
 @media screen and (max-width: 406px) {
     .sharePage__register {
         margin-top: 0.5rem;
@@ -52,7 +58,7 @@
     }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 768px) {
     .sharePage__filterList {
         margin: 0 auto;
         max-width: 73.6rem;
@@ -61,6 +67,37 @@
         margin: 0 auto;
         max-width: 73.6rem;
     }
+    .sharePage__filterWrapper {
+        margin-top: 4.5rem;
+    }
+    .sharePage__filterBtn,
+    .sharePage__filterBtn_active {
+        font-size: 1.8rem;
+        padding: 0.65rem;
+        border-radius: 0.9rem;
+        border: 0.14rem solid #e5e5e5;
+        margin-right: 0.65rem;
+    }
+    .sharePage__register {
+        font-size: 1.8rem;
+        padding: 0.65rem 1.3rem;
+        border-radius: 1.1rem;
+        border: 0.14rem solid #68b43f;
+    }
+    .sharePage__icon {
+        width: 1.8rem;
+        width: 1.8;
+        margin-right: 0.5rem;
+    }
+    .sharePage__results {
+        margin-top: 3rem;
+    }
+    .sharePage__noneresults {
+        font-size: 1.8rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
     .sharePage__filterWrapper {
         margin-top: 6rem;
     }
@@ -74,7 +111,7 @@
     }
     .sharePage__register {
         font-size: 2.2rem;
-        padding: 0.5rem 1rem;
+        padding: 0.8rem 1.6rem;
         border-radius: 1.1rem;
         border: 0.18rem solid #68b43f;
     }
@@ -85,5 +122,8 @@
     }
     .sharePage__results {
         margin-top: 3rem;
+    }
+    .sharePage__noneresults {
+        font-size: 2.2rem;
     }
 }
