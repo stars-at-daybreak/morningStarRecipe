@@ -148,7 +148,7 @@ const RecipeDetail = () => {
             <section className={styles['recipe__writer']}>
                 <h2 className='sr-only'>작성자 프로필</h2>
 
-                <div className={styles['profile-img']}>
+                <div className={styles['profile-img-box']}>
                     {writerProfileImage ? (
                         <img
                             src={`${import.meta.env.VITE_API_BASE_URL}/${writerProfileImage.filename}`}
