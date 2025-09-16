@@ -1,12 +1,9 @@
-import {
-    createComment,
-    deleteComment,
-    fetchCommentsWithUserNickname,
-    updateComment,
-} from '../services/supabaseComments.ts';
-import React, { useEffect, useState } from 'react';
-import useUserStore from '../stores/useUserStore.ts';
-import type { CommentWithUserNickname } from '../types/comments.type.ts';
+import { deleteComment, fetchCommentsWithUserNickname } from '../../services/supabaseComments.ts';
+import { useEffect, useState } from 'react';
+import useUserStore from '../../stores/useUserStore.ts';
+import type { CommentWithUserNickname } from '../../types/comments.type.ts';
+import styles from './postComments.module.css';
+import PostCommentInput from './PostCommentInput.tsx';
 
 const PostComments = ({ postId }: { postId: string }) => {
     const [comments, setComments] = useState<CommentWithUserNickname[] | null>(null);
@@ -39,31 +36,8 @@ const PostComments = ({ postId }: { postId: string }) => {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!user?.id) {
-            alert('로그인이 필요합니다.');
-            return;
-        }
-
-        const commentData = {
-            post_id: postId,
-            user_id: user.id,
-            content: comment,
-        };
-
-        let isSuccess;
-        if (type === 'update') {
-            isSuccess = await updateComment({ ...commentData, id: commentId });
-        } else {
-            isSuccess = await createComment(commentData);
-        }
-
-        if (isSuccess) {
-            alert('댓글 저장을 완료하였습니다');
-            fetchData(postId);
-        }
+    const handleComment = (comment: string) => {
+        setComment(comment);
     };
 
     useEffect(() => {
@@ -73,13 +47,19 @@ const PostComments = ({ postId }: { postId: string }) => {
     }, []);
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor='comment'>댓글</label>
-                <input type='text' id={comment} value={comment} onChange={e => setComment(e.target.value)} />
-                <button type='submit'>댓글작성</button>
-            </form>
-            <ul>
+        <div className={styles['comments']}>
+            <div>
+                <PostCommentInput
+                    postId={postId}
+                    type={type}
+                    fetchData={fetchData}
+                    commentId={commentId}
+                    comment={comment}
+                    handleComment={handleComment}
+                    user={user}
+                />
+            </div>
+            <ul className={styles['comments__list']}>
                 {comments?.map(comment => (
                     <li key={comment.id}>
                         {comment.content}

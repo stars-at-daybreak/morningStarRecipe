@@ -1,0 +1,10 @@
+.comments {
+    margin-top: clamp(3rem, 3rem + (100vw - 390px) * 0.05, 6rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.comments__list {
+    width: clamp(33.8rem, 33.8rem + (100vw - 390px) * 0.01, 69.6rem);
+}
