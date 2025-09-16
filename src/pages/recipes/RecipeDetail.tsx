@@ -12,6 +12,18 @@ import styles from './recipeDetail.module.css';
 import noneProfile from '../../assets/none-profile.svg';
 import LevelBadge from '../../components/LevelBadge/LevelBadge.tsx';
 import { fetchCategory } from '../../services/supabaseCategories.ts';
+import likeImg from '../../assets/like_icon.svg';
+import likeActiveImg from '../../assets/like_icon_active.svg';
+import dislikeImg from '../../assets/dislike_icon.svg';
+import dislikeActiveImg from '../../assets/dislike_icon_active.svg';
+import bookmarkIcon from '../../assets/bookmark_icon.svg';
+import bookmarkActiveIcon from '../../assets/bookmark_icon_active.svg';
+import {
+    deleteBookmarkRecord,
+    insertBookmarkRecord,
+    selectBookmarksByUserIdPostId,
+} from '../../services/supabasePostBookmark.ts';
+import { useModal } from '../../components/modal/ModalContext.ts';
 
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -20,25 +32,76 @@ const RecipeDetail = () => {
     const [writerProfileImage, setWriterProfileImage] = useState<Tables<'files'>>();
     const [categoryName, setCategoryName] = useState<string>();
     const [userVoteType, setUserVoteType] = useState<VoteType | null>(null);
+    const [isBookmarked, setIsBookmarked] = useState(false);
     const { user } = useUserStore();
+    const { openModal } = useModal();
 
     const fetchData = async (id: string): Promise<void> => {
         const detail = await fetchPostWithUserNickname(id);
 
         if (detail) {
             setRecipe(detail);
-            const category = await fetchCategory(detail?.category_id);
+            const category = await fetchCategory(detail.category_id);
             setCategoryName(category?.name || '없음');
-        }
 
-        if (detail) {
-            const writerProfileImage = await getUserProfileImage(detail?.user_id);
+            const writerProfileImage = await getUserProfileImage(detail.user_id);
             setWriterProfileImage(writerProfileImage);
         }
 
         if (user?.id) {
             const userVoteType = await getUserVoteStatus(id, user.id);
             setUserVoteType(userVoteType);
+
+            const bookmarkStatus = await selectBookmarksByUserIdPostId(id, user.id);
+            setIsBookmarked(bookmarkStatus);
+        } else {
+            setUserVoteType(null);
+        }
+    };
+
+    const difficultyConvert = (difficulty: string | null | undefined): string => {
+        switch (difficulty) {
+            case 'top':
+                return '상';
+            case 'middle':
+                return '중';
+            case 'bottom':
+                return '하';
+            default:
+                return '';
+        }
+    };
+
+    const createAtConvert = (): string => {
+        if (recipe?.created_at) {
+            const date = new Date(recipe?.created_at);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}.${month}.${day}`;
+        }
+        return '';
+    };
+
+    const handleBookmark = async () => {
+        if (!user?.id) {
+            openModal('LOGIN');
+            return;
+        }
+
+        if (id) {
+            if (isBookmarked) {
+                const result = await deleteBookmarkRecord(id, user.id);
+                if (result) {
+                    setIsBookmarked(false);
+                }
+            } else {
+                const result = await insertBookmarkRecord(id, user.id);
+                if (result) {
+                    setIsBookmarked(true);
+                }
+            }
         }
     };
 
@@ -78,7 +141,7 @@ const RecipeDetail = () => {
         if (id) {
             fetchData(id);
         }
-    }, []);
+    }, [id, user?.id]);
 
     return (
         <div className={styles['recipe']}>
@@ -112,29 +175,53 @@ const RecipeDetail = () => {
             <section className={styles['recipe__title']}>
                 <h2>{recipe?.title}</h2>
                 <span className='horizontal-line'></span>
-                <ul className={styles['recipe__']}>
+                <ul className={styles['recipe__info']}>
                     <li>카테고리 : {categoryName}</li>
-                    <li>난이도</li>
-                    <li>요리시간</li>
-                    <li>인분</li>
+                    <li>난이도 : {difficultyConvert(recipe?.difficulty)}</li>
+                    <li>요리시간 : {recipe?.cooking_time}분</li>
+                    <li>{recipe?.servings}인분</li>
                 </ul>
             </section>
 
-            <section className={styles['recipe__content']}>
-                <p>{recipe?.content}</p>
+            <section className={styles['recipe__ingredients']}>
+                <h2>재료</h2>
+                <p>{recipe?.ingredients}</p>
             </section>
 
-            <section>
-                <button style={{ color: userVoteType === 'like' ? 'red' : '' }} onClick={() => handleLike('like')}>
-                    추천{recipe?.like_count}
-                </button>
-                /
-                <button
-                    style={{ color: userVoteType === 'dislike' ? 'red' : '' }}
-                    onClick={() => handleLike('dislike')}
-                >
-                    비추천{recipe?.dislike_count}
-                </button>
+            <section className={styles['recipe__content-box']}>
+                <h2>레시피 설명</h2>
+                <div className={styles['recipe__content']}>{recipe?.content}</div>
+
+                <div className={styles['recipe__btn-box']}>
+                    <div className={styles['recipe__like-btn-group']}>
+                        <button
+                            className={`${userVoteType === 'like' ? styles['recipe__like-btn--active'] : styles['recipe__like-btn']}`}
+                            onClick={() => handleLike('like')}
+                        >
+                            <img
+                                className={styles['recipe__like-img']}
+                                src={userVoteType === 'like' ? likeActiveImg : likeImg}
+                                alt='추천 버튼'
+                            />
+                            {recipe?.like_count}
+                        </button>
+                        <button className={styles['recipe__dislike-btn']} onClick={() => handleLike('dislike')}>
+                            <img
+                                className={`${userVoteType === 'like' ? styles['recipe__dislike-btn--active'] : styles['recipe__dislike-img']}`}
+                                src={userVoteType === 'dislike' ? dislikeActiveImg : dislikeImg}
+                                alt='비추천 버튼'
+                            />
+                            {recipe?.dislike_count}
+                        </button>
+                    </div>
+
+                    <div className={styles['recipe__bookmark-box']}>
+                        작성일자 : <time>{createAtConvert()}</time>
+                        <button className={styles['recipe__bookmark__btn']} onClick={handleBookmark}>
+                            <img src={isBookmarked ? bookmarkActiveIcon : bookmarkIcon} alt='북마크' />
+                        </button>
+                    </div>
+                </div>
             </section>
 
             <section>{id && <PostComments postId={id} />}</section>
