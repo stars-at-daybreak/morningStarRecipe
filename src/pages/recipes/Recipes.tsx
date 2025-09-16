@@ -10,6 +10,7 @@ import { useModal } from '../../components/modal/ModalContext';
 import styles from './recipes.module.css';
 import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
+import EmptyState from '../../components/EmptyState/EmptyState';
 
 const Recipes = ({ query }: { query?: string }) => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
@@ -201,15 +202,16 @@ const Recipes = ({ query }: { query?: string }) => {
                     <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
                     {/* 검색 결과 없음 */}
                     {searchList.length === 0 && (
-                        <div>
-                            <h2 className={styles.sharePage__noneresults}>검색 결과가 없습니다</h2>
+                        <div className={styles.sharePage__noneresults}>
+                            <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                            <EmptyState title='아직 아무것도 없어요' />
                         </div>
                     )}
 
                     {/* 게시글 리스트 */}
                     {searchList.map((item, index) => (
                         <div key={`${item.id}-${index}`}>
-                            <PostItem post={item} type='recipe' onClick={postId => navigate(`/recipe/${postId}`)} />
+                            <PostItem post={item} type='recipe' onClick={postId => navigate(`/recipes/${postId}`)} />
                         </div>
                     ))}
                     {/* 무한스크롤 트리거 영역 - 시각화 */}

@@ -9,7 +9,7 @@ import type { ShareStatus } from '../../types/search.types';
 import styles from './SharePage.module.css';
 import writeSVG from '../../assets/write_icon.svg';
 import { useModal } from '../../components/modal/ModalContext';
-
+import EmptyState from '../../components/EmptyState/EmptyState';
 const Share = ({ query }: { query?: string }) => {
     //페이지 설정
     const { user } = useUserStore();
@@ -151,8 +151,9 @@ const Share = ({ query }: { query?: string }) => {
                 <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
                 {/* 검색 결과 없음 */}
                 {searchList.length === 0 && (
-                    <div>
-                        <h2 className={styles.sharePage__noneresults}>검색 결과가 없습니다</h2>
+                    <div className={styles.sharePage__noneresults}>
+                        <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                        <EmptyState title='아직 아무것도 없어요' />
                     </div>
                 )}
 
