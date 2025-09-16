@@ -5,6 +5,7 @@ import styles from './LevelBadge.module.css';
 type LevelType = 1 | 2 | 3 | 4;
 
 // 사이즈 타입 정의
+// large는 프로필용 small은 댓글용
 type SizeType = 'small' | 'large';
 
 // Props 타입 정의
