@@ -1,0 +1,288 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 4rem 1.6rem 0;
+}
+
+.page__container {
+    width: 100%;
+    max-width: 73.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+}
+
+/* 마이페이지 프로필 */
+.page__profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.page__profile_wrap {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 100%;
+    background-color: var(--color-gray-300);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* 프로필 이미지 컨테이너 */
+.page__profile_image_container {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.page__profile_image_tag {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 프로필 에디터 아이콘 */
+.page__profile_edit {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 100%;
+    background-color: var(--color-gray);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0.1rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.25);
+}
+.page__profile_edit::after {
+    content: '';
+    width: 1.7rem;
+    height: 1.6rem;
+    background: url('../../assets/Edit_icon.svg') no-repeat center/ cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, -55%);
+}
+
+/* 이미지 로드 실패 시 보여줄 fallback 아이콘 스타일 */
+.page__profile_fallback_icon {
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/picture_icon.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30%; /* 아이콘 크기 조절 */
+    opacity: 0.5;
+}
+
+/* 프로필 닉네임 */
+.page__profile_nickname {
+    font-weight: bold;
+    font-size: 2.4rem;
+    margin: 1.5rem 0 0.7rem;
+}
+
+/* 마이페이지 메뉴 */
+.page__menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.page__menu_item {
+    width: 100%;
+    border-radius: 1.5rem;
+    padding: 2.2rem 0;
+    padding-left: 2rem;
+    color: var(--color-gray);
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: var(--color-gray-100);
+    cursor: pointer;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    transition: all 0.2s ease-in-out;
+
+    position: relative;
+}
+.page__menu_item::after {
+    content: '';
+    width: 0.7rem;
+    height: 1.2rem;
+    background: url('../../assets/next_icon.svg') no-repeat center/ cover;
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    transform: translateY(-50%);
+}
+
+/* 회원탈퇴 | 로그아웃 */
+.page__actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+.page__actions button {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--color-gray-400);
+}
+
+.page__actions span {
+    display: inline-block;
+    width: 0.1rem;
+    height: 1.3rem;
+    background-color: var(--color-gray-400);
+    margin: 0 0.8rem 0;
+}
+
+@media (min-width: 768px) {
+    .page {
+        gap: 5.5rem;
+    }
+
+    /* 마이페이지 프로필 */
+    .page__profile_wrap {
+        width: 13rem;
+        height: 13rem;
+    }
+
+    .page__profile_img {
+        width: 8.1rem;
+        height: 7.6rem;
+        margin-top: 0.3rem;
+        margin-left: 0.3rem;
+    }
+
+    .page__profile_edit {
+        width: 3.8rem;
+        height: 3.8rem;
+        box-shadow: 0.2rem 0.2rem 0.3rem 0 rgba(0, 0, 0, 0.25);
+    }
+    .page__profile_edit::after {
+        width: 2.2rem;
+        height: 2rem;
+    }
+
+    .page__profile_nickname {
+        font-size: 3rem;
+        margin: 2rem 0 1.2rem;
+    }
+
+    /* 마이페이지 메뉴 */
+    .page__menu {
+        gap: 1.4rem;
+    }
+
+    .page__menu_item {
+        font-size: 2rem;
+        padding: 3rem 0;
+        padding-left: 3rem;
+        border-radius: 1.8rem;
+    }
+
+    .page__menu_item::after {
+        width: calc(0.7rem * 1.2);
+        height: calc(1.2rem * 1.2);
+        right: 3rem;
+    }
+
+    /* 회원탈퇴 | 로그아웃 */
+    .page__actions {
+        margin-top: 1.4rem;
+    }
+
+    .page__actions button {
+        font-size: 1.9rem;
+    }
+
+    .page__actions span {
+        width: 0.1rem;
+        height: 1.7rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .page {
+        gap: 7rem;
+        margin-top: 6rem;
+    }
+
+    /* 마이페이지 프로필 */
+    .page__profile_wrap {
+        width: 16rem;
+        height: 16rem;
+    }
+
+    .page__profile_img {
+        width: 10.1rem;
+        height: 9.6rem;
+        margin-top: 0.4rem;
+        margin-left: 0.4rem;
+    }
+
+    .page__profile_edit {
+        width: 4.8rem;
+        height: 4.8rem;
+        box-shadow: 0.2rem 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.25);
+    }
+    .page__profile_edit::after {
+        width: 2.8rem;
+        height: 2.6rem;
+    }
+
+    .page__profile_nickname {
+        font-size: 4rem;
+        margin: 3rem 0 1.6rem;
+    }
+
+    /* 마이페이지 메뉴 */
+    .page__menu {
+        gap: 2rem;
+    }
+
+    .page__menu_item {
+        font-size: 2.6rem;
+        padding: 3.8rem 0;
+        padding-left: 4rem;
+        border-radius: 2.4rem;
+    }
+
+    .page__menu_item::after {
+        width: calc(0.7rem * 1.6);
+        height: calc(1.3rem * 1.6);
+        right: 4rem;
+    }
+
+    /* 회원탈퇴 | 로그아웃 */
+    .page__actions {
+        margin-top: 2rem;
+    }
+
+    .page__actions button {
+        font-size: 2.2rem;
+    }
+
+    .page__actions span {
+        width: 0.1rem;
+        height: 2rem;
+        margin: 0 1rem 0;
+    }
+}
