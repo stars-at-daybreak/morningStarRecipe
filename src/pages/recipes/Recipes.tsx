@@ -1,4 +1,4 @@
-import { data, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch.tsx';
 import type { RecipeSortBy } from '../../types/search.types.ts';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
@@ -6,24 +6,14 @@ import { fetchCategories } from '../../services/supabaseCategories.ts';
 import type { Tables } from '../../types/supabase.ts';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 import SearchInput from '../../components/search/SearchFromList';
-import { useModal } from '../../hooks/useModal.tsx';
-import Modal from '../../components/modal/Modal.tsx';
+import { useModal } from '../../components/modal/ModalContext';
 import styles from './recipes.module.css';
-
 import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
-import styles from './recipes.module.css';
 
 const Recipes = ({ query }: { query?: string }) => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const navigate = useNavigate();
-    const { isOpen, type: modalType, openModal, closeModal } = useModal();
-    const { updateSearchTerm, updateRecipeSortBy, updateCategory } = useSearch({
-        pageType: 'recipe',
-        initialParams: {
-            searchTerm: query,
-        },
-    });
     const { user } = useUserStore();
     const { openModal } = useModal();
 
