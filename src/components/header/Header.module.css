@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     padding: 1.3rem;
-    border-bottom: 0.1rem solid #e5e5e5;
+    border-bottom: 0.1rem solid var(--color-gray-200);
 }
 .header__logoWrapper,
 .header__title {

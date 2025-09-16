@@ -39,8 +39,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: white;
-    border-top: 1px solid #e0e0e0;
+    background: var(--color-white);
+    border-top: 0.1rem solid #e0e0e0;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10000;
     padding: 1.6rem;
@@ -50,7 +50,7 @@
 
 .search {
     margin: 3rem auto 0;
-    border: 2px solid #68b43f;
+    border: 0.2rem solid var(--color-green);
     border-radius: 5rem;
     padding: 1.2rem 2rem;
 }
@@ -72,7 +72,7 @@
     border: none;
 }
 .search__input::placeholder {
-    color: #c5c5c5;
+    color: var(--color-gray-300);
 }
 
 /* 검색 버튼 위치 조정 (키보드 버튼 공간 확보) */
@@ -105,7 +105,7 @@
 }
 
 :global(.hg-theme-default .hg-button) {
-    background: white;
+    background: var(--color-white);
     border: 1px solid #dee2e6;
     color: #212529;
     border-radius: 0.6rem;
@@ -129,14 +129,14 @@
 
 /* 특수 버튼 스타일 */
 :global(.hg-button-enter) {
-    background: #68b43f !important;
-    color: white !important;
-    border-color: #68b43f !important;
+    background: var(--color-green) !important;
+    color: var(--color-white) !important;
+    border-color: var(--color-green) !important;
 }
 
 :global(.hg-button-enter:hover) {
-    background: #68b43f;
-    border-color: #68b43f;
+    background: var(--color-green);
+    border-color: var(--color-green);
 }
 
 :global(.hg-button-shift) {

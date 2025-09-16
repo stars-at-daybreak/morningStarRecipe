@@ -10,7 +10,7 @@
     text-align: center;
     font-weight: 400;
     font-size: 1.4rem;
-    color: #767676;
+    color: var(--color-gray);
 }
 .searchPage__resultsTitle strong {
     font-weight: 700;
@@ -22,18 +22,17 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    /* border-bottom: 0.1rem solid #c5c5c5; */
 }
 .searchPage__filterOption {
     width: 33.3%;
     padding: 1.6rem 1.4rem;
     font-weight: 700;
     font-size: 1.4rem;
-    color: #999999;
+    color: var(--color-gray-400);
 }
 .searchPage__filterOption_active {
-    color: #68b43f;
-    border-bottom: 0.3rem solid #68b43f;
+    color: var(--color-green);
+    border-bottom: 0.3rem solid var(--color-green);
 }
 .searchPage__results {
     max-width: 73.6rem;
@@ -44,12 +43,12 @@
     text-align: center;
     font-weight: 400;
     font-size: 1.4rem;
-    color: #999999;
+    color: var(--color-gray-400);
 }
 .searchPage__divider {
     margin: 0;
     padding: 0;
-    background-color: #c5c5c5;
+    background-color: var(--color-gray-300);
     height: 0.05rem;
 }
 @media (min-width: 768px) {
@@ -71,7 +70,7 @@
         font-size: 1.8rem;
     }
     .searchPage__filterOption_active {
-        border-bottom: 0.4rem solid #68b43f;
+        border-bottom: 0.4rem solid var(--color-green);
     }
     .searchPage__results {
         margin-top: 4.5rem;
