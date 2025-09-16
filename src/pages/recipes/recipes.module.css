@@ -109,11 +109,16 @@
     width: 100%;
 }
 .sharePage__noneresults {
-    width: 100%;
-    text-align: center;
-    margin-top: 8rem;
-    color: var(--color-gray-400);
-    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px), 2.2rem);
+    padding-top: 6rem;
+    padding-bottom: 6rem;
 }
 @media screen and (min-width: 1024px) {
+    .recipe__order {
+        display: flex;
+        gap: 0.8rem;
+    }
+    .sharePage__noneresults {
+        padding-top: 10rem;
+        padding-bottom: 10rem;
+    }
 }

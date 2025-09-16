@@ -42,11 +42,8 @@
     margin-top: 1.8rem;
 }
 .sharePage__noneresults {
-    width: 100%;
-    text-align: center;
-    margin-top: 8rem;
-    color: var(--color-gray-400);
-    font-size: 1.4rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
 }
 @media screen and (max-width: 406px) {
     .sharePage__register {
@@ -92,9 +89,6 @@
     .sharePage__results {
         margin-top: 3rem;
     }
-    .sharePage__noneresults {
-        font-size: 1.8rem;
-    }
 }
 
 @media screen and (min-width: 1024px) {
@@ -127,6 +121,7 @@
         margin-top: 3rem;
     }
     .sharePage__noneresults {
-        font-size: 2.2rem;
+        padding-top: 10rem;
+        padding-bottom: 10rem;
     }
 }

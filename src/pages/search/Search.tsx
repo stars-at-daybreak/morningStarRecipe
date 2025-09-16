@@ -4,7 +4,7 @@ import useSearch from '../../hooks/useSearch';
 import PostItem from '../../components/postItem/PostItem';
 import SearchInput from '../../components/search/SearchFromList';
 import styles from './SearchPage.module.css';
-
+import EmptyState from '../../components/EmptyState/EmptyState';
 interface SearchPageProps {
     query: string;
 }
@@ -106,7 +106,10 @@ const SearchPage = ({ query }: SearchPageProps) => {
 
             <section className={styles.searchPage__results} aria-live='polite'>
                 {searchList.length === 0 && !loadingMore && (
-                    <div className={styles.searchPage__noResults}>검색 결과가 없습니다.</div>
+                    <div className={styles.searchPage__noResults}>
+                        <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                        <EmptyState title='아직 아무것도 없어요' />
+                    </div>
                 )}
 
                 {searchList.length > 0 && (
