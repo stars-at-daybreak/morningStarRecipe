@@ -8,6 +8,8 @@ import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 import SearchInput from '../../components/search/SearchFromList';
 import { useModal } from '../../hooks/useModal.tsx';
 import Modal from '../../components/modal/Modal.tsx';
+import styles from './recipes.module.css';
+
 import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
 import styles from './recipes.module.css';
@@ -16,13 +18,19 @@ const Recipes = ({ query }: { query?: string }) => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const navigate = useNavigate();
     const { isOpen, type: modalType, openModal, closeModal } = useModal();
+    const { updateSearchTerm, updateRecipeSortBy, updateCategory } = useSearch({
+        pageType: 'recipe',
+        initialParams: {
+            searchTerm: query,
+        },
+    });
     const { user } = useUserStore();
+    const { openModal } = useModal();
 
     const getCategories = async () => {
         const data = await fetchCategories();
         setCategories(data);
     };
-
     usePageSetup({
         title: '모두의 레시피',
         pageName: 'recipes',
