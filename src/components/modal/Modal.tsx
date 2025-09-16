@@ -1,6 +1,7 @@
-import type { ModalType } from './ModalContext'; 
+import type { ModalType } from './ModalContext';
 import getModalContent from './getModalContent';
 import styles from './modal.module.css';
+import { logout } from '../../services/supabaseUsers.ts';
 
 interface ModalProps {
     isOpen: boolean;
@@ -17,8 +18,13 @@ export default function Modal({ isOpen, type, onClose, onConfirm }: ModalProps) 
     const modalConfig = getModalContent(type);
 
     // 확인 버튼 클릭 처리
-    const handleConfirm = () => {
-        if (onConfirm) onConfirm();
+    const handleConfirm = async () => {
+        if (onConfirm) {
+            onConfirm();
+            if (type === 'LOGOUT') {
+                await logout();
+            }
+        }
         onClose();
     };
 
