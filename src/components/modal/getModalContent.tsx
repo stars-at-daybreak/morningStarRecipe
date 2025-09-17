@@ -30,6 +30,15 @@ const getModalContent = (type: ModalType) => {
                 cancelText: '취소',
             };
 
+        case 'DELETE':
+            return {
+                title: '삭제하시겠습니까?',
+                message: '',
+                hasCancel: true,
+                confirmText: '확인',
+                cancelText: '취소',
+            };
+
         case 'CONFIRM_DISCARD_POST':
             return {
                 title: '앗! 거의 다 됐는데!',
@@ -39,6 +48,15 @@ const getModalContent = (type: ModalType) => {
                 cancelText: '나가기',
             };
 
+        case 'SUCCESS':
+            return {
+                title: '등록완료!',
+                message: '',
+                hasCancel: false,
+                confirmText: '확인',
+                cancelText: '',
+            };
+            
         case 'NOTIFY_ACCOUNT_EXISTS':
             return {
                 title: '이미 존재하는 계정입니다.',
