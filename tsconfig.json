@@ -1,7 +1,14 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "ESNext",
+        "jsx": "react-jsx",
+        "strict": true,
+        "moduleResolution": "Node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "outDir": "./dist", // <- 소스와 겹치지 않도록 dist 폴더 지정
+        "rootDir": "./src" // <- 소스 파일 위치
+    },
+    "include": ["src/**/*"]
 }
