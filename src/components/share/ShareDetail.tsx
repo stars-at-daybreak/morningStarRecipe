@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { deletePost, fetchPostWithUserNickname } from '../services/supabasePosts.ts';
+import { deletePost, fetchPostWithUserNickname } from '../../services/supabasePosts.ts';
 import { useParams, useNavigate } from 'react-router-dom';
-import PostComments from './PostComments.tsx';
-import useUserStore from '../stores/useUserStore.ts';
-import type { PostWithUserNickname } from '../types/posts.type.ts';
+import PostComments from '../PostComments.tsx';
+import useUserStore from '../../stores/useUserStore.ts';
+import type { PostWithUserNickname } from '../../types/posts.type.ts';
 
 const ShareDetail = () => {
     const { id } = useParams<{ id: string }>();
