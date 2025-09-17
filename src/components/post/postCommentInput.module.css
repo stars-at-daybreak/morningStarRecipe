@@ -6,12 +6,13 @@
     border-radius: clamp(35.8rem, 35.8rem + (100vw - 390px) * 0.01, 6rem);
     width: clamp(35.8rem, 35.8rem + (100vw - 390px) * 0.6, 73.6rem);
     height: clamp(4.4rem, 4.4rem + (100vw - 390px) * 0.05, 7.2rem);
-    padding-right: 4rem;
+    padding-right: clamp(4rem, 4rem + (100vw - 390px) * 0.1, 7rem);
     padding-left: clamp(2rem, 2rem + (100vw - 390px) * 0.05, 4rem);
 
     font-weight: 400;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.05, 2.2rem);
     color: var(--color-black);
+    outline: none;
 }
 .comments__input::placeholder {
     color: var(--color-gray-300);

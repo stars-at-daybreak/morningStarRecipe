@@ -145,9 +145,8 @@ const PostComments = ({ postId }: { postId: string }) => {
                             </div>
 
                             {updatedComment && commentId === comment.id ? (
-                                <input
+                                <textarea
                                     className={styles['comments__item-content--update']}
-                                    type='text'
                                     value={updatedComment}
                                     onChange={e => setUpdatedComment(e.target.value)}
                                 />

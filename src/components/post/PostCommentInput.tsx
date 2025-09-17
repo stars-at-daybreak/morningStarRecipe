@@ -49,12 +49,8 @@ const PostCommentInput = ({
 
     return (
         <form className={styles['comments__input-box']} onSubmit={handleSubmit}>
-            <label htmlFor='comment' className='sr-only'>
-                댓글 입력
-            </label>
             <input
                 className={styles['comments__input']}
-                type='text'
                 id={comment}
                 value={comment}
                 onChange={e => handleCommentInput(e.target.value)}

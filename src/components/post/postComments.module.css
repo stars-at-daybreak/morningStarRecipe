@@ -59,7 +59,7 @@
     }
     .comments__time {
         font-weight: 400;
-        font-size: 1.2rem;
+        font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
         color: var(--color-gray-400);
         margin-left: clamp(0.6rem, 0.6rem + (100vw - 390px) * 0.01, 1rem);
         flex-shrink: 0;
@@ -86,6 +86,10 @@
     margin-top: clamp(0.8rem, 0.8rem + (100vw - 390px) * 0.01, 1.4rem);
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
     color: var(--color-black);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    resize: vertical;
+    white-space: pre-wrap;
 }
 
 .comments__item-content--update {
@@ -96,6 +100,9 @@
     min-height: 6rem;
     border-radius: 10px;
 
+    padding: clamp(1rem, 1rem + (100vw - 390px) * 0.05, 3rem) clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.05, 3rem);
+
     border: 1px solid var(--gray-300, #c5c5c5);
     color: var(--color-black);
+    outline: none;
 }
