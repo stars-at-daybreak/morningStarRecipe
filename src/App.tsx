@@ -13,14 +13,15 @@ import { colorSet } from './types/colorSet.ts';
 import Privacy from './pages/Privacy.tsx';
 import Terms from './pages/Terms.tsx';
 import Recipes from './pages/recipes/Recipes.tsx';
-import RecipeForm from './components/recipes/RecipeForm.tsx';
-import RecipeDetail from './components/recipes/RecipeDetail.tsx';
+import RecipeForm from './pages/recipes/RecipeForm.tsx';
+import RecipeDetail from './pages/recipes/RecipeDetail.tsx';
 import Share from './pages/share/Share.tsx';
-import ShareForm from './components/share/ShareForm.tsx';
-import ShareDetail from './components/share/ShareDetail.tsx';
+import ShareForm from './components/ShareForm.tsx';
 import PasswordFind from './components/PasswordFind.tsx';
+import ShareDetail from './components/ShareDetail.tsx';
 import DeleteAccount from './pages/DeleteAccount.tsx';
 import NotFound from './pages/404/404.tsx';
+import './App.css';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
