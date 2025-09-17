@@ -152,8 +152,8 @@ const RecipeForm = () => {
                     ></textarea>
                 </div>
 
-                <ResponsiveFileUpload onFileUpload={handleFileUpload} />
-
+                {/* //<ResponsiveFileUpload onFileUpload={handleFileUpload} postId=recipeId}}/> */}
+                <ResponsiveFileUpload postId={recipeId} />
                 <button type='submit'>작성 완료</button>
             </form>
         </div>
