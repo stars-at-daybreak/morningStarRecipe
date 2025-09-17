@@ -34,6 +34,26 @@ const ShareDetail = () => {
         }
     };
 
+    // 📍 타입 수정: string | undefined 허용
+    interface ContentRendererProps {
+        htmlContent: string | undefined | null;
+        className?: string;
+        fallback?: React.ReactNode;
+    }
+
+    const ContentRenderer: React.FC<ContentRendererProps> = ({
+        htmlContent,
+        className = '',
+        fallback = <p>내용이 없습니다.</p>,
+    }) => {
+        // htmlContent가 없거나 빈 문자열인 경우
+        if (!htmlContent || htmlContent.trim() === '') {
+            return <div className={`content-renderer ${className}`}>{fallback}</div>;
+        }
+
+        return <div className={`content-renderer ${className}`} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+    };
+
     useEffect(() => {
         if (id) {
             fetchData(id);
@@ -46,10 +66,11 @@ const ShareDetail = () => {
             {user?.id === share?.user_id && <button onClick={handleDelete}>게시물 삭제</button>}
             <h2>{share?.title}</h2>
             <p>
-                {share?.user_nickname}
-                {share?.user_level_title || 'LV.1 초보 집밥러'}
+                {share?.user_nickname} {share?.user_level_title || 'LV.1 초보 집밥러'}
             </p>
-            <p>{share?.content}</p>
+
+            <ContentRenderer htmlContent={share?.content} className='post-content' fallback={<p>내용이 없습니다.</p>} />
+
             {id && <PostComments postId={id} />}
         </div>
     );

@@ -1,19 +1,30 @@
+// ShareForm.tsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { createPost, updatePost } from '../../services/supabasePosts.ts';
-import useUserStore from '../../stores/useUserStore.ts';
+import { createPost, updatePost } from '../../services/supabasePosts';
+import useUserStore from '../../stores/useUserStore';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './ShareForm.module.css';
 import { usePageSetup } from '../../hooks/usePageSetup';
-import { fetchPostWithUserNickname } from '../../services/supabasePosts.ts';
-import CustomSelect from '../SelectBox/SelectBox.tsx';
+import { fetchPostWithUserNickname } from '../../services/supabasePosts';
+import CustomSelect from '../SelectBox/SelectBox';
 import { ResponsiveFileUpload } from '../ImgUpload/ImgUpload';
 import { getPostThumbnails } from '../../services/supabaseFiles';
 import delbtn from '../../assets/delete_btn_icon.svg';
 import { saveThumbnailImage } from '../../services/supabaseFiles';
+import LexicalEditor from '../../components/LexicalEditor/LexicalEditor';
+import '../../components/LexicalEditor/LexicalEditor.css';
+import { createEditor, $getRoot } from 'lexical'; // 💡 $getRoot 임포트 추가
+import { $generateNodesFromDOM } from '@lexical/html';
+
+// 비어있는 Lexical Editor 상태를 나타내는 유효한 JSON 문자열
+const emptyEditorState =
+    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+
 const ShareForm = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { type, shareId } = location.state || { type: 'create' };
+
     const [formData, setFormData] = useState({
         post_type: 'share' as const,
         title: '',
@@ -21,49 +32,117 @@ const ShareForm = () => {
         pickup_location: '서울',
         content: '',
     });
+    const [isLoading, setIsLoading] = useState(true);
+
     const { user } = useUserStore();
     const [thumbnailURL, setThumbnailURL] = useState('');
 
-    // 📍 수정: useEffect로 간단하게 처리
-    useEffect(() => {
-        const fetchData = async () => {
-            if (type !== 'update' || !shareId) return;
+    const getValidatedContent = useCallback((content: string | null): string => {
+        if (!content) {
+            return emptyEditorState;
+        }
+
+        try {
+            const parsed = JSON.parse(content);
+            if (parsed && typeof parsed === 'object' && 'root' in parsed) {
+                return content;
+            } else {
+                throw new Error('Invalid Lexical JSON structure.');
+            }
+        } catch (e) {
+            console.error('Content is not a valid Lexical JSON state. Attempting HTML conversion.', e);
 
             try {
-                // Promise.all로 병렬 처리
+                // 💡 올바른 Lexical API를 사용하는 로직
+                const editor = createEditor(); // 임시 에디터 인스턴스 생성
+                let parsedEditorState;
+                editor.update(() => {
+                    const root = $getRoot(); // 💡 Lexical의 루트 노드를 가져옵니다.
+                    const parser = new DOMParser();
+                    const dom = parser.parseFromString(content, 'text/html');
+                    const nodes = $generateNodesFromDOM(editor, dom);
+
+                    root.clear(); // 💡 Lexical 노드의 clear() 메서드 사용
+                    nodes.forEach(node => root.append(node)); // 💡 Lexical 노드의 append() 메서드 사용
+                });
+                parsedEditorState = editor.getEditorState();
+                return JSON.stringify(parsedEditorState.toJSON());
+            } catch (htmlError) {
+                console.error('HTML conversion failed. Falling back to plain text.', htmlError);
+                const textContent = content.replace(/<[^>]*>/g, '').trim();
+                const newLexicalState = {
+                    root: {
+                        children: [
+                            {
+                                children: [
+                                    {
+                                        detail: 0,
+                                        format: 0,
+                                        mode: 'normal',
+                                        text: textContent,
+                                        type: 'text',
+                                        version: 1,
+                                    },
+                                ],
+                                direction: 'ltr',
+                                format: '',
+                                indent: 0,
+                                type: 'paragraph',
+                                version: 1,
+                            },
+                        ],
+                        direction: 'ltr',
+                        format: '',
+                        indent: 0,
+                        type: 'root',
+                        version: 1,
+                    },
+                };
+                return JSON.stringify(newLexicalState);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (type === 'create') {
+                setIsLoading(false);
+                return;
+            }
+            if (!shareId) {
+                navigate('/');
+                return;
+            }
+
+            try {
                 const [detail, thumbnail] = await Promise.all([
                     fetchPostWithUserNickname(shareId),
                     getPostThumbnails(shareId),
                 ]);
 
                 if (detail) {
-                    if (detail.post_type !== 'share') {
-                        alert('잘못된 게시글 타입입니다.');
-                        navigate('/share');
-                        return;
-                    }
-
-                    // 상태 업데이트를 한 번에 처리
+                    const parsedContent = getValidatedContent(detail.content);
                     setFormData({
                         post_type: 'share' as const,
                         title: detail.title || '',
                         share_status: detail.share_status || 'available',
                         pickup_location: detail.pickup_location || '서울',
-                        content: detail.content || '',
+                        content: parsedContent,
                     });
-
                     if (thumbnail?.file_type === 'thumbnail') {
-                        setThumbnailURL(`${thumbnail.filename}`);
+                        setThumbnailURL(thumbnail.filename);
                     }
                 }
             } catch (error) {
-                console.error('데이터 로딩 실패:', error);
+                console.error('Failed to load data:', error);
                 alert('데이터를 불러오는데 실패했습니다.');
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [type, shareId, navigate]); // isLoading 제거!
+    }, [type, shareId, navigate, getValidatedContent]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -71,19 +150,22 @@ const ShareForm = () => {
             alert('로그인이 필요합니다.');
             return;
         }
+
         const shareData = {
             ...formData,
             post_type: 'share' as const,
             user_id: user.id,
         };
+
         let isSuccess;
         if (type === 'create') {
             isSuccess = await createPost(shareData);
         } else if (type === 'update' && shareId) {
             isSuccess = await updatePost({ ...shareData, id: shareId });
         }
+
         if (isSuccess) {
-            alert('레시피 저장을 완료하였습니다.');
+            alert('게시글 저장을 완료하였습니다.');
             if (type === 'update' && shareId) {
                 await saveThumbnailImage(thumbnailURL, shareId);
             } else if (type === 'create') {
@@ -159,14 +241,23 @@ const ShareForm = () => {
                         onChange={e => setFormData(prev => ({ ...prev, pickup_location: e.target.value }))}
                     />
                 </section>
-                <div>
-                    <textarea
-                        name='content'
-                        id='content'
-                        value={formData.content}
-                        onChange={e => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                    ></textarea>
+
+                <div className={styles.content_section}>
+                    <label className={styles.content_label}>내용:</label>
+                    <div className='editor-wrapper' style={{ marginBottom: '20px' }}>
+                        {isLoading ? (
+                            <div className={styles.loadingMessage}>로딩 중...</div>
+                        ) : (
+                            <LexicalEditor
+                                placeholder='게시글 내용을 입력하세요...'
+                                className='post-editor'
+                                initialValue={formData.content}
+                                onChange={editorState => setFormData(prev => ({ ...prev, content: editorState }))}
+                            />
+                        )}
+                    </div>
                 </div>
+
                 <div className={styles.thumbnail_container}>
                     <label htmlFor='share_thumbnail' className={styles.share_thumbnail_label}>
                         <strong>썸네일 등록</strong>(최대 1장)
