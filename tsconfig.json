@@ -7,8 +7,10 @@
         "moduleResolution": "Node",
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "outDir": "./dist", // <- 소스와 겹치지 않도록 dist 폴더 지정
-        "rootDir": "./src" // <- 소스 파일 위치
+        "allowImportingTsExtensions": true, // 이 옵션 추가
+        "noEmit": true, // allowImportingTsExtensions 사용 시 필수
+        "outDir": "./dist",
+        "rootDir": "./src"
     },
     "include": ["src/**/*"]
 }

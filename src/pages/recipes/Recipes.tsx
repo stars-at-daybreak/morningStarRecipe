@@ -59,7 +59,6 @@ const Recipes = ({ query }: { query?: string }) => {
         hasMore,
         loadMore,
     } = useSearch(searchConfig);
-    console.log(currentRecipeSort);
     const handleObserver = useCallback(
         (entries: IntersectionObserverEntry[]) => {
             const [target] = entries;
