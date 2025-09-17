@@ -5,9 +5,10 @@ import styles from './ImgUpload.module.css';
 
 interface ResponsiveFileUploadProps {
     onFileUpload?: (filename: string | null) => void;
+    postId: string;
 }
 
-export const ResponsiveFileUpload = ({ onFileUpload }: ResponsiveFileUploadProps) => {
+export const ResponsiveFileUpload = ({ onFileUpload, postId }: ResponsiveFileUploadProps) => {
     const { uploadFile, isUploading } = useFileUpload();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
