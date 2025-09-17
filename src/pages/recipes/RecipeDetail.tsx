@@ -108,17 +108,18 @@ const RecipeDetail = () => {
 
     const handleDelete = async () => {
         if (id && user?.id) {
-            const isSuccess = await deletePost(id, user.id);
-            if (isSuccess) {
-                alert('삭제가 완료되었습니다.');
-                navigate('/recipes');
-            }
+            openModal('DELETE', async () => {
+                const isSuccess = await deletePost(id, user.id);
+                if (isSuccess) {
+                    navigate('/recipes');
+                }
+            });
         }
     };
 
     const handleLike = async (type: 'like' | 'dislike') => {
         if (!user?.id || !id) {
-            alert('로그인이 필요합니다.');
+            openModal('LOGIN');
             return;
         }
 
@@ -126,7 +127,7 @@ const RecipeDetail = () => {
         if (success) {
             await fetchData(id);
         } else {
-            alert('투표 처리 중 오류가 발생했습니다.');
+            openModal('FAIL', undefined, '투표 처리 중 오류가 발생했습니다.');
         }
     };
 

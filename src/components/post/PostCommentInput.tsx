@@ -3,6 +3,7 @@ import React from 'react';
 import { createComment } from '../../services/supabaseComments.ts';
 import type { User } from '@supabase/supabase-js';
 import styles from './postCommentInput.module.css';
+import { useModal } from '../modal/ModalContext.ts';
 
 const PostCommentInput = ({
     postId,
@@ -17,25 +18,32 @@ const PostCommentInput = ({
     handleCommentInput: (comment: string) => void;
     user: User | null;
 }) => {
+    const { openModal } = useModal();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!user?.id) {
-            alert('로그인이 필요합니다.');
+            openModal('LOGIN');
             return;
         }
 
-        const commentData = {
-            post_id: postId,
-            user_id: user.id,
-            content: comment,
-        };
+        if (comment.trim()) {
+            const commentData = {
+                post_id: postId,
+                user_id: user.id,
+                content: comment,
+            };
 
-        const isSuccess = await createComment(commentData);
+            const isSuccess = await createComment(commentData);
 
-        if (isSuccess) {
-            alert('댓글 저장을 완료하였습니다');
-            fetchData(postId);
+            if (isSuccess) {
+                handleCommentInput('');
+                openModal('SUCCESS', undefined, '댓글이 등록되었습니다!');
+                fetchData(postId);
+            }
+        } else {
+            handleCommentInput('');
         }
     };
 
