@@ -1,40 +1,50 @@
-import { DecoratorNode, NodeKey } from 'lexical';
+import { DecoratorNode, LexicalNode, NodeKey, SerializedLexicalNode } from 'lexical';
 import React from 'react';
-import { $applyNodeReplacement } from 'lexical';
-import { LexicalNode } from 'lexical';
+
+export type SerializedImageNode = SerializedLexicalNode & {
+    type: 'image';
+    src: string;
+    altText: string;
+};
 
 export class ImageNode extends DecoratorNode<JSX.Element> {
     __src: string;
-
-    constructor(src: string, key?: NodeKey) {
-        super(key);
-        this.__src = src;
-    }
+    __altText: string;
 
     static getType() {
         return 'image';
     }
 
     static clone(node: ImageNode) {
-        return new ImageNode(node.__src, node.__key);
+        return new ImageNode(node.__src, node.__altText, node.__key);
     }
 
-    static importJSON() {
-        return new ImageNode('');
+    // ⭐ 반드시 필요
+    static importJSON(serializedNode: SerializedImageNode) {
+        const { src = '', altText = '' } = serializedNode;
+        return $createImageNode(src, altText);
     }
 
-    exportJSON() {
+    exportJSON(): SerializedImageNode {
         return {
             type: 'image',
-            version: 1,
             src: this.__src,
+            altText: this.__altText,
+            version: 1,
         };
+    }
+
+    constructor(src = '', altText = '', key?: NodeKey) {
+        super(key);
+        this.__src = src;
+        this.__altText = altText;
     }
 
     createDOM() {
         const img = document.createElement('img');
         img.src = this.__src;
-        img.className = 'editor-image';
+        img.alt = this.__altText;
+        img.style.maxWidth = '100%';
         return img;
     }
 
@@ -43,14 +53,14 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     }
 
     decorate() {
-        return <img src={this.__src} alt='uploaded' className='editor-image' />;
+        return <img src={this.__src} alt={this.__altText} style={{ maxWidth: '100%' }} />;
     }
 }
 
-export function $createImageNode(src: string): ImageNode {
-    return $applyNodeReplacement(new ImageNode(src));
+export function $createImageNode(src = '', altText = '') {
+    return new ImageNode(src, altText);
 }
 
-export function $isImageNode(node: LexicalNode | null | undefined): node is ImageNode {
-    return node instanceof ImageNode;
+export function $isImageNode(node: LexicalNode): node is ImageNode {
+    return node.getType() === 'image';
 }

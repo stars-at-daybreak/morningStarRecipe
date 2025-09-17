@@ -246,7 +246,7 @@ const ShareForm = () => {
                     <label className={styles.content_label}>내용:</label>
                     <div className='editor-wrapper' style={{ marginBottom: '20px' }}>
                         {isLoading ? (
-                            <div className={styles.loadingMessage}>로딩 중...</div>
+                            <div className={styles.loadingMessage}></div>
                         ) : (
                             <LexicalEditor
                                 placeholder='게시글 내용을 입력하세요...'
