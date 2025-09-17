@@ -12,12 +12,14 @@ import type { SignupData } from '../../types/users.ts';
 import EmailAuthModal from '../../components/modal/EmailAuthModal.tsx';
 import NicknameButton from '../../components/button/NicknameButton.tsx';
 import ValidationText from '../../components/validation/ValidationText.tsx';
+import { useModal } from '../../components/modal/ModalContext.ts';
 
 const SignUp = () => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [checkedItems, setCheckedItems] = useState(new Set());
     const [isOpen, setIsOpen] = useState(false);
     const [isAuthConfirm, setIsAuthConfirm] = useState(false);
+    const [passedNickname, setPassedNickname] = useState('');
     const [isValidatedState, setIsValidatedState] = useState<{
         nickname: boolean | null;
         password: boolean | null;
@@ -45,6 +47,7 @@ const SignUp = () => {
             agreeToTerms: false,
         },
     });
+    const { openModal } = useModal();
 
     const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -53,8 +56,13 @@ const SignUp = () => {
             setIsValidatedState(prev => ({ ...prev, password: false }));
             return;
         }
+        if (formData.options.nickname !== passedNickname) {
+            setIsValidatedState(prev => ({ ...prev, nickname: false }));
+            return;
+        }
 
-        await signup(formData);
+        const result = await signup(formData);
+        openModal(result.status, undefined, result.text);
     };
 
     const handleCheck = (itemId: string) => {
@@ -239,14 +247,17 @@ const SignUp = () => {
                             handleInput={handleInput}
                             placeholder='닉네임을 입력해주세요.'
                             isRequired={true}
-                            isDisabled={isValidatedState.nickname === true}
                             className={isValidatedState.nickname ? 'input__label--active' : ''}
                         />
                         <NicknameButton
                             nickname={formData.options.nickname}
-                            handleDuplicate={isDuplicated =>
-                                setIsValidatedState(prev => ({ ...prev, nickname: !isDuplicated }))
-                            }
+                            handleDuplicate={isDuplicated => {
+                                if (!isDuplicated) {
+                                    setPassedNickname(formData.options.nickname);
+                                }
+
+                                return setIsValidatedState(prev => ({ ...prev, nickname: !isDuplicated }));
+                            }}
                         />
                     </div>
                     <ValidationText
