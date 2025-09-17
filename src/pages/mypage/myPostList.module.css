@@ -1,0 +1,204 @@
+.my-post-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.my-post-list__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 4rem;
+}
+
+/* 프로필 */
+.my-post-list__profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+/* 프로필 이미지 */
+.my-post-list__profile-image {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-gray-300);
+    overflow: hidden;
+}
+
+/* 프로필 기본 이미지 아이콘 */
+.my-post-list__profile-default {
+    width: 6.4rem;
+    height: 6rem;
+    background: url('../../../assets/face_logo_w.svg') no-repeat center / cover;
+    margin: 0.1rem 0 0 0.1rem;
+}
+
+/* 프로필 이미지 업로드 했을 시 */
+.my-post-list__profile-image img {
+    width: 100%;
+    object-fit: cover;
+}
+
+/* 총게시물 */
+.my-post-list__profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.my-post-list__profile-title {
+    font-size: clamp(2.4rem, 3.9vw, 4rem);
+    font-weight: bold;
+}
+
+.my-post-list__profile-count {
+    font-size: clamp(1.6rem, calc(0.8rem + 1.56vw), 2.4rem);
+    color: var(--color-gray);
+}
+
+/* 카테고리 탭 */
+.my-post-list__tabs {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 0.1rem solid var(--color-gray-300);
+    margin-top: 1rem;
+}
+.my-post-list__tabs-wrap {
+    width: 100%;
+    max-width: 73.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.my-post-list__tab {
+    width: 100%;
+    padding: 1.6rem 0;
+    color: var(--color-gray-400);
+    font-size: clamp(1.4rem, calc(0.6rem + 1.56vw), 2.2rem);
+    font-weight: bold;
+}
+
+.my-post-list__tab--active {
+    border-bottom: 0.4rem solid var(--color-green);
+    color: var(--color-green);
+}
+
+/* 게시물 리스트 */
+.my-post-list__posts {
+    width: 100%;
+    max-width: 73.6rem;
+    padding: 0 1.6rem;
+}
+
+/* 게시물 없을때 */
+.my-post-list__posts--empty {
+    display: flex;
+    margin-top: 6rem;
+    flex-direction: column;
+    /* min-height: calc(20vh - 8rem); */
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    /* 프로필 */
+    .my-post-list__profile {
+        gap: 2.2rem;
+    }
+    /* 프로필 이미지 */
+    .my-post-list__profile-image {
+        width: 13rem;
+        height: 13rem;
+    }
+    /* 프로필 기본 이미지 아이콘 */
+    .my-post-list__profile-default {
+        width: 8.2rem;
+        height: 7.6rem;
+        margin: 0.2rem 0 0 0.2rem;
+    }
+
+    /* 총게시물 */
+    .my-post-list__profile-info {
+        gap: 1.2rem;
+    }
+
+    /* 카테고리 탭 */
+    .my-post-list__tabs {
+        margin-top: 2rem;
+    }
+
+    .my-post-list__tab {
+        padding: 2.4rem 0;
+    }
+
+    /* 게시물 리스트 */
+    .my-post-list__posts {
+        margin-top: 2rem;
+    }
+    /* 게시물 없을때 */
+    .my-post-list__posts--empty {
+        margin-top: 6rem;
+    }
+}
+@media (min-width: 1024px) {
+    .my-post-list__container {
+        margin-top: 6rem;
+    }
+
+    /* 프로필 */
+    .my-post-list__profile {
+        gap: 3rem;
+    }
+    /* 프로필 이미지 */
+    .my-post-list__profile-image {
+        width: 16rem;
+        height: 16rem;
+    }
+    /* 프로필 기본 이미지 아이콘 */
+    .my-post-list__profile-default {
+        width: 10.1rem;
+        height: 9.6rem;
+        margin: 0.3rem 0 0 0.3rem;
+    }
+
+    /* 총게시물 */
+    .my-post-list__profile-info {
+        gap: 1.6rem;
+    }
+
+    /* 카테고리 탭 */
+    .my-post-list__tabs {
+        margin-top: 3rem;
+    }
+
+    .my-post-list__tab {
+        padding: 2.6rem 0;
+    }
+
+    /* 게시물 리스트 */
+    .my-post-list__posts {
+        margin-top: 2.8rem;
+    }
+
+    /* 게시물 없을때 */
+    .my-post-list__posts--empty {
+        margin-top: 10rem;
+    }
+}

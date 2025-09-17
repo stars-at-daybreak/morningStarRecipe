@@ -9,9 +9,14 @@ interface InfinitePostListProps {
     type: 'recipe' | 'share';
     fetchFunction: (page: number) => Promise<Tables<'posts'>[]>;
     onPostClick?: (postId: string) => void;
+    emptyTitle?: string; // 빈 상태 제목을 커스터마이징할 수 있는 props 추가
 }
-
-const InfinitePostList = ({ type, fetchFunction, onPostClick }: InfinitePostListProps) => {
+const InfinitePostList = ({
+    type,
+    fetchFunction,
+    onPostClick,
+    emptyTitle = '아직 아무것도 없어요',
+}: InfinitePostListProps) => {
     const [posts, setPosts] = useState<Tables<'posts'>[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [hasMore, setHasMore] = useState<boolean>(true);
@@ -90,7 +95,7 @@ const InfinitePostList = ({ type, fetchFunction, onPostClick }: InfinitePostList
 
     const [spinnerSize, setSpinnerSize] = useState(8);
 
-    // 스피너 반응형으로 크가 적용
+    // 스피너 반응형으로 크기 적용
     useEffect(() => {
         const updateSpinnerSize = () => {
             if (window.innerWidth >= 768) {
@@ -125,39 +130,10 @@ const InfinitePostList = ({ type, fetchFunction, onPostClick }: InfinitePostList
                 </div>
             )}
 
-            {!hasMore && posts.length > 0 && (
-                <div className={styles['infinite-post-list__end']}>모든 게시물을 불러왔습니다.</div>
-            )}
-
-            {/* 로딩 중이 아닐 때 게시물이 없으면 EmptyState를 렌더링 */}
-            {!loading && posts.length === 0 && <EmptyState title='아직 아무것도 없어요' />}
+            {/* 로딩 중이 아닐 때 게시물이 없으면 커스텀 EmptyState를 렌더링 */}
+            {!loading && posts.length === 0 && <EmptyState title={emptyTitle} />}
         </div>
     );
 };
 
 export default InfinitePostList;
-
-/* 사용법 */
-/* 
-import { useNavigate } from 'react-router-dom';
-import { getRecipesWithPagination } from '../../services/supabasePosts';
-import InfinitePostList from '../../components/InfinitePostList';
-  
-  const navigate = useNavigate();
-
-  const handlePostClick = (postId: string) => {
-        navigate(`/recipes/${postId}`);
-    };
-
-
-  return (
-      <div>
-          <InfinitePostList 
-              type="recipe"
-              fetchFunction={getRecipesWithPagination}
-              onPostClick={handlePostClick}
-          />
-      </div>
-  );
-
-*/

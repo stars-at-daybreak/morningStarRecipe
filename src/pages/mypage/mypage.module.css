@@ -40,10 +40,27 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/* 프로필 기본 이미지 아이콘 */
+.page__profile_img {
+    width: 6.4rem;
+    height: 6rem;
+    background: url('../../assets/face_logo_w.svg') no-repeat center / cover;
+    margin: 0.1rem 0 0 0.1rem;
+}
+
+.page__profile_image_container img {
+    width: 100%;
+    object-fit: cover;
 }
 
 .page__profile_image_tag {
@@ -164,7 +181,15 @@
         height: 13rem;
     }
 
+    /* 프로필 기본 이미지 아이콘 */
     .page__profile_img {
+        width: 8.2rem;
+        height: 7.6rem;
+        margin: 0.2rem 0 0 0.2rem;
+    }
+
+    /* 이미지 로드 실패 시 보여줄 fallback 아이콘 스타일 */
+    .page__profile_fallback_icon {
         width: 8.1rem;
         height: 7.6rem;
         margin-top: 0.3rem;
@@ -231,7 +256,15 @@
         height: 16rem;
     }
 
+    /* 프로필 기본 이미지 아이콘 */
     .page__profile_img {
+        width: 10.1rem;
+        height: 9.6rem;
+        margin: 0.3rem 0 0 0.3rem;
+    }
+
+    /* 이미지 로드 실패 시 보여줄 fallback 아이콘 스타일 */
+    .page__profile_fallback_icon {
         width: 10.1rem;
         height: 9.6rem;
         margin-top: 0.4rem;
