@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { deletePost, fetchPostWithUserNickname } from '../../services/supabasePosts.ts';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PostComments from '../../components/post/PostComments.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
 import type { PostWithUserNickname } from '../../types/posts.type.ts';
-import { handlePostVote, getUserVoteStatus } from '../../services/supabasePostVotes.ts';
+import { getUserVoteStatus, handlePostVote } from '../../services/supabasePostVotes.ts';
 import type { VoteType } from '../../types/postVotes.type.ts';
 import { getUserProfileImage } from '../../services/supabaseFiles.ts';
 import type { Tables } from '../../types/supabase.ts';
@@ -24,6 +24,7 @@ import {
     selectBookmarksByUserIdPostId,
 } from '../../services/supabasePostBookmark.ts';
 import { useModal } from '../../components/modal/ModalContext.ts';
+import { formatDateToString } from '../../utils/utils.ts';
 
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -40,6 +41,10 @@ const RecipeDetail = () => {
         const detail = await fetchPostWithUserNickname(id);
 
         if (detail) {
+            if (detail.created_at) {
+                detail.created_at = formatDateToString(detail.created_at);
+            }
+
             setRecipe(detail);
             const category = await fetchCategory(detail.category_id);
             setCategoryName(category?.name || '없음');
@@ -70,18 +75,6 @@ const RecipeDetail = () => {
             default:
                 return '';
         }
-    };
-
-    const createAtConvert = (): string => {
-        if (recipe?.created_at) {
-            const date = new Date(recipe?.created_at);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-
-            return `${year}.${month}.${day}`;
-        }
-        return '';
     };
 
     const handleBookmark = async () => {
@@ -216,7 +209,7 @@ const RecipeDetail = () => {
                     </div>
 
                     <div className={styles['recipe__bookmark-box']}>
-                        작성일자 : <time>{createAtConvert()}</time>
+                        작성일자 :<time>{recipe?.created_at}</time>
                         <button className={styles['recipe__bookmark__btn']} onClick={handleBookmark}>
                             <img src={isBookmarked ? bookmarkActiveIcon : bookmarkIcon} alt='북마크' />
                         </button>

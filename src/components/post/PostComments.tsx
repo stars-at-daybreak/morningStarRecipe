@@ -6,6 +6,7 @@ import styles from './postComments.module.css';
 import PostCommentInput from './PostCommentInput.tsx';
 import LevelBadge from '../LevelBadge/LevelBadge.tsx';
 import noneProfileImg from '../../assets/none-profile.svg';
+import { commentCreatedTime } from '../../utils/utils.ts';
 
 const PostComments = ({ postId }: { postId: string }) => {
     const [comments, setComments] = useState<CommentWithUserNickname[] | null>(null);
@@ -16,7 +17,14 @@ const PostComments = ({ postId }: { postId: string }) => {
 
     const fetchData = async (post_id: string): Promise<void> => {
         const data = await fetchCommentsWithUserNickname(post_id);
-        setComments(data);
+        if (data) {
+            const newComments = data.map(item => ({
+                ...item,
+                created_at: commentCreatedTime(String(item.created_at)),
+            }));
+
+            setComments(newComments);
+        }
     };
 
     const handleOpenUpdateInput = (commentId: string, comment: string) => {
@@ -104,6 +112,7 @@ const PostComments = ({ postId }: { postId: string }) => {
                                         {comment.user_nickname}
                                     </span>
                                     <LevelBadge level={comment?.current_level || 1} size='small' />
+                                    <time className={styles['comments__time']}>{comment.created_at}</time>
                                 </div>
                                 {user?.id === comment.user_id && (
                                     <div className={styles['comments__item-btn-group']}>
