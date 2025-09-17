@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { checkEmailExists } from '../../services/supabaseUsers.ts';
 import { EmailAlreadyExistsError } from '../../error/EmailAlreadyExistsError.ts';
 import { sendVerificationCode } from '../../services/supabaseEmailAuth.ts';
+import { useModal } from '../modal/ModalContext.ts';
 
 const EmailAuthButton = ({
     handleModal,
@@ -13,6 +14,7 @@ const EmailAuthButton = ({
     email: string;
 }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const { openModal } = useModal();
 
     const handleEmailAuth = async () => {
         if (isLoading) return;
@@ -29,13 +31,13 @@ const EmailAuthButton = ({
             if (result.success) {
                 handleModal(true);
             } else {
-                alert(result.message);
+                openModal('FAIL', undefined, result.message);
             }
         } catch (error) {
             if (error instanceof EmailAlreadyExistsError) {
-                alert(error.message);
+                openModal('FAIL', undefined, error.message);
             } else {
-                alert('인증 요청 중 오류가 발생했습니다.');
+                openModal('FAIL', undefined, '인증 요청 중 오류가 발생했습니다.');
             }
         } finally {
             setIsLoading(false);

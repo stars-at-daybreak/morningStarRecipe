@@ -1,15 +1,17 @@
 import supabase from './supabaseClient.ts';
 import type { Signup, SignupData, UpdateUser, UpdateUserData } from '../types/users.ts';
 
+const supabaseResult = (status: 'SUCCESS' | 'FAIL', text: string) => {
+    return { status, text };
+};
+
 export const signup: Signup = async (signupData: SignupData) => {
     try {
         const { email, password, options } = signupData;
 
-        // 닉네임 중복 체크
         const nicknameExists = await checkNicknameExists(options.nickname);
         if (nicknameExists) {
-            alert('이미 사용중인 닉네임입니다. 다른 닉네임을 선택해주세요.');
-            return;
+            return supabaseResult('FAIL', '이미 사용중인 닉네임입니다. 다른 닉네임을 선택해주세요.');
         }
 
         const { data, error } = await supabase.auth.signUp({
@@ -30,26 +32,29 @@ export const signup: Signup = async (signupData: SignupData) => {
         if (error) {
             console.error(error);
             if (error.message === 'User already registered') {
-                alert('이미 존재하는 계정입니다.');
+                return supabaseResult('FAIL', '이미 존재하는 계정입니다.');
             } else if (error.code === 'over_email_send_rate_limit') {
-                alert('이 이메일 주소로 너무 많은 이메일이 전송되었습니다. 잠시 후 다시 시도해 주세요.');
+                return supabaseResult(
+                    'FAIL',
+                    '이 이메일 주소로 너무 많은 이메일이 전송되었습니다. 잠시 후 다시 시도해 주세요.'
+                );
             } else if (error.message.includes('Too Many Requests')) {
-                alert('너무 많은 회원가입 요청을 하였습니다. 잠시 후 다시 이용해주세요.');
+                return supabaseResult('FAIL', '너무 많은 회원가입 요청을 하였습니다. 잠시 후 다시 이용해주세요.');
             } else if (error.code === 'weak_password') {
-                alert('비밀번호는 최소 6자 이상이어야 합니다.');
+                return supabaseResult('FAIL', '비밀번호는 최소 6자 이상이어야 합니다.');
             } else {
-                alert('회원가입에 실패하였습니다 잠시 후 다시 이용해 주세요');
+                return supabaseResult('FAIL', '회원가입에 실패하였습니다 잠시 후 다시 이용해 주세요');
             }
         } else {
             if (data.user?.identities?.length === 0) {
-                alert('이미 가입된 사용자 입니다.');
+                return supabaseResult('FAIL', '이미 가입된 사용자 입니다.');
             } else {
-                alert('회원가입이 완료 되었습니다.');
+                return supabaseResult('SUCCESS', '회원가입이 완료 되었습니다.');
             }
         }
     } catch (error) {
         console.error('회원가입 예외:', error);
-        alert('회원가입 처리 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        return supabaseResult('FAIL', '회원가입 처리 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
 };
 

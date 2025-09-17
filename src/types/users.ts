@@ -12,7 +12,12 @@ export interface SignupData {
         agreeToTerms: boolean;
     };
 }
-export type Signup = (signupData: SignupData) => Promise<void>;
+export interface SupabaseResult {
+    status: 'SUCCESS' | 'FAIL';
+    text: string;
+}
+
+export type Signup = (signupData: SignupData) => Promise<SupabaseResult>;
 
 export interface UpdateUserData {
     password?: string;
