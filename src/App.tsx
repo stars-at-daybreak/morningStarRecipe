@@ -7,7 +7,7 @@ import Home from './pages/home/Home.tsx';
 import { AuthProvider } from './providers/AuthProvider.tsx';
 import ModalProvider from './components/modal/ModalProvider.tsx';
 import Mypage from './pages/mypage/Mypage.tsx';
-import ProfileEditForm from './pages/mypage/ProfileEdit/ProfileEditForm.tsx';
+import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
 import Privacy from './pages/Privacy.tsx';
@@ -21,8 +21,6 @@ import ShareDetail from './components/ShareDetail.tsx';
 import PasswordFind from './components/PasswordFind.tsx';
 import DeleteAccount from './pages/DeleteAccount.tsx';
 import NotFound from './pages/404/404.tsx';
-import MyBookmark from './pages/mypage/MyBookmark/MyBookmark.tsx';
-import MyPostList from './pages/mypage/MyPostList/MyPostList.tsx';
 import './App.css';
 
 const App = () => {
@@ -59,9 +57,7 @@ const AppRoutes = () => {
                 <Route path='/password' element={<PasswordFind />} />
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
-                <Route path='/mypage/user-edit' element={!user ? <Login /> : <ProfileEditForm />} />
-                <Route path='/mypage/my-bookmark' element={<MyBookmark />} />
-                <Route path='/mypage/my-postList' element={<MyPostList />} />
+                <Route path='/mypage/edit' element={!user ? <Login /> : <ProfileEditForm />} />
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
@@ -70,7 +66,7 @@ const AppRoutes = () => {
                 <Route path='/share' element={<Share />} />
                 <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
-                <Route path='/delete-account' element={<DeleteAccount />} />
+                <Route path='/DeleteAccount' element={<DeleteAccount />} />
                 <Route path='/404' element={<NotFound />} />
             </Route>
         </Routes>

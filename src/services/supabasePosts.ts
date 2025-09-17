@@ -119,12 +119,9 @@ export const selectSharePostsTOP3 = async (): Promise<Post[] | null> => {
 /**
  * 내가찜한 게시물 조회
  */
-export const selectBookmarksByUserId = async (
-    userId: string,
-    options?: { page?: number; pageSize?: number }
-): Promise<BookmarkedPost[] | null> => {
+export const selectBookmarksByUserId = async (userId: string): Promise<BookmarkedPost[] | null> => {
     try {
-        let query = supabase
+        const { data, error } = await supabase
             .from('post_bookmarks')
             .select(
                 `*,
@@ -139,15 +136,6 @@ export const selectBookmarksByUserId = async (
             .eq('posts.is_post_active', true)
             .order('created_at', { ascending: false });
 
-        // 페이지네이션 적용
-        if (options?.page !== undefined && options?.pageSize) {
-            const start = options.page * options.pageSize;
-            const end = start + options.pageSize - 1;
-            query = query.range(start, end);
-        }
-
-        const { data, error } = await query;
-
         if (error) throw error;
 
         return data as BookmarkedPost[];
@@ -157,7 +145,7 @@ export const selectBookmarksByUserId = async (
     }
 };
 /**
- * 내가 올린 게시물 조회
+ * 내가찜한 게시물 조회
  */
 export const selectMyPostsByUserId = async (userId: string): Promise<Post[] | null> => {
     try {
@@ -179,7 +167,7 @@ export const selectMyPostsByUserId = async (userId: string): Promise<Post[] | nu
 
         return data as Post[];
     } catch (error) {
-        console.error('내가 올린 게시물 목록 조회 중 에러 발생:', error);
+        console.error('찜 목록 조회 중 에러 발생:', error);
         return null;
     }
 };

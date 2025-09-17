@@ -12,7 +12,11 @@ const Layout = () => {
     const location = useLocation();
 
     // 푸터를 숨길 페이지들만 정의 (EmptyState가 사용되는 페이지들 추가)
-    const hideFooterPaths = ['/404', ];
+    const hideFooterPaths = [
+        '/404',
+        // EmptyState를 사용하는 페이지들의 경로를 여기에 추가
+        // 예: '/empty-page', '/no-content' 등
+    ];
 
     // 현재 경로가 푸터를 숨길 페이지인지 확인
     const shouldHideFooter = hideFooterPaths.includes(location.pathname);
