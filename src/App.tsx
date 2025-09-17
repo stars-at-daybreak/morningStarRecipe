@@ -16,12 +16,14 @@ import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './pages/recipes/RecipeForm.tsx';
 import RecipeDetail from './pages/recipes/RecipeDetail.tsx';
 import Share from './pages/share/Share.tsx';
-import ShareForm from './components/ShareForm.tsx';
-import ShareDetail from './components/ShareDetail.tsx';
+import ShareForm from './pages/share/ShareForm.tsx';
+import { ShareDetail } from './pages/share/ShareDetail.tsx';
 import PasswordFind from './components/PasswordFind.tsx';
 import DeleteAccount from './pages/DeleteAccount.tsx';
 import NotFound from './pages/404/404.tsx';
 import './App.css';
+import MyBookmark from './pages/mypage/MyBookmark.tsx';
+import MyPostList from './pages/mypage/MyPostList.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
@@ -57,7 +59,9 @@ const AppRoutes = () => {
                 <Route path='/password' element={<PasswordFind />} />
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
-                <Route path='/mypage/edit' element={!user ? <Login /> : <ProfileEditForm />} />
+                <Route path='/mypage/user-edit' element={!user ? <Login /> : <ProfileEditForm />} />
+                <Route path='/mypage/my-bookmark' element={<MyBookmark />} />
+                <Route path='/mypage/my-postList' element={<MyPostList />} />
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
@@ -66,7 +70,7 @@ const AppRoutes = () => {
                 <Route path='/share' element={<Share />} />
                 <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
-                <Route path='/DeleteAccount' element={<DeleteAccount />} />
+                <Route path='/delete-account' element={<DeleteAccount />} />
                 <Route path='/404' element={<NotFound />} />
             </Route>
         </Routes>
