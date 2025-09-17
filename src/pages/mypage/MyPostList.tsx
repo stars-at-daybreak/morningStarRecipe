@@ -63,7 +63,7 @@ function MyPostList() {
         if (activeTab === 'recipe') {
             navigate(`/recipes/${postId}`);
         } else {
-            navigate(`/shares/${postId}`);
+            navigate(`/share/${postId}`);
         }
     };
 
