@@ -12,6 +12,7 @@ import {
 } from 'lexical';
 import { $createImageNode } from '../nodes/ImageNode';
 import { FaAlignLeft, FaAlignCenter, FaAlignRight } from 'react-icons/fa';
+import { useFileUpload } from '../../../hooks/useImageUpload';
 const LowPriority = 1;
 
 const FONT_SIZE_OPTIONS = [
@@ -30,6 +31,7 @@ const ToolbarPlugin: React.FC = () => {
     const [isCode, setIsCode] = useState(false);
     const [fontSize, setFontSize] = useState('16px');
     const [fontColor, setFontColor] = useState('#000000');
+    const { uploadFile, isUploading } = useFileUpload();
 
     const updateToolbar = useCallback(() => {
         const selection = $getSelection();
@@ -53,18 +55,22 @@ const ToolbarPlugin: React.FC = () => {
         );
     }, [editor, updateToolbar]);
 
-    const onImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = () => {
+        const filename = await uploadFile(file);
+        if (filename) {
+            const apiUrl = import.meta.env.VITE_API_BASE_URL;
+            const imageUrl = `${apiUrl}/${filename}`;
+
             editor.update(() => {
-                const node = $createImageNode(reader.result as string);
+                const node = $createImageNode(imageUrl);
                 $insertNodes([node]);
             });
-        };
-        reader.readAsDataURL(file);
+        }
+
+        e.target.value = '';
     };
 
     const handleFormat = (format: 'bold' | 'italic' | 'code' | 'underline' | 'strikethrough') => {
@@ -154,9 +160,15 @@ const ToolbarPlugin: React.FC = () => {
             />
             <div className='divider' />
 
-            <label className='toolbar-item'>
-                📷
-                <input type='file' accept='image/*' onChange={onImageUpload} style={{ display: 'none' }} />
+            <label className={`toolbar-item ${isUploading ? 'uploading' : ''}`}>
+                {isUploading ? '⏳' : '📷'}
+                <input
+                    type='file'
+                    accept='image/*'
+                    onChange={onImageUpload}
+                    style={{ display: 'none' }}
+                    disabled={isUploading}
+                />
             </label>
         </div>
     );
