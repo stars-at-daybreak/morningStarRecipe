@@ -3,6 +3,8 @@ import { createContext, useContext } from 'react';
 export type ModalType =
     | 'LOGOUT'
     | 'LOGIN'
+    | 'DELETE'
+    | 'SUCCESS'
     | 'DELETE_ACCOUNT'
     | 'CONFIRM_DISCARD_POST'
     | 'NOTIFY_ACCOUNT_EXISTS'
@@ -11,6 +13,8 @@ export type ModalType =
 export type ModalDataMap = {
     LOGOUT: undefined;
     LOGIN: undefined;
+    DELETE: undefined;
+    SUCCESS: undefined;
     DELETE_ACCOUNT: undefined;
     CONFIRM_DISCARD_POST: (() => void) | undefined;
     NOTIFY_ACCOUNT_EXISTS: undefined;

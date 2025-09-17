@@ -56,3 +56,21 @@ export default function Modal({ isOpen, type, onClose, onConfirm }: ModalProps) 
         </div>
     );
 }
+
+// 사용법
+/* 
+import { useModal } from '../components/modal/ModalContext';
+
+function MyComponent() {
+    const { openModal, closeModal } = useModal();
+
+    const handleClick = () => {
+        // 모달 열기
+        openModal('LOGIN');
+    };
+
+    return (
+        <button onClick={handleClick}>로그인 모달 열기</button>
+    );
+}
+*/
