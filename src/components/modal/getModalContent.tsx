@@ -1,7 +1,7 @@
 import type { ModalType } from './ModalContext';
 
 // 각 모달 타입별 정보를 정의하는 함수
-const getModalContent = (type: ModalType) => {
+const getModalContent = (type: ModalType, title?: string) => {
     switch (type) {
         case 'LOGOUT':
             return {
@@ -50,13 +50,22 @@ const getModalContent = (type: ModalType) => {
 
         case 'SUCCESS':
             return {
-                title: '등록완료!',
+                title: title,
                 message: '',
                 hasCancel: false,
                 confirmText: '확인',
                 cancelText: '',
             };
-            
+
+        case 'FAIL':
+            return {
+                title: title,
+                message: '',
+                hasCancel: false,
+                confirmText: '확인',
+                cancelText: '',
+            };
+
         case 'NOTIFY_ACCOUNT_EXISTS':
             return {
                 title: '이미 존재하는 계정입니다.',

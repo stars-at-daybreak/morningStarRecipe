@@ -4,6 +4,7 @@ import useUserStore from '../../stores/useUserStore.ts';
 import { useLocation } from 'react-router-dom';
 import { ResponsiveFileUpload } from '../../components/ImgUpload/ImgUpload.tsx';
 import { saveThumbnailImage } from '../../services/supabaseFiles.ts';
+import { useModal } from '../../components/modal/ModalContext.ts';
 
 const RecipeForm = () => {
     const location = useLocation();
@@ -19,12 +20,13 @@ const RecipeForm = () => {
     });
     const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
     const { user } = useUserStore();
+    const { openModal } = useModal();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!user?.id) {
-            alert('로그인이 필요합니다.');
+            openModal('LOGIN');
             return;
         }
 
@@ -43,9 +45,9 @@ const RecipeForm = () => {
                 }
 
                 if (postId) {
-                    alert('레시피 저장을 완료하였습니다.');
+                    openModal('SUCCESS', undefined, '레시피 저장을 완료하였습니다.');
                 } else {
-                    alert('레시피 저장에 실패했습니다.');
+                    openModal('FAIL', undefined, '레시피 저장을 실패했습니다.');
                 }
             } else if (type === 'update' && recipeId) {
                 const isSuccess = await updatePost({ ...recipeData, id: recipeId });
@@ -55,14 +57,14 @@ const RecipeForm = () => {
                 }
 
                 if (isSuccess) {
-                    alert('레시피 수정을 완료하였습니다.');
+                    openModal('SUCCESS', undefined, '레시피 수정을 완료하였습니다.');
                 } else {
-                    alert('레시피 수정에 실패했습니다.');
+                    openModal('FAIL', undefined, '레시피 수정을 실패했습니다.');
                 }
             }
         } catch (error) {
             console.error('레시피 저장 실패:', error);
-            alert('레시피 저장 중 오류가 발생했습니다.');
+            openModal('FAIL', undefined, `레시피 ${type === 'create' ? '저장' : '수정'} 중 오류가 발생했습니다.`);
         }
     };
 

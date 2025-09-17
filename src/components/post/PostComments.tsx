@@ -6,6 +6,8 @@ import styles from './postComments.module.css';
 import PostCommentInput from './PostCommentInput.tsx';
 import LevelBadge from '../LevelBadge/LevelBadge.tsx';
 import noneProfileImg from '../../assets/none-profile.svg';
+import { commentCreatedTime } from '../../utils/utils.ts';
+import { useModal } from '../modal/ModalContext.ts';
 
 const PostComments = ({ postId }: { postId: string }) => {
     const [comments, setComments] = useState<CommentWithUserNickname[] | null>(null);
@@ -13,10 +15,18 @@ const PostComments = ({ postId }: { postId: string }) => {
     const [updatedComment, setUpdatedComment] = useState('');
     const [commentId, setCommentId] = useState<string>('');
     const { user } = useUserStore();
+    const { openModal } = useModal();
 
     const fetchData = async (post_id: string): Promise<void> => {
         const data = await fetchCommentsWithUserNickname(post_id);
-        setComments(data);
+        if (data) {
+            const newComments = data.map(item => ({
+                ...item,
+                created_at: commentCreatedTime(String(item.created_at)),
+            }));
+
+            setComments(newComments);
+        }
     };
 
     const handleOpenUpdateInput = (commentId: string, comment: string) => {
@@ -26,11 +36,11 @@ const PostComments = ({ postId }: { postId: string }) => {
 
     const handleUpdate = async (commentId: string, commentUserId: string) => {
         if (!user?.id) {
-            alert('로그인이 필요합니다.');
+            openModal('LOGIN');
             return;
         }
         if (user.id !== commentUserId) {
-            alert('작성자만 수정이 가능합니다.');
+            openModal('FAIL', undefined, '작성자만 수정이 가능합니다.');
             return;
         }
 
@@ -43,7 +53,7 @@ const PostComments = ({ postId }: { postId: string }) => {
         const isSuccess = await updateComment(commentData);
 
         if (isSuccess) {
-            alert('댓글 저장을 완료하였습니다');
+            openModal('SUCCESS', undefined, '댓글이 수정되었습니다!');
             setUpdatedComment('');
             fetchData(postId);
         }
@@ -51,15 +61,16 @@ const PostComments = ({ postId }: { postId: string }) => {
 
     const handleDelete = async (commentId: string) => {
         if (!user?.id) {
-            alert('로그인이 필요합니다.');
+            openModal('LOGIN');
             return;
         }
 
-        const isSuccess = await deleteComment(commentId, user.id);
-        if (isSuccess) {
-            alert('댓글 삭제를 완료하였습니다');
-            fetchData(postId);
-        }
+        openModal('DELETE', async () => {
+            const isSuccess = await deleteComment(commentId, user.id);
+            if (isSuccess) {
+                fetchData(postId);
+            }
+        });
     };
 
     const handleCommentInput = (comment: string) => {
@@ -104,10 +115,11 @@ const PostComments = ({ postId }: { postId: string }) => {
                                         {comment.user_nickname}
                                     </span>
                                     <LevelBadge level={comment?.current_level || 1} size='small' />
+                                    <time className={styles['comments__time']}>{comment.created_at}</time>
                                 </div>
                                 {user?.id === comment.user_id && (
                                     <div className={styles['comments__item-btn-group']}>
-                                        {updatedComment && commentId ? (
+                                        {updatedComment && commentId === comment.id ? (
                                             <button
                                                 type='button'
                                                 onClick={() => handleUpdate(comment.id, comment.user_id)}

@@ -5,6 +5,7 @@ export type ModalType =
     | 'LOGIN'
     | 'DELETE'
     | 'SUCCESS'
+    | 'FAIL'
     | 'DELETE_ACCOUNT'
     | 'CONFIRM_DISCARD_POST'
     | 'NOTIFY_ACCOUNT_EXISTS'
@@ -13,8 +14,9 @@ export type ModalType =
 export type ModalDataMap = {
     LOGOUT: undefined;
     LOGIN: undefined;
-    DELETE: undefined;
+    DELETE: (() => void) | undefined;
     SUCCESS: undefined;
+    FAIL: undefined;
     DELETE_ACCOUNT: undefined;
     CONFIRM_DISCARD_POST: (() => void) | undefined;
     NOTIFY_ACCOUNT_EXISTS: undefined;
@@ -22,7 +24,7 @@ export type ModalDataMap = {
 };
 
 export interface ModalContextType {
-    openModal: <T extends ModalType>(type: T, data?: ModalDataMap[T]) => void;
+    openModal: <T extends ModalType>(type: T, data?: ModalDataMap[T], title?: string) => void;
     closeModal: () => void;
     openEmailAuth: (email: string, onConfirm: (success: boolean) => void) => void;
 }

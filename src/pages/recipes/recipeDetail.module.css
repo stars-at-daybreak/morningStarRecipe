@@ -196,7 +196,7 @@
 
     time {
         font-weight: 400;
-        margin-right: 1rem;
+        margin: 0 1rem 0 0.4rem;
     }
     .recipe__bookmark__btn {
         img {

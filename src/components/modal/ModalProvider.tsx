@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useUserStore from '../../stores/useUserStore';
 import Modal from './Modal';
 import EmailAuthModal from './EmailAuthModal';
-import { ModalContext} from './ModalContext';
+import { ModalContext } from './ModalContext';
 import type { ModalType, ModalDataMap } from './ModalContext';
 
 const ModalProvider = ({ children }: { children: React.ReactNode }) => {
@@ -13,10 +13,12 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     const [modalState, setModalState] = useState<{
         isOpen: boolean;
         type: ModalType | null;
+        title?: string;
         data: ModalDataMap[ModalType] | undefined;
     }>({
         isOpen: false,
         type: null,
+        title: '',
         data: undefined,
     });
 
@@ -30,8 +32,8 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         onConfirm: null,
     });
 
-    const openModal = <T extends ModalType>(type: T, data?: ModalDataMap[T]) => {
-        setModalState({ isOpen: true, type, data });
+    const openModal = <T extends ModalType>(type: T, data?: ModalDataMap[T], title?: string) => {
+        setModalState({ isOpen: true, type, title, data });
     };
 
     const closeModal = () => {
@@ -58,6 +60,11 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
             case 'DELETE_ACCOUNT':
                 navigate('/DeleteAccount');
                 break;
+            case 'DELETE':
+                if (modalState.data && typeof modalState.data === 'function') {
+                    (modalState.data as () => void)();
+                }
+                break;
             case 'CONFIRM_DISCARD_POST':
                 if (modalState.data && typeof modalState.data === 'function') {
                     (modalState.data as () => void)();
@@ -71,7 +78,13 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         <ModalContext.Provider value={{ openModal, closeModal, openEmailAuth }}>
             {children}
 
-            <Modal isOpen={modalState.isOpen} type={modalState.type} onClose={closeModal} onConfirm={handleConfirm} />
+            <Modal
+                isOpen={modalState.isOpen}
+                type={modalState.type}
+                title={modalState.title}
+                onClose={closeModal}
+                onConfirm={handleConfirm}
+            />
 
             {emailAuthState.isOpen && (
                 <EmailAuthModal

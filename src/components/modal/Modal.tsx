@@ -6,16 +6,17 @@ import { logout } from '../../services/supabaseUsers.ts';
 interface ModalProps {
     isOpen: boolean;
     type: ModalType | null;
+    title?: string;
     onClose: () => void;
     onConfirm?: () => void;
 }
 
-export default function Modal({ isOpen, type, onClose, onConfirm }: ModalProps) {
+export default function Modal({ isOpen, type, title, onClose, onConfirm }: ModalProps) {
     if (!isOpen || !type) {
         return null;
     }
 
-    const modalConfig = getModalContent(type);
+    const modalConfig = getModalContent(type, title);
 
     // 확인 버튼 클릭 처리
     const handleConfirm = async () => {
