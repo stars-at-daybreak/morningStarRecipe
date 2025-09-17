@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { deletePost, fetchPostWithUserNickname } from '../../services/supabasePosts.ts';
 import { useParams, useNavigate } from 'react-router-dom';
-import PostComments from '../../components/PostComments.tsx';
+import PostComments from '../../components/post/PostComments.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
 import type { PostWithUserNickname } from '../../types/posts.type.ts';
 import { handlePostVote, getUserVoteStatus } from '../../services/supabasePostVotes.ts';
@@ -148,7 +148,7 @@ const RecipeDetail = () => {
             <section className={styles['recipe__writer']}>
                 <h2 className='sr-only'>작성자 프로필</h2>
 
-                <div className={styles['profile-img']}>
+                <div className={styles['profile-img-box']}>
                     {writerProfileImage ? (
                         <img
                             src={`${import.meta.env.VITE_API_BASE_URL}/${writerProfileImage.filename}`}
@@ -224,7 +224,10 @@ const RecipeDetail = () => {
                 </div>
             </section>
 
-            <section>{id && <PostComments postId={id} />}</section>
+            <section>
+                <h2 className='sr-only'>댓글</h2>
+                {id && <PostComments postId={id} />}
+            </section>
         </div>
     );
 };
