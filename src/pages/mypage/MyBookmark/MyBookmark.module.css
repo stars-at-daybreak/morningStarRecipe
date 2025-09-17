@@ -1,0 +1,50 @@
+/* 게시물 있을 때 */
+.my-bookmark {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 0 1.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.my-bookmark__post-list {
+    width: 100%;
+    max-width: 73.6rem;
+}
+
+/* 게시물 없을때 */
+.my-bookmark__post-list--empty {
+    display: flex;
+    margin-top: 2rem;
+    flex-direction: column;
+    /* min-height: calc(20vh - 8rem); */
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    /* 게시물 있을 때 */
+    .my-bookmark {
+        margin-top: 3rem;
+    }
+
+    /* 게시물 없을때 */
+    .my-bookmark__post-list--empty {
+        margin-top: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* 게시물 있을 때 */
+    .my-bookmark {
+        margin-top: 4rem;
+        padding: 0 9.6rem;
+    }
+
+    /* 게시물 없을때 */
+    .my-bookmark__post-list--empty {
+        margin-top: 4rem;
+    }
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { updateUser } from '../../services/supabaseUsers.ts';
+import { updateUser } from '../../../services/supabaseUsers.ts';
 import { useNavigate } from 'react-router-dom';
-import useUserStore from '../../stores/useUserStore.ts';
+import useUserStore from '../../../stores/useUserStore.ts';
 
 const ProfileEditForm = () => {
     const { user } = useUserStore();

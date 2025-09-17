@@ -8,7 +8,7 @@ import LevelBadge from '../../components/LevelBadge/LevelBadge';
 import { saveProfileImage, getUserProfileImage } from '../../services/supabaseFiles';
 import styles from './Mypage.module.css';
 
-// API URL을 컴포넌트 외부 상수로 선언 (매번 재생성 방지)
+// API URL을 컴포넌트 외부 상수로 선언
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
 const Mypage = () => {
@@ -24,7 +24,6 @@ const Mypage = () => {
 
     const nickname = user?.user_metadata.nickname;
 
-    // useMemo를 사용하여 config 객체가 최초 렌더링 시 한 번만 생성되도록 최적화
     const pageConfig = useMemo(
         () => ({
             title: '마이페이지',
@@ -35,7 +34,6 @@ const Mypage = () => {
     );
     usePageSetup(pageConfig);
 
-    // 로그인 상태 확인 및 비로그인 시 리디렉션
     useEffect(() => {
         if (!user) {
             openModal('LOGIN');
@@ -43,7 +41,6 @@ const Mypage = () => {
         }
     }, [user, openModal, navigate]);
 
-    // DB에서 프로필 이미지 가져오기 (새로고침 대응)
     useEffect(() => {
         if (!user?.id) return;
 
@@ -59,25 +56,21 @@ const Mypage = () => {
         fetchProfileImage();
     }, [user?.id]);
 
-    // 에러 발생 시 alert 창으로 사용자에게 알림
     useEffect(() => {
         if (error) {
             alert(error);
-            resetError(); // 알림 후 에러 상태 초기화
+            resetError();
         }
     }, [error, resetError]);
 
-    // 표시할 이미지 URL이 변경될 때마다 에러 상태를 초기화
     useEffect(() => {
         setImageHasError(false);
     }, [displayImageUrl]);
 
-    // 이미지 로드 실패 시 실행될 이벤트 핸들러
     const handleImageError = () => {
         setImageHasError(true);
     };
 
-    // 수정 아이콘 클릭 핸들러
     const handleProfileEditClick = () => {
         if (isProcessing || isUploading) return;
         setIsProcessing(true);
@@ -89,14 +82,9 @@ const Mypage = () => {
         fileInputRef.current?.click();
     };
 
-    // 파일 선택 및 업로드 전체 프로세스 핸들러
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (!file) {
-            setIsProcessing(false);
-            return;
-        }
-        if (!user?.id) {
+        if (!file || !user?.id) {
             setIsProcessing(false);
             return;
         }
@@ -106,9 +94,11 @@ const Mypage = () => {
         try {
             const filename = await uploadFile(file);
             if (filename) {
+                // supabaseFiles.ts의 saveProfileImage를 호출합니다.
                 const savedFileId = await saveProfileImage(filename);
                 if (savedFileId) {
-                    setDisplayImageUrl(`${apiUrl}/${filename}`);
+                    // 성공 시 화면에 즉시 반영
+                    setDisplayImageUrl(`${apiUrl}/${filename}?t=${new Date().getTime()}`); // 캐시 방지용 타임스탬프 추가
                 }
             }
         } catch (err) {
@@ -121,7 +111,6 @@ const Mypage = () => {
         }
     };
 
-    // 로그아웃 버튼 클릭 핸들러
     const handleLogoutClick = () => {
         openModal('LOGOUT');
     };
@@ -148,7 +137,6 @@ const Mypage = () => {
                                 <div className={styles.page__profile_img} />
                             )}
                         </div>
-
                         <input
                             ref={fileInputRef}
                             type='file'
@@ -165,21 +153,19 @@ const Mypage = () => {
                             aria-disabled={isProcessing || isUploading}
                         />
                     </div>
-                    <div className={styles.page__profile_nickname}>{nickname}님</div>
-
+                    <div className={styles.page__profile_nickname}>{nickname}</div>
                     <div className={styles.page__badge}>
                         <LevelBadge level={1} size='large' />
                     </div>
                 </div>
-
                 <div className={styles.page__menu}>
-                    <Link to='/mypage/edit' className={styles.page__menu_item}>
+                    <Link to='/mypage/user-edit' className={styles.page__menu_item}>
                         회원정보 수정
                     </Link>
-                    <Link to='/mypage/bookmarks' className={styles.page__menu_item}>
+                    <Link to='/mypage/my-bookmark' className={styles.page__menu_item}>
                         내가 찜한 리스트
                     </Link>
-                    <Link to='/mypage/my-posts' className={styles.page__menu_item}>
+                    <Link to='/mypage/my-postList' className={styles.page__menu_item}>
                         내가 올린 게시물 리스트
                     </Link>
                     <Link to='/guides' className={styles.page__menu_item}>
@@ -193,7 +179,7 @@ const Mypage = () => {
                     </Link>
                     <div className={styles.page__actions}>
                         <button type='button'>
-                            <Link to={'/DeleteAccount'} className={styles.page__action_delete}>
+                            <Link to={'/delete-account'} className={styles.page__action_delete}>
                                 회원탈퇴
                             </Link>
                         </button>
