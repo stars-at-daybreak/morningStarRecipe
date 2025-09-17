@@ -1,4 +1,4 @@
-import { deleteComment, fetchCommentsWithUserNickname } from '../../services/supabaseComments.ts';
+import { deleteComment, fetchCommentsWithUserNickname, updateComment } from '../../services/supabaseComments.ts';
 import { useEffect, useState } from 'react';
 import useUserStore from '../../stores/useUserStore.ts';
 import type { CommentWithUserNickname } from '../../types/comments.type.ts';
@@ -10,7 +10,7 @@ import noneProfileImg from '../../assets/none-profile.svg';
 const PostComments = ({ postId }: { postId: string }) => {
     const [comments, setComments] = useState<CommentWithUserNickname[] | null>(null);
     const [comment, setComment] = useState('');
-    const [type, setType] = useState<'create' | 'update'>('create');
+    const [updatedComment, setUpdatedComment] = useState('');
     const [commentId, setCommentId] = useState<string>('');
     const { user } = useUserStore();
 
@@ -19,10 +19,34 @@ const PostComments = ({ postId }: { postId: string }) => {
         setComments(data);
     };
 
-    const handleUpdate = (commentId: string, comment: string) => {
-        setType('update');
+    const handleOpenUpdateInput = (commentId: string, comment: string) => {
         setCommentId(commentId);
-        setComment(comment);
+        setUpdatedComment(comment);
+    };
+
+    const handleUpdate = async (commentId: string, commentUserId: string) => {
+        if (!user?.id) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
+        if (user.id !== commentUserId) {
+            alert('작성자만 수정이 가능합니다.');
+            return;
+        }
+
+        const commentData = {
+            id: commentId,
+            user_id: user.id,
+            content: updatedComment,
+        };
+
+        const isSuccess = await updateComment(commentData);
+
+        if (isSuccess) {
+            alert('댓글 저장을 완료하였습니다');
+            setUpdatedComment('');
+            fetchData(postId);
+        }
     };
 
     const handleDelete = async (commentId: string) => {
@@ -38,7 +62,7 @@ const PostComments = ({ postId }: { postId: string }) => {
         }
     };
 
-    const handleComment = (comment: string) => {
+    const handleCommentInput = (comment: string) => {
         setComment(comment);
     };
 
@@ -53,11 +77,9 @@ const PostComments = ({ postId }: { postId: string }) => {
             <div>
                 <PostCommentInput
                     postId={postId}
-                    type={type}
                     fetchData={fetchData}
-                    commentId={commentId}
                     comment={comment}
-                    handleComment={handleComment}
+                    handleCommentInput={handleCommentInput}
                     user={user}
                 />
             </div>
@@ -85,17 +107,41 @@ const PostComments = ({ postId }: { postId: string }) => {
                                 </div>
                                 {user?.id === comment.user_id && (
                                     <div className={styles['comments__item-btn-group']}>
-                                        <button type='button' onClick={() => handleUpdate(comment.id, comment.content)}>
-                                            수정
-                                        </button>
-                                        <button type='button' onClick={() => handleDelete(comment.id)}>
-                                            삭제
-                                        </button>
+                                        {updatedComment && commentId ? (
+                                            <button
+                                                type='button'
+                                                onClick={() => handleUpdate(comment.id, comment.user_id)}
+                                            >
+                                                수정완료
+                                            </button>
+                                        ) : (
+                                            <>
+                                                <button
+                                                    className={styles['comments__item-update-btn']}
+                                                    type='button'
+                                                    onClick={() => handleOpenUpdateInput(comment.id, comment.content)}
+                                                >
+                                                    수정
+                                                </button>
+                                                <button type='button' onClick={() => handleDelete(comment.id)}>
+                                                    삭제
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 )}
                             </div>
 
-                            <div className={styles['comments__item-content']}>{comment.content}</div>
+                            {updatedComment && commentId === comment.id ? (
+                                <input
+                                    className={styles['comments__item-content--update']}
+                                    type='text'
+                                    value={updatedComment}
+                                    onChange={e => setUpdatedComment(e.target.value)}
+                                />
+                            ) : (
+                                <div className={styles['comments__item-content']}>{comment.content}</div>
+                            )}
                         </li>
                     ))}
                 </ul>

@@ -1,24 +1,20 @@
 import commentsIcon from '../../assets/comments_icon.svg';
 import React from 'react';
-import { createComment, updateComment } from '../../services/supabaseComments.ts';
+import { createComment } from '../../services/supabaseComments.ts';
 import type { User } from '@supabase/supabase-js';
 import styles from './postCommentInput.module.css';
 
 const PostCommentInput = ({
     postId,
-    type,
     fetchData,
-    commentId,
     comment,
-    handleComment,
+    handleCommentInput,
     user,
 }: {
     postId: string;
-    type: string;
     fetchData: (post_id: string) => Promise<void>;
-    commentId: string;
     comment: string;
-    handleComment: (comment: string) => void;
+    handleCommentInput: (comment: string) => void;
     user: User | null;
 }) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,12 +31,7 @@ const PostCommentInput = ({
             content: comment,
         };
 
-        let isSuccess;
-        if (type === 'update') {
-            isSuccess = await updateComment({ ...commentData, id: commentId });
-        } else {
-            isSuccess = await createComment(commentData);
-        }
+        const isSuccess = await createComment(commentData);
 
         if (isSuccess) {
             alert('댓글 저장을 완료하였습니다');
@@ -58,7 +49,7 @@ const PostCommentInput = ({
                 type='text'
                 id={comment}
                 value={comment}
-                onChange={e => handleComment(e.target.value)}
+                onChange={e => handleCommentInput(e.target.value)}
                 placeholder='댓글을 입력하세요'
             />
             <button className={styles['comments__input-btn']} type='submit'>

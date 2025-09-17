@@ -67,7 +67,7 @@
             font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
             color: var(--color-gray-400);
         }
-        button:first-child:after {
+        .comments__item-update-btn:after {
             content: '|';
             color: var(--color-gray-200);
             padding: 0 1rem;
@@ -78,4 +78,15 @@
 .comments__item-content {
     margin-top: clamp(0.8rem, 0.8rem + (100vw - 390px) * 0.01, 1.4rem);
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
+}
+
+.comments__item-content--update {
+    margin-top: clamp(0.8rem, 0.8rem + (100vw - 390px) * 0.01, 1.4rem);
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
+
+    width: clamp(34rem, 34rem + (100vw - 390px) * 0.6, 69.6rem);
+    min-height: 6rem;
+    border-radius: 10px;
+
+    border: 1px solid var(--gray-300, #c5c5c5);
 }
