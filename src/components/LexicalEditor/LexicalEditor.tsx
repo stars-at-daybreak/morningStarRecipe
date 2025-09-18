@@ -19,7 +19,6 @@ import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ImagePlugin from './plugins/ImagePlugin';
 import ErrorBoundary from './ErrorBoundary';
 import { ImageNode } from './nodes/ImageNode';
-
 import './LexicalEditor.css';
 
 interface LexicalEditorProps {

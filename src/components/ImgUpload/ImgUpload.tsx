@@ -36,7 +36,7 @@ export const ResponsiveFileUpload = ({ onFileUpload, postId }: ResponsiveFileUpl
             <input
                 ref={fileInputRef}
                 type='file'
-                accept='image/*'
+                accept='image/png, image/jpeg, image/jpg'
                 onChange={handleFileSelect}
                 className={styles['image-upload__file-input']}
                 id='image-upload-input'
