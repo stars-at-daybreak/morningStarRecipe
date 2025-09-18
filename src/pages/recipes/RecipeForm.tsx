@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPost, fetchPostWithUserNickname, updatePost } from '../../services/supabasePosts.ts';
 import useUserStore from '../../stores/useUserStore.ts';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,13 +10,16 @@ import { fetchCategories } from '../../services/supabaseCategories.ts';
 import type { Tables } from '../../types/supabase.ts';
 import LexicalEditor from '../../components/LexicalEditor/LexicalEditor.tsx';
 import delbtn from '../../assets/delete_btn_icon.svg';
-import { $getRoot, createEditor } from 'lexical';
-import { $generateNodesFromDOM } from '@lexical/html';
 import styles from './recipeForm.module.css';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
+import { setEditorInitialValue } from '../../utils/lexicalUtils';
 
-const emptyEditorState =
-    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+// 유효성 검사 인터페이스
+interface ValidationErrors {
+    title?: string;
+    ingredients?: string;
+    content?: string;
+}
 
 const RecipeForm = () => {
     const location = useLocation();
@@ -25,13 +28,21 @@ const RecipeForm = () => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const [thumbnailURL, setThumbnailURL] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [errors, setErrors] = useState<ValidationErrors>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // 필드 ref들
+    const titleRef = useRef<HTMLInputElement>(null);
+    const ingredientsRef = useRef<HTMLInputElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+
     const [formData, setFormData] = useState({
         post_type: '' as 'recipe',
         title: '',
-        category_id: '',
-        difficulty: '' as 'top' | 'middle' | 'bottom',
-        cooking_time: 0,
-        servings: 0,
+        category_id: '510d0ed8-281f-4721-bca2-a1be5cecf92b',
+        difficulty: 'top' as 'top' | 'middle' | 'bottom',
+        cooking_time: 10,
+        servings: 1,
         ingredients: '',
         content: '',
     });
@@ -48,6 +59,14 @@ const RecipeForm = () => {
         showBackButton: true,
     });
 
+    // 입력값 변경 시 해당 필드의 에러 제거
+    const handleInputChange = (field: keyof ValidationErrors, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: undefined }));
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -56,41 +75,60 @@ const RecipeForm = () => {
             return;
         }
 
-        const recipeData = {
-            ...formData,
-            post_type: 'recipe' as const,
-            user_id: user.id,
-        };
+        // 유효성 검사 실행
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+
+        // 에러가 있으면 제출 중단
+        if (Object.keys(validationErrors).length > 0) {
+            // 첫 번째 에러 필드에 포커스
+            const firstErrorField = Object.keys(validationErrors)[0] as keyof ValidationErrors;
+
+            if (firstErrorField === 'title' && titleRef.current) {
+                titleRef.current.focus();
+                titleRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (firstErrorField === 'ingredients' && ingredientsRef.current) {
+                ingredientsRef.current.focus();
+                ingredientsRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (firstErrorField === 'content' && contentRef.current) {
+                contentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // LexicalEditor의 경우 포커스는 에디터 내부에서 처리
+            }
+            return;
+        }
+
+        setIsSubmitting(true);
 
         try {
+            const recipeData = {
+                ...formData,
+                post_type: 'recipe' as const,
+                user_id: user.id,
+            };
+
+            let isSuccess;
             if (type === 'create') {
-                const postId = await createPost(recipeData);
-
-                if (postId && thumbnailURL) {
-                    await saveThumbnailImage(thumbnailURL, postId);
-                }
-
-                if (postId) {
-                    openModal('SUCCESS', undefined, '레시피 저장을 완료하였습니다.');
-                } else {
-                    openModal('FAIL', undefined, '레시피 저장을 실패했습니다.');
-                }
+                isSuccess = await createPost(recipeData);
             } else if (type === 'update' && recipeId) {
-                const isSuccess = await updatePost({ ...recipeData, id: recipeId });
+                isSuccess = await updatePost({ ...recipeData, id: recipeId });
+            }
 
-                if (isSuccess && thumbnailURL) {
+            if (isSuccess) {
+                if (type === 'update' && recipeId) {
                     await saveThumbnailImage(thumbnailURL, recipeId);
+                    openModal('SUCCESS', '/recipes/' + recipeId, '레시피 수정을 완료하였습니다.');
+                } else if (type === 'create') {
+                    await saveThumbnailImage(thumbnailURL, isSuccess.toString());
+                    openModal('SUCCESS', '/recipes/' + isSuccess.toString(), '레시피 작성을 완료하였습니다.');
                 }
-
-                if (isSuccess) {
-                    openModal('SUCCESS', undefined, '레시피 수정을 완료하였습니다.');
-                } else {
-                    openModal('FAIL', undefined, '레시피 수정을 실패했습니다.');
-                }
+            } else {
+                openModal('FAIL', undefined, '레시피 작성을 실패했습니다.');
             }
         } catch (error) {
-            console.error('레시피 저장 실패:', error);
-            openModal('FAIL', undefined, `레시피 ${type === 'create' ? '저장' : '수정'} 중 오류가 발생했습니다.`);
+            console.error('Submit error:', error);
+            openModal('FAIL', undefined, '레시피 작성 중 오류가 발생했습니다.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -101,70 +139,57 @@ const RecipeForm = () => {
         }
     }, []);
 
-    const getValidatedContent = useCallback((content: string | null): string => {
-        if (!content) {
-            return emptyEditorState;
+    // 유효성 검사 함수
+    const validateForm = (): ValidationErrors => {
+        const newErrors: ValidationErrors = {};
+
+        // 제목 검사 (필수, 최소 2자)
+        if (!formData.title.trim()) {
+            newErrors.title = '제목을 입력해주세요.';
+        } else if (formData.title.trim().length < 2) {
+            newErrors.title = '제목은 최소 2자 이상 입력해주세요.';
+        } else if (formData.title.trim().length > 100) {
+            newErrors.title = '제목은 최대 100자까지 입력 가능합니다.';
         }
 
-        try {
-            const parsed = JSON.parse(content);
-            if (parsed && typeof parsed === 'object' && 'root' in parsed) {
-                return content;
-            } else {
-                throw new Error('Invalid Lexical JSON structure.');
-            }
-        } catch (error) {
+        // 재료 검사 (필수, 최소 2자)
+        if (!formData.ingredients.trim()) {
+            newErrors.ingredients = '재료를 입력해주세요.';
+        } else if (formData.ingredients.trim().length < 2) {
+            newErrors.ingredients = '재료는 최소 2자 이상 입력해주세요.';
+        }
+
+        // 내용 검사 (필수, 빈 에디터 상태가 아닌지 확인)
+        if (!formData.content.trim()) {
+            newErrors.content = '레시피 설명을 입력해주세요.';
+        } else {
             try {
-                // 💡 올바른 Lexical API를 사용하는 로직
-                const editor = createEditor(); // 임시 에디터 인스턴스 생성
-                editor.update(() => {
-                    const root = $getRoot(); // 💡 Lexical의 루트 노드를 가져옵니다.
-                    const parser = new DOMParser();
-                    const dom = parser.parseFromString(content, 'text/html');
-                    const nodes = $generateNodesFromDOM(editor, dom);
+                const parsed = JSON.parse(formData.content);
+                // 빈 에디터 상태인지 확인
+                if (parsed.root && parsed.root.children) {
+                    const hasContent = parsed.root.children.some((child: any) => {
+                        if (child.children && child.children.length > 0) {
+                            return child.children.some(
+                                (textNode: any) => textNode.text && textNode.text.trim().length > 0
+                            );
+                        }
+                        return false;
+                    });
 
-                    root.clear(); // 💡 Lexical 노드의 clear() 메서드 사용
-                    nodes.forEach(node => root.append(node)); // 💡 Lexical 노드의 append() 메서드 사용
-                });
-
-                const parsedEditorState = editor.getEditorState();
-                console.error(error);
-                return JSON.stringify(parsedEditorState.toJSON());
-            } catch (error) {
-                const textContent = content.replace(/<[^>]*>/g, '').trim();
-                const newLexicalState = {
-                    root: {
-                        children: [
-                            {
-                                children: [
-                                    {
-                                        detail: 0,
-                                        format: 0,
-                                        mode: 'normal',
-                                        text: textContent,
-                                        type: 'text',
-                                        version: 1,
-                                    },
-                                ],
-                                direction: 'ltr',
-                                format: '',
-                                indent: 0,
-                                type: 'paragraph',
-                                version: 1,
-                            },
-                        ],
-                        direction: 'ltr',
-                        format: '',
-                        indent: 0,
-                        type: 'root',
-                        version: 1,
-                    },
-                };
-                console.error(error);
-                return JSON.stringify(newLexicalState);
+                    if (!hasContent) {
+                        newErrors.content = '레시피 설명을 입력해주세요.';
+                    }
+                }
+            } catch {
+                // JSON이 아닌 일반 텍스트인 경우
+                if (formData.content.trim().length < 5) {
+                    newErrors.content = '레시피 설명을 최소 5자 이상 입력해주세요.';
+                }
             }
         }
-    }, []);
+
+        return newErrors;
+    };
 
     useEffect(() => {
         getCategories();
@@ -188,7 +213,8 @@ const RecipeForm = () => {
                 ]);
 
                 if (detail) {
-                    const parsedContent = getValidatedContent(detail.content);
+                    const safeContent = setEditorInitialValue(detail.content);
+
                     setFormData({
                         post_type: 'recipe' as const,
                         category_id: detail.category_id || '',
@@ -197,8 +223,9 @@ const RecipeForm = () => {
                         ingredients: detail.ingredients || '',
                         servings: detail.servings || 0,
                         title: detail.title || '',
-                        content: parsedContent,
+                        content: safeContent,
                     });
+
                     if (thumbnail?.file_type === 'thumbnail') {
                         setThumbnailURL(thumbnail.filename);
                     }
@@ -211,22 +238,26 @@ const RecipeForm = () => {
         };
 
         fetchData();
-    }, [type, recipeId, navigate, getValidatedContent]);
+    }, [type, recipeId, navigate]);
 
     return (
         <div className={styles.container}>
-            <form className={styles.recipeForm} onSubmit={handleSubmit}>
+            <form className={styles.recipeForm} onSubmit={handleSubmit} noValidate>
                 <div>
                     <label className={styles.recipeForm__title} htmlFor='title'>
-                        제목:
+                        제목 : <span className={styles.required}></span>
                     </label>
                     <input
-                        className={styles.recipeForm__title_input}
+                        ref={titleRef}
+                        className={`${styles.recipeForm__title_input} ${errors.title ? styles.error : ''}`}
                         type='text'
                         id='title'
                         value={formData.title}
-                        onChange={e => setFormData({ ...formData, title: e.target.value })}
+                        onChange={e => handleInputChange('title', e.target.value)}
+                        placeholder='제목을 입력하세요'
+                        maxLength={100}
                     />
+                    {errors.title && <div className={styles.error_message}>{errors.title}</div>}
                 </div>
 
                 <div className={styles.recipe_select_section}>
@@ -305,36 +336,44 @@ const RecipeForm = () => {
 
                 <div>
                     <label htmlFor='ingredients' className={styles.ingredients__title}>
-                        재료 :
+                        재료 : <span className={styles.required}></span>
                     </label>
                     <input
-                        className={styles.recipeForm__ingredients}
+                        ref={ingredientsRef}
+                        className={`${styles.recipeForm__ingredients} ${errors.ingredients ? styles.error : ''}`}
                         type='text'
                         id='ingredients'
                         value={formData.ingredients}
-                        onChange={e => setFormData({ ...formData, ingredients: e.target.value })}
+                        onChange={e => handleInputChange('ingredients', e.target.value)}
+                        maxLength={50}
                     />
+                    {errors.ingredients && <div className={styles.error_message}>{errors.ingredients}</div>}
                 </div>
 
                 <div className={styles.content_section}>
-                    <label className={styles.content_label}>레시피설명 :</label>
-                    <div className={styles.editor_wrapper}>
+                    <label className={styles.content_label}>
+                        레시피설명 : <span className={styles.required}></span>
+                    </label>
+                    <div ref={contentRef} className={`${styles.editor_wrapper} ${errors.content ? styles.error : ''}`}>
                         {isLoading ? (
-                            <div className={styles.loadingMessage}></div>
+                            <div className={styles.loadingMessage}>로딩 중...</div>
                         ) : (
                             <LexicalEditor
                                 placeholder='게시글 내용을 입력하세요...'
                                 className='post-editor'
                                 initialValue={formData.content}
-                                onChange={editorState => setFormData({ ...formData, content: editorState })}
+                                onChange={editorState => {
+                                    handleInputChange('content', editorState);
+                                }}
                             />
                         )}
                     </div>
+                    {errors.content && <div className={styles.error_message}>{errors.content}</div>}
                 </div>
 
                 <div className={styles.thumbnail_container}>
-                    <label htmlFor='share_thumbnail' className={styles.recipe_thumbnail_label}>
-                        <strong>썸네일 등록</strong>(최대 1장)
+                    <label htmlFor='recipe_thumbnail' className={styles.recipe_thumbnail_label}>
+                        <strong>썸네일 등록</strong>(선택사항, 최대 1장)
                     </label>
                     <div className={styles.thumbnail_wrapper}>
                         <ResponsiveFileUpload postId={recipeId} onFileUpload={handleFileUpload} />
@@ -357,8 +396,8 @@ const RecipeForm = () => {
                     </div>
                 </div>
 
-                <button type='submit' className={styles.recipeForm__submit}>
-                    {type !== 'update' ? '작성' : '수정'} 완료
+                <button type='submit' className={styles.recipeForm__submit} disabled={isSubmitting}>
+                    {isSubmitting ? '처리 중...' : (type !== 'update' ? '작성' : '수정') + ' 완료'}
                 </button>
             </form>
         </div>

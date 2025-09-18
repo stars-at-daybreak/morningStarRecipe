@@ -138,6 +138,12 @@
     border-radius: 50rem;
     margin-top: 3rem;
 }
+.error_message {
+    color: #e74c3c;
+    font-size: 1.4rem;
+    margin: 1rem 0.2rem 0;
+}
+
 @media screen and (min-width: 768px) {
     .recipeForm {
         margin: 5rem auto;
@@ -313,5 +319,9 @@
         padding: 2.2rem 1.6rem;
         border-radius: 80rem;
         margin-top: 6rem;
+    }
+    .error_message {
+        font-size: 2rem;
+        margin: 1.4rem 0.8rem 0;
     }
 }
