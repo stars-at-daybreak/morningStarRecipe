@@ -15,7 +15,7 @@ import LexicalEditor from '../../components/LexicalEditor/LexicalEditor';
 import '../../components/LexicalEditor/LexicalEditor.css';
 import { createEditor, $getRoot } from 'lexical'; // 💡 $getRoot 임포트 추가
 import { $generateNodesFromDOM } from '@lexical/html';
-
+import { useModal } from '../../components/modal/ModalContext.ts';
 // 비어있는 Lexical Editor 상태를 나타내는 유효한 JSON 문자열
 const emptyEditorState =
     '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
@@ -23,6 +23,7 @@ const emptyEditorState =
 const ShareForm = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { openModal } = useModal();
     const { type, shareId } = location.state || { type: 'create' };
 
     const [formData, setFormData] = useState({
@@ -50,8 +51,6 @@ const ShareForm = () => {
                 throw new Error('Invalid Lexical JSON structure.');
             }
         } catch (e) {
-            console.error('Content is not a valid Lexical JSON state. Attempting HTML conversion.', e);
-
             try {
                 // 💡 올바른 Lexical API를 사용하는 로직
                 const editor = createEditor(); // 임시 에디터 인스턴스 생성
@@ -68,7 +67,6 @@ const ShareForm = () => {
                 parsedEditorState = editor.getEditorState();
                 return JSON.stringify(parsedEditorState.toJSON());
             } catch (htmlError) {
-                console.error('HTML conversion failed. Falling back to plain text.', htmlError);
                 const textContent = content.replace(/<[^>]*>/g, '').trim();
                 const newLexicalState = {
                     root: {
@@ -135,7 +133,6 @@ const ShareForm = () => {
                 }
             } catch (error) {
                 console.error('Failed to load data:', error);
-                alert('데이터를 불러오는데 실패했습니다.');
             } finally {
                 setIsLoading(false);
             }
@@ -147,7 +144,7 @@ const ShareForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!user?.id) {
-            alert('로그인이 필요합니다.');
+            openModal('LOGIN');
             return;
         }
 
@@ -165,12 +162,15 @@ const ShareForm = () => {
         }
 
         if (isSuccess) {
-            alert('게시글 저장을 완료하였습니다.');
             if (type === 'update' && shareId) {
                 await saveThumbnailImage(thumbnailURL, shareId);
+                openModal('SUCCESS', '/share/' + shareId, '나눔글 수정을 완료하였습니다.');
             } else if (type === 'create') {
                 await saveThumbnailImage(thumbnailURL, isSuccess.toString());
+                openModal('SUCCESS', '/share/' + isSuccess.toString(), '나눔글 작성을 완료하였습니다.');
             }
+        } else {
+            openModal('FAIL', undefined, '나눔글 수정을 실패했습니다.');
         }
     };
 

@@ -57,6 +57,10 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
                 clearUser();
                 navigate('/');
                 break;
+            case 'SUCCESS':
+                const data = modalState.data;
+                if (data && typeof data === 'string') navigate(data);
+                break;
             case 'DELETE_ACCOUNT':
                 navigate('/DeleteAccount');
                 break;
