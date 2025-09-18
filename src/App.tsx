@@ -10,8 +10,8 @@ import Mypage from './pages/mypage/Mypage.tsx';
 import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
-import Privacy from './pages/Privacy.tsx';
-import Terms from './pages/Terms.tsx';
+import Privacy from './pages/mypage/Privacy.tsx';
+import Terms from './pages/mypage/Terms.tsx';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './pages/recipes/RecipeForm.tsx';
 import RecipeDetail from './pages/recipes/RecipeDetail.tsx';
@@ -62,11 +62,11 @@ const AppRoutes = () => {
                 <Route path='/mypage/user-edit' element={!user ? <Login /> : <ProfileEditForm />} />
                 <Route path='/mypage/my-bookmark' element={<MyBookmark />} />
                 <Route path='/mypage/my-postList' element={<MyPostList />} />
+                <Route path='/mypage/privacy' element={<Privacy />} />
+                <Route path='/mypage/terms' element={<Terms />} />
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
-                <Route path='/privacy' element={<Privacy />} />
-                <Route path='/Terms' element={<Terms />} />
                 <Route path='/share' element={<Share />} />
                 <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
