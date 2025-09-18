@@ -164,7 +164,7 @@ const ToolbarPlugin: React.FC = () => {
                 {isUploading ? '⏳' : '📷'}
                 <input
                     type='file'
-                    accept='image/*'
+                    accept='image/png, image/jpeg, image/jpg'
                     onChange={onImageUpload}
                     style={{ display: 'none' }}
                     disabled={isUploading}

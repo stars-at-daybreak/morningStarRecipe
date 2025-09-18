@@ -1,0 +1,86 @@
+/* LexicalRenderer.module.css */
+
+.lexical-renderer {
+    max-width: 68.6rem;
+    border-radius: 0;
+    padding: 0;
+    text-align: start;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: normal;
+    color: var(--color-black);
+    margin: 0;
+}
+
+/* 정렬 클래스 */
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+/* 컨텐츠 요소 스타일 */
+.content-paragraph {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.content-list {
+    margin: 16px 0;
+    padding-left: 20px;
+}
+
+.content-list-item {
+    margin-bottom: 8px;
+}
+
+.content-link {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.content-link:hover {
+    text-decoration: underline;
+}
+
+.content-image {
+    max-width: 100%;
+    height: auto;
+    margin: 8px 0;
+    border-radius: 4px;
+    display: block;
+}
+
+/* 이미지 정렬 */
+.content-image.text-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.content-image.text-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.content-image.text-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+.plain-text {
+    line-height: 1.5;
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+}
+
+.plain-text span {
+    word-break: break-word; /* 긴 단어 줄바꿈 */
+}
