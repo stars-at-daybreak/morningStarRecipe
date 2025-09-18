@@ -184,6 +184,15 @@
     .editor_wrapper {
         margin-top: 1.3rem;
     }
+    .recipeForm__ingredients {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+        margin-top: 1.6rem;
+        border: 0.15rem solid var(--color-gray-300);
+        height: 5.8rem;
+        border-radius: 1.3rem;
+        padding: 2rem 2.5rem;
+    }
     /* 썸네일 */
     .thumbnail_container {
         margin-top: 4.5rem;
@@ -260,6 +269,15 @@
     }
     .editor_wrapper {
         margin-top: 1.6rem;
+    }
+    .recipeForm__ingredients {
+        font-size: 2.2rem;
+        line-height: 2.2rem;
+        margin-top: 1.6rem;
+        border: 0.15rem solid var(--color-gray-300);
+        height: 7.2rem;
+        border-radius: 1.6rem;
+        padding: 2.5rem 3rem;
     }
     /* 썸네일 */
     .thumbnail_container {
