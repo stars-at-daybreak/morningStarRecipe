@@ -15,7 +15,7 @@ export type ModalDataMap = {
     LOGOUT: undefined;
     LOGIN: undefined;
     DELETE: (() => void) | undefined;
-    SUCCESS: undefined;
+    SUCCESS: string | undefined;
     FAIL: undefined;
     DELETE_ACCOUNT: undefined;
     CONFIRM_DISCARD_POST: (() => void) | undefined;

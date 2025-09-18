@@ -84,6 +84,7 @@
     .RecentItem .fallbackImage {
         width: 3.9rem;
         height: 3.9rem;
+        border-radius: 0;
     }
 }
 
@@ -117,5 +118,6 @@
     .RecentItem .fallbackImage {
         width: 5.2rem;
         height: 5.2rem;
+        border-radius: 0;
     }
 }

@@ -1,7 +1,7 @@
 /* Lexical Editor Styles */
 .lexical-editor {
-    border: 1px solid #e1e5e9;
-    border-radius: 8px;
+    border: 0.1rem solid var(--color-gray-300);
+    border-radius: 1rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: white;
     overflow: hidden;
@@ -15,9 +15,9 @@
 .toolbar {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 8px 12px;
-    border-bottom: 1px solid #e1e5e9;
+    gap: 0.4rem;
+    padding: 0.8rem 1.2rem;
+    border-bottom: 0.1rem solid var(--color-gray-300);
     background: #f8f9fa;
     flex-wrap: wrap;
 }
@@ -26,15 +26,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 32px;
-    height: 32px;
-    padding: 4px 8px;
-    border: 1px solid transparent;
-    border-radius: 4px;
+    min-width: 3.2rem;
+    height: 3.2rem;
+    padding: 0.4rem 0.8rem;
+    border: 0.1rem solid transparent;
+    border-radius: 0.4rem;
     background: transparent;
     color: #374151;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 500;
     transition: all 0.2s ease;
 }
@@ -61,33 +61,33 @@
 }
 
 .toolbar-select {
-    padding: 6px 8px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
+    padding: 0.6rem 0.8rem;
+    border: 0.1rem solid var(--color-gray-300);
+    border-radius: 0.4rem;
     background: white;
-    font-size: 14px;
+    font-size: 1.4rem;
     cursor: pointer;
 }
 
 .divider {
-    width: 1px;
-    height: 24px;
+    width: 0.1rem;
+    height: 2.4rem;
     background: #d1d5db;
-    margin: 0 4px;
+    margin: 0 0.4rem;
 }
 
 /* Editor Inner Container */
 .editor-inner {
     position: relative;
-    min-height: 200px;
+    min-height: 20rem;
 }
 
 /* Content Editable */
 .editor-input {
-    min-height: 200px;
-    padding: 16px;
+    min-height: 20rem;
+    padding: 1.6rem;
     outline: none;
-    font-size: 16px;
+    font-size: 1.6rem;
     line-height: 1.6;
     color: #374151;
     resize: none;
@@ -101,12 +101,13 @@
 /* Placeholder */
 .editor-placeholder {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 1.6rem;
+    left: 1.6rem;
     color: #9ca3af;
-    font-size: 16px;
+    font-size: 1.6rem;
     pointer-events: none;
     user-select: none;
+    margin: 0.8rem 0;
 }
 
 /* Text Formatting */
@@ -132,82 +133,82 @@
 
 .editor-text-code {
     background: #f3f4f6;
-    border: 1px solid #e5e7eb;
-    border-radius: 4px;
-    padding: 2px 4px;
+    border: 0.1rem solid var(--color-gray-300);
+    border-radius: 0.4rem;
+    padding: 0.2rem 0.4rem;
     font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
+    font-size: 1.4rem;
 }
 
 /* Headings */
 .editor-heading-h1 {
-    font-size: 32px;
+    font-size: 3.2rem;
     font-weight: 700;
     line-height: 1.2;
-    margin: 24px 0 16px;
+    margin: 2.4rem 0 1.6rem;
     color: #111827;
 }
 
 .editor-heading-h2 {
-    font-size: 24px;
+    font-size: 2.4rem;
     font-weight: 600;
     line-height: 1.3;
-    margin: 20px 0 12px;
+    margin: 2rem 0 1.2rem;
     color: #111827;
 }
 
 .editor-heading-h3 {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 600;
     line-height: 1.4;
-    margin: 16px 0 8px;
+    margin: 1.6rem 0 0.8rem;
     color: #374151;
 }
 
 .editor-heading-h4 {
-    font-size: 18px;
+    font-size: 1.8rem;
     font-weight: 600;
     line-height: 1.4;
-    margin: 12px 0 6px;
+    margin: 1.2rem 0 0.6rem;
     color: #374151;
 }
 
 .editor-heading-h5 {
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 600;
     line-height: 1.5;
-    margin: 8px 0 4px;
+    margin: 0.8rem 0 0.4rem;
     color: #374151;
 }
 
 /* Paragraph */
 .editor-paragraph {
-    margin: 8px 0;
-    line-height: 1.6;
+    margin: 0.8rem 0;
+    line-height: 1.6rem;
 }
 
 /* Quote */
 .editor-quote {
-    margin: 16px 0;
-    padding-left: 16px;
-    border-left: 4px solid #e5e7eb;
+    margin: 1.6rem 0;
+    padding-left: 1.6rem;
+    border-left: 0.4rem solid #e5e7eb;
     font-style: italic;
     color: #6b7280;
 }
 
 /* Lists */
 .editor-list-ol {
-    padding-left: 24px;
-    margin: 8px 0;
+    padding-left: 2.4rem;
+    margin: 0.8rem 0;
 }
 
 .editor-list-ul {
-    padding-left: 24px;
-    margin: 8px 0;
+    padding-left: 2.4rem;
+    margin: 0.8rem 0;
 }
 
 .editor-listitem {
-    margin: 4px 0;
+    margin: 0.4rem 0;
 }
 
 .editor-nested-listitem {
@@ -243,89 +244,56 @@
     background: #1f2937;
     color: #f9fafb;
     font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
+    font-size: 1.4rem;
     line-height: 1.5;
-    padding: 16px;
-    border-radius: 8px;
-    margin: 16px 0;
+    padding: 1.6rem;
+    border-radius: 0.8rem;
+    margin: 1.6rem 0;
     overflow-x: auto;
     white-space: pre;
-}
-
-/* Code Highlighting */
-.editor-tokenComment {
-    color: #6b7280;
-}
-
-.editor-tokenPunctuation {
-    color: #d1d5db;
-}
-
-.editor-tokenProperty {
-    color: #f59e0b;
-}
-
-.editor-tokenSelector {
-    color: #10b981;
-}
-
-.editor-tokenOperator {
-    color: #f59e0b;
-}
-
-.editor-tokenAttr {
-    color: #3b82f6;
-}
-
-.editor-tokenVariable {
-    color: #8b5cf6;
-}
-
-.editor-tokenFunction {
-    color: #ef4444;
 }
 
 /* Image Styles */
 .editor-image {
     display: block;
-    margin: 16px auto;
+    margin: 1.6rem auto;
     max-width: 100%;
 }
 
 .image-wrapper {
     position: relative;
     display: inline-block;
-    margin: 16px 0;
+    margin: 1.6rem 0;
 }
 
 .image-wrapper.focused {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline: 0.2rem solid #3b82f6;
+    outline-offset: 0.2rem;
+    border-radius: 0.4rem;
 }
 
 .image {
     display: block;
     max-width: 100%;
     height: auto;
-    border-radius: 4px;
+    border-radius: 0.4rem;
 }
 
 .image-controls {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 0.8rem;
+    right: 0.8rem;
     display: flex;
-    gap: 4px;
+    gap: 0.4rem;
 }
 
 .image-delete-button {
     background: #ef4444;
     color: white;
     border: none;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 12px;
+    border-radius: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: background 0.2s ease;
 }
@@ -338,24 +306,38 @@
 @media (max-width: 768px) {
     .toolbar {
         flex-wrap: wrap;
-        gap: 2px;
-        padding: 6px 8px;
+        gap: 0.2rem;
+        padding: 0.6rem 0.8rem;
     }
 
     .toolbar-item {
-        min-width: 28px;
-        height: 28px;
-        font-size: 12px;
+        min-width: 2.8rem;
+        height: 2.8rem;
+        font-size: 1.2rem;
     }
 
     .editor-input {
-        padding: 12px;
-        font-size: 14px;
+        padding: 1.2rem;
+        font-size: 1.4rem;
     }
 
     .editor-placeholder {
-        top: 12px;
-        left: 12px;
-        font-size: 14px;
+        top: 1.2rem;
+        left: 1.2rem;
+        font-size: 1.4rem;
+    }
+}
+@media screen and (min-width: 768px) {
+    .lexical-editor {
+        border-radius: 1.3rem;
+        border: 0.15rem solid var(--color-gray-300);
+    }
+    .toolbar {
+        border-bottom: 0.15rem solid var(--color-gray-300);
+    }
+}
+@media screen and (min-width: 1024px) {
+    .lexical-editor {
+        border-radius: 1.6rem;
     }
 }

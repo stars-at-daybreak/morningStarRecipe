@@ -127,7 +127,7 @@ const Share = ({ query }: { query?: string }) => {
                                 aria-label='새 나눔글 작성하기'
                             >
                                 <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
-                                나눔글 작성하기
+                                나눔 하기
                             </NavLink>
                         ) : (
                             <button
@@ -140,7 +140,7 @@ const Share = ({ query }: { query?: string }) => {
                                 aria-label='로그인 후 나눔글 작성하기'
                             >
                                 <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
-                                나눔글 작성하기
+                                나눔 하기
                             </button>
                         )}
                     </div>
