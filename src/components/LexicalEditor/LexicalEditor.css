@@ -1,6 +1,6 @@
 /* Lexical Editor Styles */
 .lexical-editor {
-    border: 0.1rem solid #e1e5e9;
+    border: 0.1rem solid var(--color-gray-300);
     border-radius: 1rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: white;
@@ -17,7 +17,7 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.8rem 1.2rem;
-    border-bottom: 0.1rem solid #e1e5e9;
+    border-bottom: 0.1rem solid var(--color-gray-300);
     background: #f8f9fa;
     flex-wrap: wrap;
 }
@@ -62,7 +62,7 @@
 
 .toolbar-select {
     padding: 0.6rem 0.8rem;
-    border: 0.1rem solid #d1d5db;
+    border: 0.1rem solid var(--color-gray-300);
     border-radius: 0.4rem;
     background: white;
     font-size: 1.4rem;
@@ -133,7 +133,7 @@
 
 .editor-text-code {
     background: #f3f4f6;
-    border: 0.1rem solid #e5e7eb;
+    border: 0.1rem solid var(--color-gray-300);
     border-radius: 0.4rem;
     padding: 0.2rem 0.4rem;
     font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
@@ -253,39 +253,6 @@
     white-space: pre;
 }
 
-/* Code Highlighting */
-.editor-tokenComment {
-    color: #6b7280;
-}
-
-.editor-tokenPunctuation {
-    color: #d1d5db;
-}
-
-.editor-tokenProperty {
-    color: #f59e0b;
-}
-
-.editor-tokenSelector {
-    color: #10b981;
-}
-
-.editor-tokenOperator {
-    color: #f59e0b;
-}
-
-.editor-tokenAttr {
-    color: #3b82f6;
-}
-
-.editor-tokenVariable {
-    color: #8b5cf6;
-}
-
-.editor-tokenFunction {
-    color: #ef4444;
-}
-
 /* Image Styles */
 .editor-image {
     display: block;
@@ -363,5 +330,14 @@
 @media screen and (min-width: 768px) {
     .lexical-editor {
         border-radius: 1.3rem;
+        border: 0.15rem solid var(--color-gray-300);
+    }
+    .toolbar {
+        border-bottom: 0.15rem solid var(--color-gray-300);
+    }
+}
+@media screen and (min-width: 1024px) {
+    .lexical-editor {
+        border-radius: 1.6rem;
     }
 }

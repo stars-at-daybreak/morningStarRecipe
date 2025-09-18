@@ -12,7 +12,8 @@
     line-height: 1.6rem;
     position: relative;
     outline: none;
-    color: var(--color-gray-600);
+    color: var(--color-gray);
+    border: 0.1rem solid var(--color-white);
 }
 .customSelect__button::after {
     content: '';
@@ -54,7 +55,7 @@
     cursor: pointer;
     border: none;
     text-align: left;
-    color: var(--color-gray-600);
+    color: var(--color-gray);
     font-size: 1.2rem;
 }
 
@@ -68,6 +69,7 @@
         border-radius: 1.3rem;
         font-size: 1.5rem;
         line-height: 1.5rem;
+        border: 0.15rem solid var(--color-white);
     }
     .customSelect__button:focus {
         border: 0.15rem solid var(--color-green);
@@ -89,11 +91,8 @@
         font-size: 1.8rem;
         line-height: 1.8rem;
     }
-    .customSelect__button:focus {
-        border: 0.2rem solid var(--color-green);
-    }
+
     .customSelect__dropdown {
-        border: 0.2rem solid var(--color-green);
         padding: 2rem;
         gap: 1.2rem;
     }
