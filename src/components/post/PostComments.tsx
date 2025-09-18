@@ -16,6 +16,7 @@ const PostComments = ({ postId }: { postId: string }) => {
     const [commentId, setCommentId] = useState<string>('');
     const { user } = useUserStore();
     const { openModal } = useModal();
+    const COMMENT_MAX_LENGTH = 300;
 
     const fetchData = async (post_id: string): Promise<void> => {
         const data = await fetchCommentsWithUserNickname(post_id);
@@ -49,7 +50,15 @@ const PostComments = ({ postId }: { postId: string }) => {
     };
 
     const handleCommentInput = (comment: string) => {
-        setComment(comment);
+        if (comment.length <= COMMENT_MAX_LENGTH) {
+            setComment(comment);
+        }
+    };
+
+    const handleUpdatedCommentInput = (comment: string) => {
+        if (comment.length <= COMMENT_MAX_LENGTH) {
+            setUpdatedComment(comment);
+        }
     };
 
     useEffect(() => {
@@ -67,6 +76,7 @@ const PostComments = ({ postId }: { postId: string }) => {
                     comment={comment}
                     handleCommentInput={handleCommentInput}
                     user={user}
+                    COMMENT_MAX_LENGTH={COMMENT_MAX_LENGTH}
                 />
             </div>
             <div className={styles['comments__list-box']}>
@@ -119,7 +129,7 @@ const PostComments = ({ postId }: { postId: string }) => {
                                     postId={postId}
                                     fetchData={fetchData}
                                     comment={updatedComment}
-                                    handleCommentInput={setUpdatedComment}
+                                    handleCommentInput={handleUpdatedCommentInput}
                                     user={user}
                                     type='update'
                                     commentId={comment.id}
@@ -127,6 +137,7 @@ const PostComments = ({ postId }: { postId: string }) => {
                                         setUpdatedComment('');
                                         setCommentId('');
                                     }}
+                                    COMMENT_MAX_LENGTH={COMMENT_MAX_LENGTH}
                                 />
                             ) : (
                                 <div className={styles['comments__item-content']}>{comment.content}</div>

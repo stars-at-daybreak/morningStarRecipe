@@ -14,6 +14,7 @@ const PostCommentTextarea = ({
     type = 'create',
     commentId,
     onCancel,
+    COMMENT_MAX_LENGTH,
 }: {
     postId: string;
     fetchData: (post_id: string) => Promise<void>;
@@ -23,6 +24,7 @@ const PostCommentTextarea = ({
     type?: 'create' | 'update';
     commentId?: string;
     onCancel?: () => void;
+    COMMENT_MAX_LENGTH: number;
 }) => {
     const { openModal } = useModal();
 
@@ -80,7 +82,9 @@ const PostCommentTextarea = ({
                 placeholder='댓글을 입력하세요'
             />
             <div className={styles['comments__text-bottom']}>
-                <span className={styles['comments__text-count']}>{comment.length}/300</span>
+                <span className={styles['comments__text-count']}>
+                    {comment.length}/{COMMENT_MAX_LENGTH}
+                </span>
                 <div className={styles['comments__text-btn-group']}>
                     {type === 'update' && onCancel && (
                         <button type='button' onClick={onCancel} className={styles['comments__text-cancel-btn']}>

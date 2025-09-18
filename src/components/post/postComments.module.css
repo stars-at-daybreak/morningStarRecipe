@@ -10,7 +10,7 @@
     margin-top: clamp(3rem, 3rem + (100vw - 390px) * 0.02, 4rem);
     display: flex;
     justify-content: center;
-    padding: 1rem;
+    padding: 0 clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.5rem);
 
     .comments__list {
         width: 100%;
