@@ -1,4 +1,5 @@
-import commentsIcon from '../../assets/comments_icon2.svg';
+import commentsSaveIcon from '../../assets/comments_save_icon.svg';
+import commentsUpdateIcon from '../../assets/comments_update_icon.svg';
 import React from 'react';
 import { createComment, updateComment } from '../../services/supabaseComments.ts';
 import type { User } from '@supabase/supabase-js';
@@ -93,9 +94,9 @@ const PostCommentTextarea = ({
                     )}
                     <button className={styles['comments__text-btn']} type='submit'>
                         {type === 'create' ? (
-                            <img src={commentsIcon} alt='댓글 작성' />
+                            <img src={commentsSaveIcon} alt='댓글 작성' />
                         ) : (
-                            <img src={commentsIcon} alt='댓글 수정' />
+                            <img src={commentsUpdateIcon} alt='댓글 수정' />
                         )}
                     </button>
                 </div>
