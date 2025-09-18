@@ -1,26 +1,52 @@
-import React, { useState } from 'react';
-import { createPost, updatePost } from '../../services/supabasePosts.ts';
+import React, { useCallback, useEffect, useState } from 'react';
+import { createPost, fetchPostWithUserNickname, updatePost } from '../../services/supabasePosts.ts';
 import useUserStore from '../../stores/useUserStore.ts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ResponsiveFileUpload } from '../../components/ImgUpload/ImgUpload.tsx';
-import { saveThumbnailImage } from '../../services/supabaseFiles.ts';
+import { getPostThumbnails, saveThumbnailImage } from '../../services/supabaseFiles.ts';
 import { useModal } from '../../components/modal/ModalContext.ts';
+import CustomSelect from '../../components/SelectBox/SelectBox.tsx';
+import { fetchCategories } from '../../services/supabaseCategories.ts';
+import type { Tables } from '../../types/supabase.ts';
+import LexicalEditor from '../../components/LexicalEditor/LexicalEditor.tsx';
+import delbtn from '../../assets/delete_btn_icon.svg';
+import { $getRoot, createEditor } from 'lexical';
+import { $generateNodesFromDOM } from '@lexical/html';
+import styles from './recipeForm.module.css';
+import { usePageSetup } from '../../hooks/usePageSetup.tsx';
+
+const emptyEditorState =
+    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
 
 const RecipeForm = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { type, recipeId } = location.state || { type: 'create' };
+    const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
+    const [thumbnailURL, setThumbnailURL] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const [formData, setFormData] = useState({
+        post_type: '' as 'recipe',
         title: '',
-        category_id: '7ddc5ac7-0105-4d9d-be47-46f3ea5f95ba',
-        difficulty: 'middle' as 'top' | 'middle' | 'bottom',
-        cooking_time: 10,
-        servings: 1,
+        category_id: '',
+        difficulty: '' as 'top' | 'middle' | 'bottom',
+        cooking_time: 0,
+        servings: 0,
         ingredients: '',
         content: '',
     });
-    const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
+    const getCategories = async () => {
+        const data = await fetchCategories();
+        setCategories(data);
+    };
     const { user } = useUserStore();
     const { openModal } = useModal();
+
+    usePageSetup({
+        title: '레시피 작성',
+        pageName: type === 'create' ? 'recipeWrite' : 'recipeUpdate',
+        showBackButton: true,
+    });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -40,8 +66,8 @@ const RecipeForm = () => {
             if (type === 'create') {
                 const postId = await createPost(recipeData);
 
-                if (postId && uploadedFilename) {
-                    await saveThumbnailImage(uploadedFilename, postId);
+                if (postId && thumbnailURL) {
+                    await saveThumbnailImage(thumbnailURL, postId);
                 }
 
                 if (postId) {
@@ -52,8 +78,8 @@ const RecipeForm = () => {
             } else if (type === 'update' && recipeId) {
                 const isSuccess = await updatePost({ ...recipeData, id: recipeId });
 
-                if (isSuccess && uploadedFilename) {
-                    await saveThumbnailImage(uploadedFilename, recipeId);
+                if (isSuccess && thumbnailURL) {
+                    await saveThumbnailImage(thumbnailURL, recipeId);
                 }
 
                 if (isSuccess) {
@@ -68,93 +94,272 @@ const RecipeForm = () => {
         }
     };
 
-    const handleFileUpload = (filename: string | null) => {
-        setUploadedFilename(filename);
-    };
+    const handleFileUpload = useCallback((filename: string | null) => {
+        if (filename) {
+            const newThumbnailURL = `${filename}`;
+            setThumbnailURL(newThumbnailURL);
+        }
+    }, []);
+
+    const getValidatedContent = useCallback((content: string | null): string => {
+        if (!content) {
+            return emptyEditorState;
+        }
+
+        try {
+            const parsed = JSON.parse(content);
+            if (parsed && typeof parsed === 'object' && 'root' in parsed) {
+                return content;
+            } else {
+                throw new Error('Invalid Lexical JSON structure.');
+            }
+        } catch (error) {
+            try {
+                // 💡 올바른 Lexical API를 사용하는 로직
+                const editor = createEditor(); // 임시 에디터 인스턴스 생성
+                editor.update(() => {
+                    const root = $getRoot(); // 💡 Lexical의 루트 노드를 가져옵니다.
+                    const parser = new DOMParser();
+                    const dom = parser.parseFromString(content, 'text/html');
+                    const nodes = $generateNodesFromDOM(editor, dom);
+
+                    root.clear(); // 💡 Lexical 노드의 clear() 메서드 사용
+                    nodes.forEach(node => root.append(node)); // 💡 Lexical 노드의 append() 메서드 사용
+                });
+
+                const parsedEditorState = editor.getEditorState();
+                console.error(error);
+                return JSON.stringify(parsedEditorState.toJSON());
+            } catch (error) {
+                const textContent = content.replace(/<[^>]*>/g, '').trim();
+                const newLexicalState = {
+                    root: {
+                        children: [
+                            {
+                                children: [
+                                    {
+                                        detail: 0,
+                                        format: 0,
+                                        mode: 'normal',
+                                        text: textContent,
+                                        type: 'text',
+                                        version: 1,
+                                    },
+                                ],
+                                direction: 'ltr',
+                                format: '',
+                                indent: 0,
+                                type: 'paragraph',
+                                version: 1,
+                            },
+                        ],
+                        direction: 'ltr',
+                        format: '',
+                        indent: 0,
+                        type: 'root',
+                        version: 1,
+                    },
+                };
+                console.error(error);
+                return JSON.stringify(newLexicalState);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        getCategories();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (type === 'create') {
+                setIsLoading(false);
+                return;
+            }
+            if (!recipeId) {
+                navigate('/');
+                return;
+            }
+
+            try {
+                const [detail, thumbnail] = await Promise.all([
+                    fetchPostWithUserNickname(recipeId),
+                    getPostThumbnails(recipeId),
+                ]);
+
+                if (detail) {
+                    const parsedContent = getValidatedContent(detail.content);
+                    setFormData({
+                        post_type: 'recipe' as const,
+                        category_id: detail.category_id || '',
+                        cooking_time: detail.cooking_time || 0,
+                        difficulty: detail.difficulty || 'middle',
+                        ingredients: detail.ingredients || '',
+                        servings: detail.servings || 0,
+                        title: detail.title || '',
+                        content: parsedContent,
+                    });
+                    if (thumbnail?.file_type === 'thumbnail') {
+                        setThumbnailURL(thumbnail.filename);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [type, recipeId, navigate, getValidatedContent]);
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
+        <div className={styles.container}>
+            <form className={styles.recipeForm} onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor='title'>제목:</label>
+                    <label className={styles.recipeForm__title} htmlFor='title'>
+                        제목:
+                    </label>
                     <input
+                        className={styles.recipeForm__title_input}
                         type='text'
                         id='title'
                         value={formData.title}
                         onChange={e => setFormData({ ...formData, title: e.target.value })}
                     />
                 </div>
-                <div>
-                    <label htmlFor='category'>카테고리:</label>
-                    <select
-                        name='category'
-                        id='category'
-                        value={formData.category_id}
-                        onChange={e => setFormData({ ...formData, category_id: e.target.value })}
-                    >
-                        <option value='7ddc5ac7-0105-4d9d-be47-46f3ea5f95ba'>한식</option>
-                    </select>
 
-                    <label htmlFor='difficulty'>난이도:</label>
-                    <select
-                        name='difficulty'
-                        id='difficulty'
-                        value={formData.difficulty}
-                        onChange={e =>
-                            setFormData({ ...formData, difficulty: e.target.value as 'top' | 'middle' | 'bottom' })
-                        }
-                    >
-                        <option value='top'>상</option>
-                        <option value='middle'>중</option>
-                        <option value='bottom'>하</option>
-                    </select>
-
-                    <label htmlFor='cooking_time'>요리시간:</label>
-                    <select
-                        name='cooking_time'
-                        id='cooking_time'
-                        value={formData.cooking_time}
-                        onChange={e => setFormData({ ...formData, cooking_time: Number(e.target.value) })}
-                    >
-                        <option value='10'>10분</option>
-                        <option value='20'>20분</option>
-                        <option value='30'>30분</option>
-                    </select>
-
-                    <label htmlFor='servings'>인원:</label>
-                    <select
-                        name='servings'
-                        id='servings'
-                        value={formData.servings}
-                        onChange={e => setFormData({ ...formData, servings: Number(e.target.value) })}
-                    >
-                        <option value='1'>1인분</option>
-                        <option value='2'>2인분</option>
-                        <option value='3'>3인분</option>
-                    </select>
+                <div className={styles.recipe_select_section}>
+                    <ul>
+                        <li className={styles.recipe_select_group}>
+                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                카테고리 :
+                            </label>
+                            <div className={styles.recipe_select_input}>
+                                <CustomSelect
+                                    value={formData.category_id}
+                                    onChange={e => setFormData({ ...formData, category_id: e.target.value })}
+                                    options={categories.map(category => ({ value: category.id, label: category.name }))}
+                                />
+                            </div>
+                        </li>
+                        <li className={styles.recipe_select_group}>
+                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                난이도 :
+                            </label>
+                            <div className={styles.recipe_select_input}>
+                                <CustomSelect
+                                    value={formData.difficulty}
+                                    onChange={e =>
+                                        setFormData({
+                                            ...formData,
+                                            difficulty: e.target.value as 'top' | 'middle' | 'bottom',
+                                        })
+                                    }
+                                    options={[
+                                        { value: 'top', label: '상' },
+                                        { value: 'middle', label: '중' },
+                                        { value: 'bottom', label: '하' },
+                                    ]}
+                                />
+                            </div>
+                        </li>
+                        <li className={styles.recipe_select_group}>
+                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                요리시간 :
+                            </label>
+                            <div className={styles.recipe_select_input}>
+                                <CustomSelect
+                                    value={String(formData.cooking_time)}
+                                    onChange={e => setFormData({ ...formData, cooking_time: Number(e.target.value) })}
+                                    options={[
+                                        { value: '10', label: '10분' },
+                                        { value: '20', label: '20분' },
+                                        { value: '30', label: '30분' },
+                                        { value: '40', label: '40분' },
+                                        { value: '50', label: '50분' },
+                                        { value: '60', label: '60분' },
+                                    ]}
+                                />
+                            </div>
+                        </li>
+                        <li className={styles.recipe_select_group}>
+                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                인원 :
+                            </label>
+                            <div className={styles.recipe_select_input}>
+                                <CustomSelect
+                                    value={String(formData.servings)}
+                                    onChange={e => setFormData({ ...formData, servings: Number(e.target.value) })}
+                                    options={[
+                                        { value: '1', label: '1인분' },
+                                        { value: '2', label: '2인분' },
+                                        { value: '3', label: '3인분' },
+                                        { value: '4', label: '4인분' },
+                                    ]}
+                                />
+                            </div>
+                        </li>
+                    </ul>
                 </div>
 
                 <div>
-                    <label htmlFor='ingredients'>재료</label>
+                    <label htmlFor='ingredients' className={styles.ingredients__title}>
+                        재료 :
+                    </label>
                     <input
+                        className={styles.recipeForm__ingredients}
                         type='text'
                         id='ingredients'
                         value={formData.ingredients}
                         onChange={e => setFormData({ ...formData, ingredients: e.target.value })}
                     />
                 </div>
-                <div>
-                    <textarea
-                        name='content'
-                        id='content'
-                        value={formData.content}
-                        onChange={e => setFormData({ ...formData, content: e.target.value })}
-                    ></textarea>
+
+                <div className={styles.content_section}>
+                    <label className={styles.content_label}>레시피설명 :</label>
+                    <div className={styles.editor_wrapper}>
+                        {isLoading ? (
+                            <div className={styles.loadingMessage}></div>
+                        ) : (
+                            <LexicalEditor
+                                placeholder='게시글 내용을 입력하세요...'
+                                className='post-editor'
+                                initialValue={formData.content}
+                                onChange={editorState => setFormData({ ...formData, content: editorState })}
+                            />
+                        )}
+                    </div>
                 </div>
 
-                <ResponsiveFileUpload onFileUpload={handleFileUpload} />
+                <div className={styles.thumbnail_container}>
+                    <label htmlFor='share_thumbnail' className={styles.recipe_thumbnail_label}>
+                        <strong>썸네일 등록</strong>(최대 1장)
+                    </label>
+                    <div className={styles.thumbnail_wrapper}>
+                        <ResponsiveFileUpload postId={recipeId} onFileUpload={handleFileUpload} />
+                        {thumbnailURL && (
+                            <div className={styles.thumbnail_preview}>
+                                <button
+                                    type='button'
+                                    onClick={() => setThumbnailURL('')}
+                                    className={styles.thumbnail_delete_button}
+                                >
+                                    <img src={delbtn} alt='삭제 버튼' className={styles.thumbnail_delete_img} />
+                                </button>
+                                <img
+                                    src={import.meta.env.VITE_API_BASE_URL + '/' + thumbnailURL}
+                                    alt='썸네일'
+                                    className={styles.thumbnail_img}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
 
-                <button type='submit'>작성 완료</button>
+                <button type='submit' className={styles.recipeForm__submit}>
+                    {type !== 'update' ? '작성' : '수정'} 완료
+                </button>
             </form>
         </div>
     );
