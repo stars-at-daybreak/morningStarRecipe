@@ -19,7 +19,7 @@ import Share from './pages/share/Share.tsx';
 import ShareForm from './pages/share/ShareForm.tsx';
 import { ShareDetail } from './pages/share/ShareDetail.tsx';
 import PasswordFind from './components/PasswordFind.tsx';
-import DeleteAccount from './pages/DeleteAccount.tsx';
+import DeleteAccount from './pages/mypage/DeleteAccount.tsx';
 import NotFound from './pages/404/404.tsx';
 import './App.css';
 import MyBookmark from './pages/mypage/MyBookmark.tsx';
@@ -64,13 +64,13 @@ const AppRoutes = () => {
                 <Route path='/mypage/my-postList' element={<MyPostList />} />
                 <Route path='/mypage/privacy' element={<Privacy />} />
                 <Route path='/mypage/terms' element={<Terms />} />
+                <Route path='/mypage/delete-account' element={<DeleteAccount />} />
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
                 <Route path='/share' element={<Share />} />
                 <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
-                <Route path='/delete-account' element={<DeleteAccount />} />
                 <Route path='/404' element={<NotFound />} />
             </Route>
         </Routes>

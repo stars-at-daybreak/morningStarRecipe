@@ -182,7 +182,7 @@ const Mypage = () => {
                     </Link>
                     <div className={styles.page__actions}>
                         <button type='button'>
-                            <Link to={'/delete-account'} className={styles.page__action_delete}>
+                            <Link to={'/mypage/delete-account'} className={styles.page__action_delete}>
                                 회원탈퇴
                             </Link>
                         </button>

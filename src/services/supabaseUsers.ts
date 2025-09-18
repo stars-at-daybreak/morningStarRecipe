@@ -150,7 +150,7 @@ export const withdraw = async () => {
         }
 
         await supabase.auth.signOut();
-        alert('회원 탈퇴가 완료되었습니다.');
+        // alert('회원 탈퇴가 완료되었습니다.');
     } catch (error) {
         console.error('회원 탈퇴 실패:', error);
         alert('회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.');
