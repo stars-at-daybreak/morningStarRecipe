@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import useUserStore from '../../stores/useUserStore.ts';
 import type { CommentWithUserNickname } from '../../types/comments.type.ts';
 import styles from './postComments.module.css';
-import PostCommentInput from './PostCommentInput.tsx';
+import PostCommentTextarea from './PostCommentTextarea.tsx';
 import LevelBadge from '../LevelBadge/LevelBadge.tsx';
 import noneProfileImg from '../../assets/none-profile.svg';
 import { commentCreatedTime } from '../../utils/utils.ts';
@@ -34,31 +34,6 @@ const PostComments = ({ postId }: { postId: string }) => {
         setUpdatedComment(comment);
     };
 
-    const handleUpdate = async (commentId: string, commentUserId: string) => {
-        if (!user?.id) {
-            openModal('LOGIN');
-            return;
-        }
-        if (user.id !== commentUserId) {
-            openModal('FAIL', undefined, '작성자만 수정이 가능합니다.');
-            return;
-        }
-
-        const commentData = {
-            id: commentId,
-            user_id: user.id,
-            content: updatedComment,
-        };
-
-        const isSuccess = await updateComment(commentData);
-
-        if (isSuccess) {
-            openModal('SUCCESS', undefined, '댓글이 수정되었습니다!');
-            setUpdatedComment('');
-            fetchData(postId);
-        }
-    };
-
     const handleDelete = async (commentId: string) => {
         if (!user?.id) {
             openModal('LOGIN');
@@ -86,7 +61,7 @@ const PostComments = ({ postId }: { postId: string }) => {
     return (
         <div className={styles['comments']}>
             <div>
-                <PostCommentInput
+                <PostCommentTextarea
                     postId={postId}
                     fetchData={fetchData}
                     comment={comment}
@@ -120,12 +95,7 @@ const PostComments = ({ postId }: { postId: string }) => {
                                 {user?.id === comment.user_id && (
                                     <div className={styles['comments__item-btn-group']}>
                                         {updatedComment && commentId === comment.id ? (
-                                            <button
-                                                type='button'
-                                                onClick={() => handleUpdate(comment.id, comment.user_id)}
-                                            >
-                                                수정완료
-                                            </button>
+                                            <></>
                                         ) : (
                                             <>
                                                 <button
@@ -145,10 +115,18 @@ const PostComments = ({ postId }: { postId: string }) => {
                             </div>
 
                             {updatedComment && commentId === comment.id ? (
-                                <textarea
-                                    className={styles['comments__item-content--update']}
-                                    value={updatedComment}
-                                    onChange={e => setUpdatedComment(e.target.value)}
+                                <PostCommentTextarea
+                                    postId={postId}
+                                    fetchData={fetchData}
+                                    comment={updatedComment}
+                                    handleCommentInput={setUpdatedComment}
+                                    user={user}
+                                    type='update'
+                                    commentId={comment.id}
+                                    onCancel={() => {
+                                        setUpdatedComment('');
+                                        setCommentId('');
+                                    }}
                                 />
                             ) : (
                                 <div className={styles['comments__item-content']}>{comment.content}</div>

@@ -208,3 +208,8 @@
         }
     }
 }
+
+.recipe__comments-box {
+    max-width: 73.6rem;
+    width: 100%;
+}
