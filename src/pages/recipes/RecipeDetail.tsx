@@ -218,7 +218,7 @@ const RecipeDetail = () => {
                 </div>
             </section>
 
-            <section>
+            <section className={styles['recipe__comments-box']}>
                 <h2 className='sr-only'>댓글</h2>
                 {id && <PostComments postId={id} />}
             </section>

@@ -145,6 +145,10 @@
         font-weight: 400;
         color: var(--color-black);
         line-height: clamp(1.8rem, 1.8rem + (100vw - 390px) * 0.03, 3rem);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        resize: vertical;
+        white-space: pre-wrap;
     }
 }
 
@@ -203,4 +207,9 @@
             width: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.03, 3.2rem);
         }
     }
+}
+
+.recipe__comments-box {
+    max-width: 73.6rem;
+    width: 100%;
 }
