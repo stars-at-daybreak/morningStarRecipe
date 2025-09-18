@@ -213,58 +213,62 @@ const SignUp = () => {
             </div>
 
             <form className={styles['signup__form']} onSubmit={signUpHandler}>
-                <fieldset className={styles['signup__email-box']}>
-                    <legend className='sr-only'>이메일 인증</legend>
+                <div className={styles['signup__validation-group']}>
+                    <fieldset className={styles['signup__email-box']}>
+                        <legend className='sr-only'>이메일 인증</legend>
 
-                    <InputText
-                        label='이메일'
-                        id='email'
-                        name='email'
-                        state={formData.email}
-                        type='email'
-                        handleInput={handleInput}
-                        placeholder='이메일 주소를 입력해주세요.'
-                        isRequired={true}
-                        isDisabled={isAuthConfirm}
-                        className={isAuthConfirm ? 'input__label--active' : ''}
-                    />
-                    <EmailAuthButton
-                        handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
-                        isConfirm={isAuthConfirm}
-                        email={formData.email}
-                    />
-                </fieldset>
-
-                <fieldset className={styles['signup__nickname-box']}>
-                    <legend className='sr-only'>닉네임 중복확인</legend>
-                    <div className={styles['signup__nickname-contents']}>
                         <InputText
-                            label='닉네임'
-                            id='nickname'
-                            name='nickname'
-                            state={formData.options.nickname}
-                            type='text'
+                            label='이메일'
+                            id='email'
+                            name='email'
+                            state={formData.email}
+                            type='email'
                             handleInput={handleInput}
-                            placeholder='닉네임을 입력해주세요.'
+                            placeholder='이메일 주소를 입력해주세요.'
                             isRequired={true}
-                            className={isValidatedState.nickname ? 'input__label--active' : ''}
+                            isDisabled={isAuthConfirm}
+                            className={isAuthConfirm ? 'input__label--active' : ''}
                         />
-                        <NicknameButton
-                            nickname={formData.options.nickname}
-                            handleDuplicate={isDuplicated => {
-                                if (!isDuplicated) {
-                                    setPassedNickname(formData.options.nickname);
-                                }
+                        <EmailAuthButton
+                            handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
+                            isConfirm={isAuthConfirm}
+                            email={formData.email}
+                        />
+                    </fieldset>
 
-                                return setIsValidatedState(prev => ({ ...prev, nickname: !isDuplicated }));
-                            }}
+                    <fieldset className={styles['signup__nickname-box']}>
+                        <legend className='sr-only'>닉네임 중복확인</legend>
+                        <div className={styles['signup__nickname-contents']}>
+                            <InputText
+                                label='닉네임'
+                                id='nickname'
+                                name='nickname'
+                                state={formData.options.nickname}
+                                type='text'
+                                handleInput={handleInput}
+                                placeholder='닉네임을 입력해주세요.'
+                                isRequired={true}
+                                className={isValidatedState.nickname ? 'input__label--active' : ''}
+                            />
+                            <NicknameButton
+                                nickname={formData.options.nickname}
+                                handleDuplicate={isDuplicated => {
+                                    if (!isDuplicated) {
+                                        setPassedNickname(formData.options.nickname);
+                                    }
+
+                                    return setIsValidatedState(prev => ({ ...prev, nickname: !isDuplicated }));
+                                }}
+                            />
+                        </div>
+                        <ValidationText
+                            isPassed={isValidatedState.nickname}
+                            text={
+                                isValidatedState.nickname ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.'
+                            }
                         />
-                    </div>
-                    <ValidationText
-                        isPassed={isValidatedState.nickname}
-                        text={isValidatedState.nickname ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.'}
-                    />
-                </fieldset>
+                    </fieldset>
+                </div>
 
                 <fieldset className={styles['signup__password-group']}>
                     <legend className='sr-only'>비밀번호 입력 및 확인</legend>

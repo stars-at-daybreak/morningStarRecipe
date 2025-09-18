@@ -16,6 +16,7 @@
 }
 
 .input__field {
+    width: 100%;
     flex: 1;
     border: none;
     border-bottom: 0.1rem solid var(--color-gray-300);

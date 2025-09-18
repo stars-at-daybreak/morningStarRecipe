@@ -20,6 +20,7 @@
     color: var(--color-black);
     outline: none;
     overflow: hidden;
+    resize: none;
 }
 .comments__text::placeholder {
     color: var(--color-gray-300);
