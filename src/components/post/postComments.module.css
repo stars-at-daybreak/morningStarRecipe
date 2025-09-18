@@ -58,6 +58,7 @@
         font-weight: 700;
         font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 2.2rem);
         margin-right: 0.6rem;
+        white-space: nowrap;
     }
     .comments__time {
         font-weight: 400;
