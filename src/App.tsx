@@ -10,8 +10,8 @@ import Mypage from './pages/mypage/Mypage.tsx';
 import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
-import Privacy from './pages/Privacy.tsx';
-import Terms from './pages/Terms.tsx';
+import Privacy from './pages/mypage/Privacy.tsx';
+import Terms from './pages/mypage/Terms.tsx';
 import Recipes from './pages/recipes/Recipes.tsx';
 import RecipeForm from './pages/recipes/RecipeForm.tsx';
 import RecipeDetail from './pages/recipes/RecipeDetail.tsx';
@@ -19,7 +19,7 @@ import Share from './pages/share/Share.tsx';
 import ShareForm from './pages/share/ShareForm.tsx';
 import { ShareDetail } from './pages/share/ShareDetail.tsx';
 import PasswordFind from './components/PasswordFind.tsx';
-import DeleteAccount from './pages/DeleteAccount.tsx';
+import DeleteAccount from './pages/mypage/DeleteAccount.tsx';
 import NotFound from './pages/404/404.tsx';
 import './App.css';
 import MyBookmark from './pages/mypage/MyBookmark.tsx';
@@ -62,15 +62,15 @@ const AppRoutes = () => {
                 <Route path='/mypage/user-edit' element={!user ? <Login /> : <ProfileEditForm />} />
                 <Route path='/mypage/my-bookmark' element={<MyBookmark />} />
                 <Route path='/mypage/my-postList' element={<MyPostList />} />
+                <Route path='/mypage/privacy' element={<Privacy />} />
+                <Route path='/mypage/terms' element={<Terms />} />
+                <Route path='/mypage/delete-account' element={<DeleteAccount />} />
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={<RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
-                <Route path='/privacy' element={<Privacy />} />
-                <Route path='/Terms' element={<Terms />} />
                 <Route path='/share' element={<Share />} />
                 <Route path='/share/form' element={<ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
-                <Route path='/delete-account' element={<DeleteAccount />} />
                 <Route path='/404' element={<NotFound />} />
             </Route>
         </Routes>

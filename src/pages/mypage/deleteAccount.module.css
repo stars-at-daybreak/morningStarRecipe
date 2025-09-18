@@ -1,0 +1,60 @@
+.delete-account {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: clamp(5rem, 5rem + (100vw - 390px) * 0.08, 10rem);
+}
+
+.delete-account__content {
+    width: 100%;
+    max-width: 73.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 3.5rem;
+    gap: clamp(5rem, 5rem + (100vw - 390px) * 0.08, 10rem);
+}
+
+/* 로고 */
+.delete-account__logo_wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.05, 2.4rem);
+}
+.delete-account__description {
+    font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
+    line-height: 135%;
+    text-align: center;
+    color: var(--color-gray-400);
+}
+.delete-account__description strong {
+    font-weight: bold;
+}
+
+.delete-account__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: clamp(3rem, 3rem + (100vw - 390px) * 0.05, 6rem);
+}
+
+.delete-account__form input {
+    width: 100%;
+}
+
+.delete-account__form_email {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}

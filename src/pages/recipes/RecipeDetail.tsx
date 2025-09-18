@@ -25,6 +25,7 @@ import {
 } from '../../services/supabasePostBookmark.ts';
 import { useModal } from '../../components/modal/ModalContext.ts';
 import { formatDateToString } from '../../utils/utils.ts';
+import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -36,6 +37,12 @@ const RecipeDetail = () => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const { user } = useUserStore();
     const { openModal } = useModal();
+
+    usePageSetup({
+        title: '모두의 레시피',
+        pageName: 'recipeDetail',
+        showBackButton: true,
+    });
 
     const fetchData = async (id: string): Promise<void> => {
         const detail = await fetchPostWithUserNickname(id);
@@ -218,7 +225,7 @@ const RecipeDetail = () => {
                 </div>
             </section>
 
-            <section>
+            <section className={styles['recipe__comments-box']}>
                 <h2 className='sr-only'>댓글</h2>
                 {id && <PostComments postId={id} />}
             </section>

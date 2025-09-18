@@ -3,17 +3,26 @@
     flex-direction: column;
     align-items: center;
     margin-top: 5rem;
+    width: 100%;
+    padding: 0 1.6rem;
 }
 
 .signup__form {
     width: 100%;
     max-width: 73.6rem;
     margin-top: 5rem;
-    padding: 0 3.5rem;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.signup__validation-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 .signup__nickname-box {
@@ -28,11 +37,12 @@
     align-items: flex-end;
 }
 
-.signup__email-box button {
-    min-width: 9.7rem;
-    width: clamp(8.7rem, 8.7rem + (100vw - 390px) * 0.1, 14.9rem);
-    height: clamp(3.6rem, 3.6rem + (100vw - 390px) * 0.05, 6.2rem);
-
+.signup__email-box button,
+.signup__nickname-box button {
+    width: 8.7rem;
+    height: 3.6rem;
+    /* padding: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 2rem) 0; */
+    min-width: auto;
     margin-left: 1rem;
     border: 1px solid var(--color-green);
     border-radius: 50rem;
@@ -41,6 +51,8 @@
     font-weight: 500;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.01, 2.2rem);
     line-height: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.01, 2.2rem);
+    white-space: nowrap;
+    transition: all 0.1s ease-in-out;
 }
 
 .signup__password-group,
@@ -159,23 +171,30 @@
     margin-top: 3rem;
 }
 
+@media (min-width: 768px) {
+    .signup__email-box button,
+    .signup__nickname-box button {
+        width: 9rem;
+        height: 4.8rem;
+    }
+}
 @media (min-width: 1024px) {
     .signup {
-        margin-top: 10rem;
+        margin-top: 11.7rem;
     }
     .signup__form {
         margin-top: 10rem;
         padding: 0;
     }
+
     .signup__email-box button,
     .signup__nickname-box button {
-        width: 14.9rem;
+        width: 15rem;
         height: 6.2rem;
-
-        margin-left: 2.1rem;
-
+        /* margin-left: 2.1rem;
+    
         font-size: 2.2rem;
-        line-height: 2.2rem;
+        line-height: 2.2rem; */
     }
 
     .signup__password-group,

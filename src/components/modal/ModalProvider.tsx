@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../../stores/useUserStore';
+import { withdraw } from '../../services/supabaseUsers';
 import Modal from './Modal';
 import EmailAuthModal from './EmailAuthModal';
 import { ModalContext } from './ModalContext';
@@ -48,7 +49,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         setEmailAuthState({ isOpen: false, email: '', onConfirm: null });
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         switch (modalState.type) {
             case 'LOGIN':
                 navigate('/login');
@@ -57,12 +58,23 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
                 clearUser();
                 navigate('/');
                 break;
-            case 'SUCCESS':
+            case 'SUCCESS': {
                 const data = modalState.data;
                 if (data && typeof data === 'string') navigate(data);
                 break;
+            }
             case 'DELETE_ACCOUNT':
-                navigate('/DeleteAccount');
+                try {
+                    await withdraw();
+                    clearUser();
+                    // SUCCESS 모달로 회원탈퇴 완료 메시지 표시
+                    openModal('SUCCESS', '/', '회원탈퇴가 완료되었습니다.');
+                    return; // closeModal()을 호출하지 않음
+                } catch (error) {
+                    console.error('회원탈퇴 처리 중 오류:', error);
+                    // openModal('FAIL', undefined, '회원탈퇴 처리 중 오류가 발생했습니다.');
+                    return;
+                }
                 break;
             case 'DELETE':
                 if (modalState.data && typeof modalState.data === 'function') {
