@@ -15,6 +15,7 @@
 /* 모달창 - 모바일 기본값 */
 .modal {
     width: 26.4rem;
+    /* padding: 0 clamp(5rem, 5rem + (100vw - 390px) * 0.1, 7.7rem); */
     background-color: white;
     border-radius: 2rem;
 }
@@ -80,7 +81,7 @@
 /* 태블릿 버전 (1024px 이상) */
 @media (min-width: 1024px) {
     .modal {
-        width: 42.2rem;
+        width: 43rem;
         border-radius: 3.2rem;
     }
 
