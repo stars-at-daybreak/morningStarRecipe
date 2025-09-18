@@ -242,7 +242,7 @@ const RecipeForm = () => {
 
     return (
         <div className={styles.container}>
-            <form className={styles.recipeForm} onSubmit={handleSubmit} noValidate>
+            <form className={styles.recipeForm} onSubmit={handleSubmit}>
                 <div>
                     <label className={styles.recipeForm__title} htmlFor='title'>
                         제목 : <span className={styles.required}></span>
