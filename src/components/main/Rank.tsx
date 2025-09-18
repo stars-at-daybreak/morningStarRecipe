@@ -180,10 +180,10 @@ const RankingItem: React.FC<RankingItemProps> = React.memo(({ post, index, apiUr
     }, []);
 
     const getRankSuffix = useCallback((i: number) => {
-        const rank = i + 1;
-        if (rank === 1) return 'st';
-        if (rank === 2) return 'nd';
-        if (rank === 3) return 'rd';
+        const rank = i;
+        if (rank === 1) return '등';
+        if (rank === 2) return '등';
+        if (rank === 3) return '등';
         return 'th';
     }, []);
 
