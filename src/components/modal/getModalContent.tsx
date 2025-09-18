@@ -44,8 +44,8 @@ const getModalContent = (type: ModalType, title?: string) => {
                 title: '앗! 거의 다 됐는데!',
                 message: '저장하지 않고 나가시면,\n작성하신 내용이 모두 사라져요!',
                 hasCancel: true,
-                confirmText: '계속 작성하기',
-                cancelText: '나가기',
+                confirmText: '나가기',
+                cancelText: '계속 작성하기',
             };
 
         case 'SUCCESS':
