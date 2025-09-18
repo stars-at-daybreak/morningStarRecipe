@@ -182,7 +182,7 @@ const ShareForm = () => {
     }, []);
 
     usePageSetup({
-        title: type === 'create' ? '나눔글 작성' : '나눔글 수정',
+        title: '모두의 나눔',
         pageName: type === 'create' ? 'shareWrite' : 'shareUpdate',
         showBackButton: true,
     });
@@ -243,8 +243,8 @@ const ShareForm = () => {
                 </section>
 
                 <div className={styles.content_section}>
-                    <label className={styles.content_label}>내용:</label>
-                    <div className='editor-wrapper' style={{ marginBottom: '20px' }}>
+                    <label className={styles.content_label}>나눔 설명 :</label>
+                    <div className={styles.editor_wrapper}>
                         {isLoading ? (
                             <div className={styles.loadingMessage}></div>
                         ) : (
