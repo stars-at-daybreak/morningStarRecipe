@@ -73,6 +73,7 @@
         font-size: clamp(2rem, 2rem + (100vw - 390px) * 0.02, 3.2rem);
         line-height: 120%;
         margin: clamp(2rem, 2rem + (100vw - 390px) * 0.04, 4rem) 2.5rem;
+        word-break: break-word;
     }
 
     .recipe__info {
@@ -115,6 +116,7 @@
     p {
         margin-top: clamp(0.4rem, 0.4rem + (100vw - 390px) * 0.01, 0.8rem);
         color: var(--color-black);
+        word-break: break-word;
     }
 }
 
@@ -205,9 +207,17 @@
         margin: 0 1rem 0 0.4rem;
     }
     .recipe__bookmark__btn {
-        img {
-            width: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.03, 3.2rem);
-        }
+        width: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.03, 3.2rem);
+        height: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.03, 3.2rem);
+        background-image: url('../../assets/bookmark_icon.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        transition: 0.1s ease-in;
+    }
+
+    .recipe__bookmark__btn--active {
+        background-image: url('../../assets/bookmark_icon_active.svg');
     }
 }
 

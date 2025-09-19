@@ -55,6 +55,7 @@
     line-height: 130%;
     color: var(--color-black);
     transition: 0.1s ease-in;
+    word-break: break-word;
 }
 
 /* 레시피 목록 */

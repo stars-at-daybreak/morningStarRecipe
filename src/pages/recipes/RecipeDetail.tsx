@@ -16,8 +16,6 @@ import likeImg from '../../assets/like_icon.svg';
 import likeActiveImg from '../../assets/like_icon_active.svg';
 import dislikeImg from '../../assets/dislike_icon.svg';
 import dislikeActiveImg from '../../assets/dislike_icon_active.svg';
-import bookmarkIcon from '../../assets/bookmark_icon.svg';
-import bookmarkActiveIcon from '../../assets/bookmark_icon_active.svg';
 import {
     deleteBookmarkRecord,
     insertBookmarkRecord,
@@ -28,13 +26,19 @@ import { formatDateToString } from '../../utils/utils.ts';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
 import LexicalRenderer from '../../components/LexicalEditor/LexicalRenderer.tsx';
 
+interface VoteCounts {
+    prevType: null | 'like' | 'dislike';
+    likeCount: number;
+    dislikeCount: number;
+}
+
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [recipe, setRecipe] = useState<PostWithUserNickname | null>(null);
+    const [voteCounts, setVoteCounts] = useState<VoteCounts>({ prevType: null, likeCount: 0, dislikeCount: 0 });
     const [writerProfileImage, setWriterProfileImage] = useState<Tables<'files'>>();
     const [categoryName, setCategoryName] = useState<string>();
-    const [userVoteType, setUserVoteType] = useState<VoteType | null>(null);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const { user } = useUserStore();
     const { openModal } = useModal();
@@ -63,12 +67,15 @@ const RecipeDetail = () => {
 
         if (user?.id) {
             const userVoteType = await getUserVoteStatus(id, user.id);
-            setUserVoteType(userVoteType);
+
+            setVoteCounts({
+                prevType: userVoteType,
+                likeCount: detail?.like_count || 0,
+                dislikeCount: detail?.dislike_count || 0,
+            });
 
             const bookmarkStatus = await selectBookmarksByUserIdPostId(id, user.id);
             setIsBookmarked(bookmarkStatus);
-        } else {
-            setUserVoteType(null);
         }
     };
 
@@ -125,15 +132,28 @@ const RecipeDetail = () => {
         }
     };
 
-    const handleLike = async (type: 'like' | 'dislike') => {
+    const updateVoteCounts = (changeType: 'like' | 'dislike'): VoteCounts => {
+        const isSameType = voteCounts.prevType === changeType;
+        const isOppositeType = voteCounts.prevType && voteCounts.prevType !== changeType;
+
+        return {
+            prevType: isSameType ? null : changeType,
+            likeCount: voteCounts.likeCount + (changeType === 'like' ? (isSameType ? -1 : 1) : isOppositeType ? -1 : 0),
+            dislikeCount:
+                voteCounts.dislikeCount + (changeType === 'dislike' ? (isSameType ? -1 : 1) : isOppositeType ? -1 : 0),
+        };
+    };
+
+    const handleLike = async (changeType: 'like' | 'dislike') => {
         if (!user?.id || !id) {
             openModal('LOGIN');
             return;
         }
 
-        const success = await handlePostVote(id, user.id, type);
+        const success = await handlePostVote(id, user.id, changeType);
         if (success) {
-            await fetchData(id);
+            setVoteCounts(updateVoteCounts(changeType));
+            // await fetchData(id);
         } else {
             openModal('FAIL', undefined, '투표 처리 중 오류가 발생했습니다.');
         }
@@ -198,31 +218,35 @@ const RecipeDetail = () => {
                 <div className={styles['recipe__btn-box']}>
                     <div className={styles['recipe__like-btn-group']}>
                         <button
-                            className={`${userVoteType === 'like' ? styles['recipe__like-btn--active'] : styles['recipe__like-btn']}`}
+                            className={`${voteCounts.prevType === 'like' ? styles['recipe__like-btn--active'] : styles['recipe__like-btn']}`}
                             onClick={() => handleLike('like')}
+                            aria-label={`좋아요 ${voteCounts.likeCount}개 ${voteCounts.prevType === 'like' ? '(선택됨)' : ''}`}
+                            aria-pressed={voteCounts.prevType === 'like'}
+                        >
+                            <img src={voteCounts.prevType === 'like' ? likeActiveImg : likeImg} alt='' />
+                            <span>{voteCounts.likeCount}</span>
+                        </button>
+                        <button
+                            className={`${voteCounts.prevType === 'dislike' ? styles['recipe__dislike-btn--active'] : styles['recipe__dislike-btn']}`}
+                            onClick={() => handleLike('dislike')}
+                            aria-label={`싫어요 ${voteCounts.dislikeCount}개 ${voteCounts.prevType === 'dislike' ? '(선택됨)' : ''}`}
+                            aria-pressed={voteCounts.prevType === 'dislike'}
                         >
                             <img
-                                className={styles['recipe__like-img']}
-                                src={userVoteType === 'like' ? likeActiveImg : likeImg}
-                                alt='추천 버튼'
+                                src={voteCounts.prevType === 'dislike' ? dislikeActiveImg : dislikeImg}
+                                alt=''
                             />
-                            {recipe?.like_count}
-                        </button>
-                        <button className={styles['recipe__dislike-btn']} onClick={() => handleLike('dislike')}>
-                            <img
-                                className={`${userVoteType === 'like' ? styles['recipe__dislike-btn--active'] : styles['recipe__dislike-img']}`}
-                                src={userVoteType === 'dislike' ? dislikeActiveImg : dislikeImg}
-                                alt='비추천 버튼'
-                            />
-                            {recipe?.dislike_count}
+                            <span>{voteCounts.dislikeCount}</span>
                         </button>
                     </div>
 
                     <div className={styles['recipe__bookmark-box']}>
                         작성일자 :<time>{recipe?.created_at}</time>
-                        <button className={styles['recipe__bookmark__btn']} onClick={handleBookmark}>
-                            <img src={isBookmarked ? bookmarkActiveIcon : bookmarkIcon} alt='북마크' />
-                        </button>
+                        <button
+                            className={`${styles['recipe__bookmark__btn']} ${isBookmarked ? styles['recipe__bookmark__btn--active'] : ''}`}
+                            onClick={handleBookmark}
+                            aria-label={isBookmarked ? '북마크 해제' : '북마크 추가'}
+                        ></button>
                     </div>
                 </div>
             </section>
