@@ -1,4 +1,5 @@
 import React from 'react';
+import LinkPreview from './components/LinkPreview';
 import styles from './LexicalRenderer.module.css';
 
 // Lexical 출력용 노드 타입 정의 (라이브러리 타입과 구분하기 위해 Render prefix 사용)
@@ -32,6 +33,17 @@ interface RenderImageNode extends BaseRenderNode {
     altText?: string;
 }
 
+interface RenderYouTubeNode extends BaseRenderNode {
+    type: 'youtube';
+    videoId: string;
+}
+
+interface RenderAutoLinkNode extends BaseRenderNode {
+    type: 'autolink';
+    url: string;
+    children: RenderNode[];
+}
+
 interface RenderListNode extends BaseRenderNode {
     type: 'list';
     listType: 'number' | 'bullet';
@@ -62,6 +74,8 @@ type RenderNode =
     | RenderTextNode
     | RenderLinkNode
     | RenderImageNode
+    | RenderYouTubeNode
+    | RenderAutoLinkNode
     | RenderListNode
     | RenderListItemNode
     | RenderParagraphNode
@@ -83,7 +97,7 @@ const LexicalRenderer: React.FC<LexicalRendererProps> = ({ content, className = 
     const renderNode = (node: RenderNode | any, index: number = 0): React.ReactNode => {
         if (!node || typeof node !== 'object') return null;
 
-        const { type, children = [], text, style, url, src, listType, format, textStyle } = node;
+        const { type, children = [], text, style, url, src, videoId, format, textStyle } = node;
 
         // format에서 정렬 정보 추출 (문자열인 경우만 처리)
         const getAlignmentClass = (format: string | number | undefined) => {
@@ -155,18 +169,6 @@ const LexicalRenderer: React.FC<LexicalRendererProps> = ({ content, className = 
                     </div>
                 );
 
-            case 'list':
-                const ListTag = listType === 'number' ? 'ol' : 'ul';
-                return (
-                    <ListTag
-                        key={index}
-                        className={`${styles['content-list']} ${alignmentClass}`.trim()}
-                        style={inlineStyles}
-                    >
-                        {children.map((child: RenderNode, i: number) => renderNode(child, i))}
-                    </ListTag>
-                );
-
             case 'listitem':
                 return (
                     <li
@@ -210,6 +212,23 @@ const LexicalRenderer: React.FC<LexicalRendererProps> = ({ content, className = 
                     </a>
                 );
 
+            case 'autolink':
+                return (
+                    <React.Fragment key={index}>
+                        <a
+                            href={url}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className={`${styles['content-link']} ${alignmentClass}`.trim()}
+                            style={inlineStyles}
+                        >
+                            {children.map((child: RenderNode, i: number) => renderNode(child, i))}
+                        </a>
+                        <br />
+                        <LinkPreview url={url} />
+                    </React.Fragment>
+                );
+
             case 'image':
                 return (
                     <img
@@ -222,6 +241,25 @@ const LexicalRenderer: React.FC<LexicalRendererProps> = ({ content, className = 
                             (e.target as HTMLImageElement).style.display = 'none';
                         }}
                     />
+                );
+
+            case 'youtube':
+                return (
+                    <div key={index} style={{ margin: '20px 0', ...inlineStyles }} className={alignmentClass}>
+                        <iframe
+                            width='100%'
+                            height='315'
+                            src={`https://www.youtube.com/embed/${videoId}`}
+                            title='YouTube video player'
+                            frameBorder='0'
+                            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                            allowFullScreen
+                            style={{
+                                maxWidth: '560px',
+                                borderRadius: '8px',
+                            }}
+                        />
+                    </div>
                 );
 
             default:

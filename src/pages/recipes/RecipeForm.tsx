@@ -168,10 +168,30 @@ const RecipeForm = () => {
                 // 빈 에디터 상태인지 확인
                 if (parsed.root && parsed.root.children) {
                     const hasContent = parsed.root.children.some((child: any) => {
+                        // 이미지, YouTube 등의 미디어 노드들은 그 자체로 유효한 콘텐츠
+                        if (child.type === 'image' || child.type === 'youtube') {
+                            return true;
+                        }
+
+                        // AutoLinkNode는 'autolink' 타입을 사용함
+                        if (child.type === 'autolink' && child.url) {
+                            return true;
+                        }
+
+                        // 텍스트가 포함된 노드들 확인
                         if (child.children && child.children.length > 0) {
-                            return child.children.some(
-                                (textNode: any) => textNode.text && textNode.text.trim().length > 0
-                            );
+                            return child.children.some((textNode: any) => {
+                                // AutoLinkNode 내부 확인 (autolink 타입)
+                                if (textNode.type === 'autolink' && textNode.url) {
+                                    return true;
+                                }
+
+                                // 일반 텍스트 노드 (URL 포함)
+                                if (textNode.text && textNode.text.trim().length > 0) {
+                                    return true;
+                                }
+                                return false;
+                            });
                         }
                         return false;
                     });
