@@ -12,7 +12,7 @@ import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
 import EmptyState from '../../components/EmptyState/EmptyState';
 
-const Recipes = ({ query }: { query?: string }) => {
+const Recipes = () => {
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const navigate = useNavigate();
     const { user } = useUserStore();
@@ -32,6 +32,7 @@ const Recipes = ({ query }: { query?: string }) => {
         getCategories();
     }, []);
 
+    const query = new URLSearchParams(window.location.search).get('query') || '';
     const [inputValue, setInputValue] = useState(query);
     const updateQuery = (query: string) => {
         if (query) navigate(`/recipes?query=${query}`);
