@@ -1,12 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { AutoLinkPlugin } from '@lexical/react/LexicalAutoLinkPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
@@ -18,8 +16,10 @@ import { TRANSFORMERS } from '@lexical/markdown';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ImagePlugin from './plugins/ImagePlugin';
+import YouTubePlugin from './plugins/YouTubePlugin';
 import ErrorBoundary from './ErrorBoundary';
 import { ImageNode } from './nodes/ImageNode';
+import { YouTubeNode } from './nodes/YouTubeNode';
 import './LexicalEditor.css';
 import { MATCHERS } from '../../utils/lexicalUtils.ts';
 
@@ -65,6 +65,7 @@ const editorConfig = {
         AutoLinkNode,
         LinkNode,
         ImageNode,
+        YouTubeNode,
     ],
     onError: (error: Error) => console.error(error),
 };
@@ -75,15 +76,6 @@ const LexicalEditor: React.FC<LexicalEditorProps> = ({
     onChange,
     className,
 }) => {
-    const initialEditorState = useMemo(() => {
-        try {
-            return initialValue || null;
-        } catch (e) {
-            console.error('Invalid initial editor state', e);
-            return null;
-        }
-    }, [initialValue]);
-
     const initialConfig = {
         ...editorConfig,
         editorState: initialValue || undefined,
@@ -102,12 +94,11 @@ const LexicalEditor: React.FC<LexicalEditorProps> = ({
                         />
                         <HistoryPlugin />
                         <AutoFocusPlugin />
-                        <ListPlugin />
-                        <LinkPlugin />
                         <AutoLinkPlugin matchers={MATCHERS} />
                         <TabIndentationPlugin />
                         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
                         <ImagePlugin />
+                        <YouTubePlugin />
                         {onChange && (
                             <OnChangePlugin
                                 onChange={editorState => {
