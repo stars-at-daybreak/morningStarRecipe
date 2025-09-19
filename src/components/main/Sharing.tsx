@@ -28,16 +28,9 @@ const Sharing: React.FC = () => {
             {posts.length > 0 ? (
                 <div className={styles.shareList}>
                     {posts.map((post, index) => (
-                        <div
-                            key={index}
-                            className='flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow'
-                        >
-                            <PostItem
-                                post={post}
-                                type='share'
-                                onClick={postId => (window.location.href = `/share/${postId}`)}
-                            />
-                        </div>
+                        <Link to={'/share/' + post.id} key={index}>
+                            <PostItem post={post} type='share' />
+                        </Link>
                     ))}
                 </div>
             ) : (

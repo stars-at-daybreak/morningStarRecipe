@@ -49,8 +49,10 @@ const App = () => {
 };
 
 const AppRoutes = () => {
-    const { user } = useUserStore();
-
+    const { user, isLoading } = useUserStore();
+    if (isLoading) {
+        return false;
+    }
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
