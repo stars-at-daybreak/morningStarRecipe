@@ -5,6 +5,7 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { AutoLinkPlugin } from '@lexical/react/LexicalAutoLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
@@ -20,6 +21,7 @@ import ImagePlugin from './plugins/ImagePlugin';
 import ErrorBoundary from './ErrorBoundary';
 import { ImageNode } from './nodes/ImageNode';
 import './LexicalEditor.css';
+import { MATCHERS } from '../../utils/lexicalUtils.ts';
 
 interface LexicalEditorProps {
     placeholder?: string;
@@ -48,6 +50,7 @@ const editorConfig = {
             italic: 'editor-text-italic',
             underline: 'editor-text-underline',
         },
+        link: 'editor-auto-link',
     },
     nodes: [
         HeadingNode,
@@ -101,6 +104,7 @@ const LexicalEditor: React.FC<LexicalEditorProps> = ({
                         <AutoFocusPlugin />
                         <ListPlugin />
                         <LinkPlugin />
+                        <AutoLinkPlugin matchers={MATCHERS} />
                         <TabIndentationPlugin />
                         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
                         <ImagePlugin />
