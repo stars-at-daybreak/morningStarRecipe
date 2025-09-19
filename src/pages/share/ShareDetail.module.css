@@ -65,6 +65,7 @@
     color: var(--color-black);
     max-width: 73.6rem;
     margin: 2rem auto 0;
+    word-break: break-word;
 }
 .share__content .share__content_wrap,
 .share__location p {
