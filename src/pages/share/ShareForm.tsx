@@ -32,7 +32,7 @@ const ShareForm = () => {
         post_type: 'share' as const,
         title: '',
         share_status: 'available' as 'available' | 'reserved' | 'completed' | 'cancelled',
-        pickup_location: '서울',
+        pickup_location: '',
         content: '',
     });
 
@@ -218,7 +218,7 @@ const ShareForm = () => {
 
     return (
         <div className={styles.container}>
-            <form onSubmit={handleSubmit} className={styles.shareForm} noValidate>
+            <form onSubmit={handleSubmit} className={styles.shareForm}>
                 <section>
                     <label htmlFor='title' className={styles.shareForm__title}>
                         제목: <span className={styles.required}></span>
