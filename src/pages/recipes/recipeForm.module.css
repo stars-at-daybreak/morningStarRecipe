@@ -1,18 +1,18 @@
 .container {
     width: 100%;
 }
-.shareForm {
+.recipeForm {
     margin: 2rem 2.5rem;
     max-width: 73.6rem;
 }
 /* 제목 */
-.shareForm__title {
+.recipeForm__title {
     display: block;
     font-weight: 700;
     font-size: 1.4rem;
     line-height: 1.6rem;
 }
-.shareForm__title_input {
+.recipeForm__title_input {
     font-size: 1.4rem;
     line-height: 1.6rem;
     width: 100%;
@@ -23,18 +23,27 @@
     border-radius: 1rem;
     padding: 1.5rem 2rem;
 }
-/* 나눔상태 */
-.share_status_section {
-    display: flex;
-    align-items: center;
+
+.recipe_select_section {
     margin-top: 1.4rem;
     padding: 1.6rem 1.5rem;
     border: 0.1rem solid var(--color-gray-100);
     border-radius: 1rem;
     background: var(--color-gray-100);
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.6rem);
+    }
 }
-.share_status_label {
-    display: inline;
+.recipe_select_group {
+    display: flex;
+    gap: 0.4rem;
+}
+.recipe_select_label {
+    display: flex;
+    align-items: center;
     min-width: 5rem;
     font-weight: 400;
     font-size: 1.2rem;
@@ -42,19 +51,28 @@
     text-align: right;
     color: var(--color-black);
 }
-.share_status_select {
-    margin-left: 0.4rem;
-    width: 100%;
+.recipe_select_input {
+    flex: 1;
 }
-/* 나눔 위치 */
-.shareLocation__title {
+.ingredients__title {
     margin-top: 3rem;
     display: block;
     font-weight: 700;
     font-size: 1.4rem;
     line-height: 1.6rem;
 }
-.shareLocation__title_input {
+
+/* 레시피설명 */
+.content_label {
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    color: var(--color-black);
+}
+.editor_wrapper {
+    margin-top: 1rem;
+}
+.recipeForm__ingredients {
     font-size: 1.4rem;
     line-height: 1.6rem;
     width: 100%;
@@ -69,25 +87,16 @@
 .content_section {
     margin-top: 3rem;
 }
-.content_label {
-    font-weight: 700;
-    font-size: 1.4rem;
-    line-height: 1.6rem;
-    color: var(--color-black);
-}
-.editor_wrapper {
-    margin-top: 1rem;
-}
 /* 썸네일 */
 .thumbnail_container {
     margin-top: 3rem;
 }
-.share_thumbnail_label {
+.recipe_thumbnail_label {
     font-weight: 400;
     font-size: 1.4rem;
     line-height: 16px;
 }
-.share_thumbnail_label strong {
+.recipe_thumbnail_label strong {
     font-weight: 700;
 }
 .thumbnail_wrapper {
@@ -117,7 +126,7 @@
     border-radius: 1.5rem;
 }
 /* 저장 버튼 */
-.shareForm__submit {
+.recipeForm__submit {
     width: 100%;
     background: var(--color-green);
     color: var(--color-white);
@@ -134,16 +143,17 @@
     font-size: 1.4rem;
     margin: 1rem 0.2rem 0;
 }
+
 @media screen and (min-width: 768px) {
-    .shareForm {
+    .recipeForm {
         margin: 5rem auto;
     }
     /* 제목 */
-    .shareForm__title {
+    .recipeForm__title {
         font-size: 1.8rem;
         line-height: 2.2rem;
     }
-    .shareForm__title_input {
+    .recipeForm__title_input {
         font-size: 1.8rem;
         line-height: 2.2rem;
         margin-top: 1.6rem;
@@ -152,36 +162,23 @@
         border-radius: 1.3rem;
         padding: 2rem 2.5rem;
     }
-
-    /* 상태 */
-    .share_status_section {
+    .recipe_select_section {
         margin-top: 2.3rem;
         padding: 2.8rem;
         border-radius: 1.3rem;
     }
-    .share_status_label {
+    .recipe_select_label {
         font-size: 1.5rem;
         line-height: 1.5rem;
         min-width: 7rem;
     }
-    .share_status_select {
-        margin-left: 0.7rem;
-    }
-    /* 위치 */
-    .shareLocation__title {
+
+    .ingredients__title {
         margin-top: 4.5rem;
         font-size: 1.8rem;
         line-height: 2.2rem;
     }
-    .shareLocation__title_input {
-        font-size: 1.8rem;
-        line-height: 2.2rem;
-        margin-top: 1.6rem;
-        border: 0.15rem solid var(--color-gray-300);
-        height: 5.8rem;
-        border-radius: 1.3rem;
-        padding: 2rem 2.5rem;
-    }
+
     /* 설명 */
     .content_section {
         margin-top: 4.5rem;
@@ -193,11 +190,20 @@
     .editor_wrapper {
         margin-top: 1.3rem;
     }
+    .recipeForm__ingredients {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+        margin-top: 1.6rem;
+        border: 0.15rem solid var(--color-gray-300);
+        height: 5.8rem;
+        border-radius: 1.3rem;
+        padding: 2rem 2.5rem;
+    }
     /* 썸네일 */
     .thumbnail_container {
         margin-top: 4.5rem;
     }
-    .share_thumbnail_label {
+    .recipe_thumbnail_label {
         font-size: 1.8rem;
         line-height: 1.8rem;
     }
@@ -220,7 +226,7 @@
         height: 10.5rem;
         border-radius: 1.9rem;
     }
-    .shareForm__submit {
+    .recipeForm__submit {
         font-size: 1.9rem;
         line-height: 1.9rem;
         padding: 1.8rem 1.3rem;
@@ -230,11 +236,11 @@
 }
 @media screen and (min-width: 1024px) {
     /* 제목 */
-    .shareForm__title {
+    .recipeForm__title {
         font-size: 2.2rem;
         line-height: 2.2rem;
     }
-    .shareForm__title_input {
+    .recipeForm__title_input {
         font-size: 2.2rem;
         line-height: 2.2rem;
         margin-top: 1.6rem;
@@ -243,35 +249,22 @@
         border-radius: 1.6rem;
         padding: 2.5rem 3rem;
     }
-    /* 상태 */
-    .share_status_section {
+    .recipe_select_section {
         margin-top: 3.2rem;
         padding: 3rem;
         border-radius: 1.6rem;
     }
-    .share_status_label {
+    .recipe_select_label {
         font-size: 1.8rem;
         line-height: 1.8rem;
         min-width: 8rem;
     }
-    .share_status_select {
-        margin-left: 1rem;
-    }
-    /* 위치 */
-    .shareLocation__title {
+    .ingredients__title {
         margin-top: 6rem;
         font-size: 2.2rem;
         line-height: 2.2rem;
     }
-    .shareLocation__title_input {
-        font-size: 2.2rem;
-        line-height: 2.2rem;
-        margin-top: 1.6rem;
-        border: 0.15rem solid var(--color-gray-300);
-        height: 7.2rem;
-        border-radius: 1.6rem;
-        padding: 2.5rem 3rem;
-    }
+
     /* 설명 */
     .content_section {
         margin-top: 6rem;
@@ -283,11 +276,20 @@
     .editor_wrapper {
         margin-top: 1.6rem;
     }
+    .recipeForm__ingredients {
+        font-size: 2.2rem;
+        line-height: 2.2rem;
+        margin-top: 1.6rem;
+        border: 0.15rem solid var(--color-gray-300);
+        height: 7.2rem;
+        border-radius: 1.6rem;
+        padding: 2.5rem 3rem;
+    }
     /* 썸네일 */
     .thumbnail_container {
         margin-top: 6rem;
     }
-    .share_thumbnail_label {
+    .recipe_thumbnail_label {
         font-size: 2.2rem;
         line-height: 2.2rem;
     }
@@ -311,7 +313,7 @@
         border-radius: 2.4rem;
     }
     /* 버튼 */
-    .shareForm__submit {
+    .recipeForm__submit {
         font-size: 2.4rem;
         line-height: 2.4rem;
         padding: 2.2rem 1.6rem;

@@ -25,6 +25,8 @@ import {
 } from '../../services/supabasePostBookmark.ts';
 import { useModal } from '../../components/modal/ModalContext.ts';
 import { formatDateToString } from '../../utils/utils.ts';
+import { usePageSetup } from '../../hooks/usePageSetup.tsx';
+import LexicalRenderer from '../../components/LexicalEditor/LexicalRenderer.tsx';
 
 const RecipeDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -36,6 +38,12 @@ const RecipeDetail = () => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const { user } = useUserStore();
     const { openModal } = useModal();
+
+    usePageSetup({
+        title: '모두의 레시피',
+        pageName: 'recipeDetail',
+        showBackButton: true,
+    });
 
     const fetchData = async (id: string): Promise<void> => {
         const detail = await fetchPostWithUserNickname(id);
@@ -184,7 +192,8 @@ const RecipeDetail = () => {
 
             <section className={styles['recipe__content-box']}>
                 <h2>레시피 설명</h2>
-                <div className={styles['recipe__content']}>{recipe?.content}</div>
+                <div className={styles['recipe__content']}></div>
+                <LexicalRenderer content={recipe?.content || ''} className={styles['share-content-renderer']} />
 
                 <div className={styles['recipe__btn-box']}>
                     <div className={styles['recipe__like-btn-group']}>

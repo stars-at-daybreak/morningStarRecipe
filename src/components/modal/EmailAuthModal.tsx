@@ -21,19 +21,24 @@ const EmailAuthModal = ({
         return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
     };
 
-    const handleConfirm = async () => {
-        if (!code) {
-            setIsHidden(false);
-            return;
-        }
+    const handleConfirm = async (type: 'confirm' | 'cancel') => {
+        if (type === 'confirm') {
+            if (!code) {
+                setIsHidden(false);
+                return;
+            }
 
-        const isSuccess = await verifyEmailCode(email, code);
+            const isSuccess = await verifyEmailCode(email, code);
 
-        if (isSuccess) {
-            handleModal(false);
-            handleAuthConfirm(true);
+            if (isSuccess) {
+                handleModal(false);
+                handleAuthConfirm(true);
+            } else {
+                setIsHidden(false);
+            }
         } else {
-            setIsHidden(false);
+            //todo 취소하기
+            handleModal(false);
         }
     };
 
@@ -68,7 +73,7 @@ const EmailAuthModal = ({
                     <p className={styles['auth-modal__contents']}>인증번호를 입력해주세요</p>
                     <time className={styles['auth-modal__timer']}>{formatTime(timeLeft)}</time>
                     <input
-                        className={styles['auth-modal__input']}
+                        className={`${styles['auth-modal__input']} ${code.length === 6 ? styles['auth-modal__input--active'] : ''}`}
                         type='number'
                         value={code}
                         onChange={handleInputCode}
@@ -79,9 +84,19 @@ const EmailAuthModal = ({
                         인증번호가 일치하지 않습니다.
                     </span>
                 </div>
-                <button className={styles['auth-modal__btn']} type='button' onClick={handleConfirm}>
-                    확인
-                </button>
+                <div className={styles['auth-modal__btn-group']}>
+                    <button className={styles['auth-modal__btn']} type='button' onClick={() => handleConfirm('cancel')}>
+                        취소
+                    </button>
+                    <div className={styles['auth-modal__btn-line']}></div>
+                    <button
+                        className={`${styles['auth-modal__btn']} ${code.length === 6 ? styles['auth-modal__btn--active'] : ''}`}
+                        type='button'
+                        onClick={() => handleConfirm('confirm')}
+                    >
+                        확인
+                    </button>
+                </div>
             </div>
         </div>
     );

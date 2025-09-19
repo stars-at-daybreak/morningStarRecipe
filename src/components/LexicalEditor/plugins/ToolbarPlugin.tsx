@@ -1,4 +1,3 @@
-import { $createQuoteNode } from '@lexical/rich-text';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
@@ -11,8 +10,9 @@ import {
     $isTextNode,
 } from 'lexical';
 import { $createImageNode } from '../nodes/ImageNode';
-import { FaAlignLeft, FaAlignCenter, FaAlignRight } from 'react-icons/fa';
+import { FaAlignLeft, FaAlignCenter, FaAlignRight, FaYoutube } from 'react-icons/fa';
 import { useFileUpload } from '../../../hooks/useImageUpload';
+import { INSERT_YOUTUBE_COMMAND } from '../commands/YouTubeCommands';
 const LowPriority = 1;
 
 const FONT_SIZE_OPTIONS = [
@@ -27,8 +27,6 @@ const ToolbarPlugin: React.FC = () => {
     const [isBold, setIsBold] = useState(false);
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
-    const [isStrikethrough, setIsStrikethrough] = useState(false);
-    const [isCode, setIsCode] = useState(false);
     const [fontSize, setFontSize] = useState('16px');
     const [fontColor, setFontColor] = useState('#000000');
     const { uploadFile, isUploading } = useFileUpload();
@@ -39,15 +37,13 @@ const ToolbarPlugin: React.FC = () => {
             setIsBold(selection.hasFormat('bold'));
             setIsItalic(selection.hasFormat('italic'));
             setIsUnderline(selection.hasFormat('underline'));
-            setIsStrikethrough(selection.hasFormat('strikethrough'));
-            setIsCode(selection.hasFormat('code'));
         }
     }, [editor]);
 
     useEffect(() => {
         return editor.registerCommand(
             SELECTION_CHANGE_COMMAND,
-            _payload => {
+            () => {
                 updateToolbar();
                 return false;
             },
@@ -92,6 +88,13 @@ const ToolbarPlugin: React.FC = () => {
                 });
             }
         });
+    };
+
+    const handleYouTubeInsert = () => {
+        const youtubeUrl = prompt('YouTube URL을 입력하세요:');
+        if (youtubeUrl) {
+            editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, youtubeUrl);
+        }
     };
 
     return (
@@ -164,12 +167,16 @@ const ToolbarPlugin: React.FC = () => {
                 {isUploading ? '⏳' : '📷'}
                 <input
                     type='file'
-                    accept='image/*'
+                    accept='image/png, image/jpeg, image/jpg'
                     onChange={onImageUpload}
                     style={{ display: 'none' }}
                     disabled={isUploading}
                 />
             </label>
+
+            <button type='button' onClick={handleYouTubeInsert} className='toolbar-item' title='YouTube 영상 삽입'>
+                <FaYoutube className='w-5 h-5' style={{ color: '#FF0000' }} />
+            </button>
         </div>
     );
 };

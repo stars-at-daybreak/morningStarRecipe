@@ -3,12 +3,19 @@ import { usePageStore } from '../../stores/usePageStore';
 import logo from '../../assets/logo.svg';
 import prev from '../../assets/prev_icon.png';
 import styles from './Header.module.css';
-
+import { useModal } from '../../components/modal/ModalContext';
 const Header = () => {
-    const { title, showBackButton } = usePageStore();
-
+    const { title, pageName, showBackButton } = usePageStore();
+    const specialPages = ['shareUpdate', 'shareWrite', 'recipeWrite', 'recipeUpdate'];
+    const { openModal } = useModal();
     const handleBackNavigation = () => {
-        window.history.back();
+        if (specialPages.includes(pageName)) {
+            openModal('CONFIRM_DISCARD_POST', async () => {
+                window.history.back();
+            });
+        } else {
+            window.history.back();
+        }
     };
 
     return (
