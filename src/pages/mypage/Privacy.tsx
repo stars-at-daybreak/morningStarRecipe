@@ -17,7 +17,7 @@ function Privacy() {
     return (
         <section className={styles.privacy}>
             <div className={styles.privacy__container}>
-                <h1 className='sr-only'>개인정보처리방침</h1>
+                <h2 className='sr-only'>개인정보처리방침</h2>
                 <div className={styles.privacy__content}>
                     <strong className={styles.privacy__title}>모두의 부엌 개인정보 수집 및 이용 동의서</strong>
 

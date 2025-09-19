@@ -41,7 +41,7 @@ export const signup: Signup = async (signupData: SignupData) => {
             } else if (error.message.includes('Too Many Requests')) {
                 return supabaseResult('FAIL', '너무 많은 회원가입 요청을 하였습니다. 잠시 후 다시 이용해주세요.');
             } else if (error.code === 'weak_password') {
-                return supabaseResult('FAIL', '비밀번호는 최소 6자 이상이어야 합니다.');
+                return supabaseResult('FAIL', '비밀번호는 최소 8자 이상이어야 합니다.');
             } else {
                 return supabaseResult('FAIL', '회원가입에 실패하였습니다 잠시 후 다시 이용해 주세요');
             }
@@ -116,16 +116,16 @@ export const updateUser: UpdateUser = async (updateData: UpdateUserData): Promis
             console.error('사용자 정보 업데이트 실패:', error);
 
             if (error.code === 'weak_password') {
-                alert('비밀번호는 최소 6자 이상이어야 합니다.');
+                // alert('비밀번호는 최소 8자 이상이어야 합니다.');
             } else if (error.status === 422) {
-                alert('동일한 비밀번호로 변경할 수 없습니다.');
+                // alert('동일한 비밀번호로 변경할 수 없습니다.');
             } else {
                 alert('정보 업데이트에 실패했습니다. 다시 시도해주세요.');
             }
             return false;
         }
 
-        alert('사용자 정보가 성공적으로 업데이트되었습니다.');
+        // alert('사용자 정보가 성공적으로 업데이트되었습니다.');
         return true;
     } catch (error) {
         console.error('사용자 정보 업데이트 예외:', error);
@@ -170,7 +170,7 @@ export const updatePassword = async (email: string, newPassword: string): Promis
             return false;
         }
 
-        alert('비밀번호가 성공적으로 변경되었습니다.');
+        // alert('비밀번호가 성공적으로 변경되었습니다.');
         return true;
     } catch (error) {
         console.error('비밀번호 변경 예외:', error);
