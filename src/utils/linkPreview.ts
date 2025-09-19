@@ -10,9 +10,8 @@ export async function fetchLinkMetadata(url: string): Promise<LinkMetadata | nul
     try {
         // 여러 CORS 프록시 서비스를 순차적으로 시도
         const proxyUrls = [
-            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            `https://cors-anywhere.herokuapp.com/${url}`,
             `https://corsproxy.io/?${encodeURIComponent(url)}`,
-            `https://cors-anywhere.herokuapp.com/${url}`
         ];
 
         let response: Response | null = null;
@@ -23,9 +22,9 @@ export async function fetchLinkMetadata(url: string): Promise<LinkMetadata | nul
                 response = await fetch(proxyUrl, {
                     method: 'GET',
                     headers: {
-                        'Accept': 'application/json, text/html, */*',
+                        Accept: 'application/json, text/html, */*',
                     },
-                    signal: AbortSignal.timeout(3000) // 3초 타임아웃
+                    signal: AbortSignal.timeout(3000), // 3초 타임아웃
                 });
 
                 if (response.ok) {
@@ -72,31 +71,29 @@ export async function fetchLinkMetadata(url: string): Promise<LinkMetadata | nul
             return undefined;
         };
 
-        const title = getMetaContent('og:title') ||
-                     getMetaContent('twitter:title') ||
-                     doc.querySelector('title')?.textContent ||
-                     undefined;
+        const title =
+            getMetaContent('og:title') ||
+            getMetaContent('twitter:title') ||
+            doc.querySelector('title')?.textContent ||
+            undefined;
 
-        const description = getMetaContent('og:description') ||
-                           getMetaContent('twitter:description') ||
-                           getMetaContent('description') ||
-                           undefined;
+        const description =
+            getMetaContent('og:description') ||
+            getMetaContent('twitter:description') ||
+            getMetaContent('description') ||
+            undefined;
 
-        const image = getMetaContent('og:image') ||
-                     getMetaContent('twitter:image') ||
-                     undefined;
+        const image = getMetaContent('og:image') || getMetaContent('twitter:image') || undefined;
 
-        const siteName = getMetaContent('og:site_name') ||
-                        new URL(url).hostname;
+        const siteName = getMetaContent('og:site_name') || new URL(url).hostname;
 
         return {
             title: title?.trim(),
             description: description?.trim(),
             image,
             url,
-            siteName
+            siteName,
         };
-
     } catch (error) {
         // AbortError는 정상적인 타임아웃이므로 로그 출력하지 않음
         if (error instanceof Error && error.name !== 'AbortError') {
@@ -104,7 +101,7 @@ export async function fetchLinkMetadata(url: string): Promise<LinkMetadata | nul
         }
         return {
             url,
-            siteName: new URL(url).hostname
+            siteName: new URL(url).hostname,
         };
     }
 }
