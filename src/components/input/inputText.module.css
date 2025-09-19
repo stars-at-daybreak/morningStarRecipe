@@ -22,6 +22,7 @@
     border-bottom: 0.1rem solid var(--color-gray-300);
     padding: 0 0 0.8rem;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 39rem) * 0.013, 2.2rem);
+    background-color: transparent;
 }
 .input__field:focus {
     border-bottom: 0.1rem solid var(--color-green);

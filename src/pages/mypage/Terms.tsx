@@ -17,7 +17,7 @@ function Terms() {
     return (
         <section className={styles.terms}>
             <div className={styles.terms__container}>
-                <h1 className='sr-only'>서비스 이용약관</h1>
+                <h2 className='sr-only'>서비스 이용약관</h2>
                 <div className={styles.terms__content}>
                     <strong className={styles.terms__title}>모두의 부엌 서비스 이용약관</strong>
                     <strong className={styles.terms__sub_title}>제1조 (목적) </strong>

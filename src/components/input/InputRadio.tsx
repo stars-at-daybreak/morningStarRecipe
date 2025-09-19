@@ -6,12 +6,16 @@ const InputRadio = ({
     value,
     isRequired,
     handleInput,
+    checked,
+    isDisabled,
 }: {
     label: string;
     id: string;
     name: string;
     value: string;
     isRequired?: boolean;
+    checked: boolean;
+    isDisabled?: boolean;
     handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
     return (
@@ -25,6 +29,8 @@ const InputRadio = ({
                     value={value}
                     onChange={handleInput}
                     required={isRequired}
+                    checked={checked}
+                    disabled={isDisabled}
                 />
                 {label}
             </label>

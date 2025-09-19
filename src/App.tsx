@@ -7,7 +7,7 @@ import Home from './pages/home/Home.tsx';
 import { AuthProvider } from './providers/AuthProvider.tsx';
 import ModalProvider from './components/modal/ModalProvider.tsx';
 import Mypage from './pages/mypage/Mypage.tsx';
-import ProfileEditForm from './pages/mypage/ProfileEditForm.tsx';
+import UserEditForm from './pages/mypage/UserEditForm.tsx';
 import useUserStore from './stores/useUserStore.ts';
 import { colorSet } from './types/colorSet.ts';
 import Privacy from './pages/mypage/Privacy.tsx';
@@ -24,6 +24,8 @@ import NotFound from './pages/404/404.tsx';
 import './App.css';
 import MyBookmark from './pages/mypage/MyBookmark.tsx';
 import MyPostList from './pages/mypage/MyPostList.tsx';
+import LevelupGuide from './pages/mypage/LevelupGuide.tsx';
+import PasswordVerification from './pages/mypage/PasswordVerification.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
@@ -61,8 +63,10 @@ const AppRoutes = () => {
                 <Route path='/password' element={<PasswordFind />} />
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
-                <Route path='/mypage/user-edit' element={!user ? <Login /> : <ProfileEditForm />} />
+                <Route path='/mypage/password-verification' element={<PasswordVerification />} />
+                <Route path='/mypage/user-edit' element={<UserEditForm />} />
                 <Route path='/mypage/my-bookmark' element={<MyBookmark />} />
+                <Route path='/mypage/levelup-guide' element={<LevelupGuide />} />
                 <Route path='/mypage/my-postList' element={<MyPostList />} />
                 <Route path='/mypage/privacy' element={<Privacy />} />
                 <Route path='/mypage/terms' element={<Terms />} />

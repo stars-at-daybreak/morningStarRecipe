@@ -41,7 +41,7 @@
 .my-post-list__profile-default {
     width: 6.4rem;
     height: 6rem;
-    background: url('../../../assets/face_logo_w.svg') no-repeat center / cover;
+    background: url('../../assets/face_logo_w.svg') no-repeat center / cover;
     margin: 0.1rem 0 0 0.1rem;
 }
 

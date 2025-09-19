@@ -1,0 +1,131 @@
+.user-edit {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: clamp(5rem, 5rem + (100vw - 390px) * 0.08, 10rem);
+}
+
+/* 유효성 체크 제거 */
+.user-edit label::after {
+    display: none;
+}
+
+.user-edit__container {
+    width: 100%;
+    max-width: 73.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 3.5rem;
+    gap: clamp(5rem, 5rem + (100vw - 390px) * 0.08, 10rem);
+}
+
+/* 로고 */
+.user-edit__header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 회원인증 폼 */
+.user-edit__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(3rem, 3rem + (100vw - 390px) * 0.08, 6rem);
+}
+
+/* email+닉네임+에러메세지 */
+.user-edit__info-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 닉네임에만 margin설정 안되어있어서 여기만 해줌 */
+.user-edit__nickname-group {
+    margin-top: 1.6rem;
+}
+@media (min-width: 1024px) {
+    .user-edit__nickname-group {
+        margin-top: 3.2rem;
+    }
+}
+/* email+닉네임 */
+.user-edit__info,
+.user-edit__info_user {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.user-edit__nickname-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.user-edit__info input[type='email'] {
+    color: var(--color-gray-300);
+}
+.user-edit__info_user input {
+    color: var(--color-gray-300);
+}
+
+/* 에러메세지 */
+.user-edit__validation-text-error-wrap {
+    width: 100%;
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.03, 1.8rem);
+    color: var(--color-red);
+    text-align: left;
+    margin-top: clamp(1rem, 1rem + (100vw - 390px) * 0.02, 1.6rem);
+}
+/* 유효성 검사 성공 메시지 */
+.user-edit__validation-text--success {
+    color: var(--color-green);
+}
+
+/* 라디오 버튼 */
+.user-edit__radio-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.05, 3.2rem);
+}
+.user-edit__radio-info-group {
+    width: 100%;
+}
+
+.user-edit__radio-info-group > label {
+    display: block;
+    font-size: clamp(1.2rem, 1.2rem + (100vw - 39rem) * 0.01, 1.8rem);
+    line-height: 1.2rem;
+    color: var(--color-gray);
+}
+.user-edit__radio {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.8rem;
+    gap: clamp(0.5rem, 0.5rem + (100vw - 39rem) * 0.01, 1rem);
+}
+@media (min-width: 1024px) {
+    .user-edit__radio {
+        margin-top: 1.6rem;
+    }
+}

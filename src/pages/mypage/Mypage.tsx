@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import { useModal } from '../../components/modal/ModalContext';
 import useUserStore from '../../stores/useUserStore';
@@ -24,15 +24,11 @@ const Mypage = () => {
 
     const nickname = user?.user_metadata.nickname;
 
-    const pageConfig = useMemo(
-        () => ({
-            title: '마이페이지',
-            pageName: 'mypage',
-            showBackButton: false,
-        }),
-        []
-    );
-    usePageSetup(pageConfig);
+    usePageSetup({
+        title: '마이페이지',
+        pageName: 'mypage',
+        showBackButton: false,
+    });
 
     useEffect(() => {
         if (!user) {
@@ -162,7 +158,7 @@ const Mypage = () => {
                 </div>
 
                 <div className={styles.page__menu}>
-                    <Link to='/mypage/user-edit' className={styles.page__menu_item}>
+                    <Link to='/mypage/password-verification' className={styles.page__menu_item}>
                         회원정보 수정
                     </Link>
                     <Link to='/mypage/my-bookmark' className={styles.page__menu_item}>
@@ -171,7 +167,7 @@ const Mypage = () => {
                     <Link to='/mypage/my-postList' className={styles.page__menu_item}>
                         내가 올린 게시물 리스트
                     </Link>
-                    <Link to='/guides' className={styles.page__menu_item}>
+                    <Link to='/mypage/levelup-guide' className={styles.page__menu_item}>
                         모두의 레벨업 가이드
                     </Link>
                     <Link to='/privacy' className={styles.page__menu_item}>
