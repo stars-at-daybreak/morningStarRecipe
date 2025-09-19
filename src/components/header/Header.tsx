@@ -13,6 +13,8 @@ const Header = () => {
             openModal('CONFIRM_DISCARD_POST', async () => {
                 window.history.back();
             });
+        } else {
+            window.history.back();
         }
     };
 

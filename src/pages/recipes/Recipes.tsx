@@ -40,7 +40,7 @@ const Recipes = () => {
     usePageSetup({
         title: '모두의 레시피',
         pageName: 'recipes',
-        showBackButton: false,
+        showBackButton: true,
     });
 
     useEffect(() => {
