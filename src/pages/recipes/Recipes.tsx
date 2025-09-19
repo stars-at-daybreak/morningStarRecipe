@@ -11,8 +11,24 @@ import styles from './recipes.module.css';
 import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
 import EmptyState from '../../components/EmptyState/EmptyState';
+import { SyncLoader } from 'react-spinners';
+// ------------------- 디바운스 훅 -------------------
+function useDebounce<T>(value: T, delay: number) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
 
-const Recipes = ({ query }: { query?: string }) => {
+    useEffect(() => {
+        const handler = setTimeout(() => setDebouncedValue(value), delay);
+        return () => clearTimeout(handler);
+    }, [value, delay]);
+
+    return debouncedValue;
+}
+
+const Recipes = () => {
+    const query = useMemo(() => {
+        const params = new URLSearchParams(location.search);
+        return params.get('query') || '';
+    }, [location.search]);
     const [categories, setCategories] = useState<Tables<'categories'>[]>([]);
     const navigate = useNavigate();
     const { user } = useUserStore();
@@ -33,32 +49,48 @@ const Recipes = ({ query }: { query?: string }) => {
     }, []);
 
     const [inputValue, setInputValue] = useState(query);
+    const debouncedInput = useDebounce(inputValue, 500);
     const updateQuery = (query: string) => {
         if (query) navigate(`/recipes?query=${query}`);
     };
     //search, List
     const observerRef = useRef<HTMLDivElement>(null);
-    const searchConfig = useMemo(() => {
-        return {
+
+    // ------------------- useSearch 설정 -------------------
+    const searchConfig = useMemo(
+        () => ({
             pageType: 'recipe' as const,
             initialParams: { searchTerm: query },
             enableInfiniteScroll: true,
             pageSize: 5,
-        };
-    }, [query]);
+        }),
+        [query]
+    );
 
     const {
         searchList,
+        loading,
         loadingMore,
-        updateSearchTerm,
+        error,
         totalCount,
+        isInitialized,
+        hasMore,
+        loadMore,
+        updateRecipeSortBy,
         currentRecipeCategory,
         currentRecipeSort,
         updateCategory,
-        updateRecipeSortBy,
-        hasMore,
-        loadMore,
+        updateSearchTerm,
+        search,
+        initialize,
     } = useSearch(searchConfig);
+    // 초기 검색 (한 번만)
+    useEffect(() => {
+        if (!isInitialized) initialize();
+    }, [initialize, isInitialized]);
+    useEffect(() => {
+        search({ searchTerm: debouncedInput });
+    }, [debouncedInput]);
     const handleObserver = useCallback(
         (entries: IntersectionObserverEntry[]) => {
             const [target] = entries;
@@ -87,9 +119,50 @@ const Recipes = ({ query }: { query?: string }) => {
             }
         };
     }, [handleObserver]);
-    const handleFilter = (status: RecipeSortBy) => {
-        updateRecipeSortBy(status);
-    };
+
+    // 카테고리 클릭 핸들러
+    const handleCategoryClick = useCallback(
+        (categoryId: string) => {
+            updateCategory(categoryId); // 카테고리 상태 업데이트
+            search({
+                // 검색 다시 실행
+                searchTerm: debouncedInput,
+                category: categoryId,
+                sortBy: currentRecipeSort,
+            });
+        },
+        [debouncedInput, currentRecipeSort, search, updateCategory]
+    );
+
+    // 정렬 클릭 핸들러
+    const handleSortClick = useCallback(
+        (sort: RecipeSortBy) => {
+            updateRecipeSortBy(sort); // 정렬 상태 업데이트
+            search({
+                // 검색 다시 실행
+                searchTerm: debouncedInput,
+                category: currentRecipeCategory,
+                sortBy: sort,
+            });
+        },
+        [debouncedInput, currentRecipeCategory, search, updateRecipeSortBy]
+    );
+    // 스피너 반응형으로 크기 적용
+    const [spinnerSize, setSpinnerSize] = useState(8);
+
+    useEffect(() => {
+        const updateSpinnerSize = () => {
+            if (window.innerWidth >= 768) {
+                setSpinnerSize(12); // 태블릿
+            } else {
+                setSpinnerSize(8); // 모바일
+            }
+        };
+
+        updateSpinnerSize();
+        window.addEventListener('resize', updateSpinnerSize);
+        return () => window.removeEventListener('resize', updateSpinnerSize);
+    }, []);
     return (
         <div className={styles['recipe']}>
             <section className={styles['recipe__category']}>
@@ -106,7 +179,7 @@ const Recipes = ({ query }: { query?: string }) => {
                             <button
                                 className={styles['recipe__category-button']}
                                 type='button'
-                                onClick={() => updateCategory('')}
+                                onClick={() => handleCategoryClick('')}
                             >
                                 전체
                             </button>
@@ -123,7 +196,7 @@ const Recipes = ({ query }: { query?: string }) => {
                                 <button
                                     className={styles['recipe__category-button']}
                                     type='button'
-                                    onClick={() => updateCategory(data.id)}
+                                    onClick={() => handleCategoryClick(data.id)}
                                 >
                                     {data.name}
                                 </button>
@@ -155,7 +228,7 @@ const Recipes = ({ query }: { query?: string }) => {
                                     : styles['recipe__orderBtn']
                             }
                         >
-                            <button type='button' onClick={() => handleFilter('recently')}>
+                            <button type='button' onClick={() => handleSortClick('recently')}>
                                 최신순
                             </button>
                         </li>
@@ -166,7 +239,7 @@ const Recipes = ({ query }: { query?: string }) => {
                                     : styles['recipe__orderBtn']
                             }
                         >
-                            <button type='button' onClick={() => handleFilter('recommended')}>
+                            <button type='button' onClick={() => handleSortClick('recommended')}>
                                 추천순
                             </button>
                         </li>
@@ -177,7 +250,7 @@ const Recipes = ({ query }: { query?: string }) => {
                                     : styles['recipe__orderBtn']
                             }
                         >
-                            <button type='button' onClick={() => handleFilter('popular')}>
+                            <button type='button' onClick={() => handleSortClick('popular')}>
                                 인기순
                             </button>
                         </li>
@@ -199,25 +272,45 @@ const Recipes = ({ query }: { query?: string }) => {
                 </div>
                 <section className={styles.sharePage__results} aria-live='polite'>
                     <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
-                    {/* 검색 결과 없음 */}
-                    {searchList.length === 0 && (
-                        <div className={styles.sharePage__noneresults}>
-                            <h2 className='sr-only'>검색 결과가 없습니다</h2>
-                            <EmptyState title='아직 아무것도 없어요' />
-                        </div>
-                    )}
 
-                    {/* 게시글 리스트 */}
-                    {searchList.map((item, index) => (
-                        <div key={`${item.id}-${index}`}>
-                            <PostItem post={item} type='recipe' onClick={postId => navigate(`/recipes/${postId}`)} />
+                    {!isInitialized ? (
+                        <div className={styles.sharePage__loading}>
+                            {' '}
+                            <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
                         </div>
-                    ))}
-                    {/* 무한스크롤 트리거 영역 - 시각화 */}
-                    {hasMore && !loadingMore && searchList.length > 0 && (
-                        <div ref={observerRef} aria-hidden='true'>
-                            <span></span>
-                        </div>
+                    ) : (
+                        <>
+                            {loading && (
+                                <div className={styles.recipe__loading}>
+                                    {' '}
+                                    <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
+                                </div>
+                            )}
+                            {/* 검색 결과 없음 */}
+                            {!loading && searchList.length === 0 && (
+                                <div className={styles.sharePage__noneresults}>
+                                    <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                                    <EmptyState title='아직 아무것도 없어요' />
+                                </div>
+                            )}
+
+                            {/* 게시글 리스트 */}
+                            {searchList.map((item, index) => (
+                                <div key={`${item.id}-${index}`}>
+                                    <PostItem
+                                        post={item}
+                                        type='recipe'
+                                        onClick={postId => navigate(`/recipes/${postId}`)}
+                                    />
+                                </div>
+                            ))}
+                            {/* 무한스크롤 트리거 영역 - 시각화 */}
+                            {!loading && hasMore && !loadingMore && searchList.length > 0 && (
+                                <div ref={observerRef} aria-hidden='true'>
+                                    <span></span>
+                                </div>
+                            )}
+                        </>
                     )}
                 </section>
             </section>

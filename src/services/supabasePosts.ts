@@ -64,6 +64,7 @@ export const selectPostsLikeTop3 = async (): Promise<Post[] | null> => {
             .from('posts')
             .select(`*`)
             .eq('is_post_active', true)
+            .eq('post_type', 'recipe')
             .order('like_count', { ascending: false })
             .limit(3);
 

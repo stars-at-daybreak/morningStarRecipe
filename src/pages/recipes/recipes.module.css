@@ -119,6 +119,13 @@
     padding-top: 6rem;
     padding-bottom: 6rem;
 }
+.recipe__loading {
+    height: 22rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 @media screen and (min-width: 1024px) {
     .recipe__order {
         display: flex;
@@ -127,5 +134,8 @@
     .sharePage__noneresults {
         padding-top: 10rem;
         padding-bottom: 10rem;
+    }
+    .recipe__loading {
+        height: 45rem;
     }
 }
