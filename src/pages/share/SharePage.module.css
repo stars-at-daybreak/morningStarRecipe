@@ -48,6 +48,13 @@
     padding-top: 6rem;
     padding-bottom: 6rem;
 }
+.sharePage__loading {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 22rem;
+}
 @media screen and (min-width: 768px) {
     .sharePage__filterList {
         margin: 0 auto;
@@ -82,6 +89,9 @@
     }
     .sharePage__results {
         margin-top: 3rem;
+    }
+    .sharePage__loading {
+        height: 45rem;
     }
 }
 
