@@ -40,7 +40,7 @@ const Share = () => {
     usePageSetup({
         title: '모두의 나눔',
         pageName: 'share',
-        showBackButton: false,
+        showBackButton: true,
     });
 
     // 검색 입력 상태
