@@ -63,19 +63,19 @@ const AppRoutes = () => {
                 <Route path='/password' element={<PasswordFind />} />
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
-                <Route path='/mypage/password-verification' element={<PasswordVerification />} />
-                <Route path='/mypage/user-edit' element={<UserEditForm />} />
-                <Route path='/mypage/my-bookmark' element={<MyBookmark />} />
-                <Route path='/mypage/levelup-guide' element={<LevelupGuide />} />
-                <Route path='/mypage/my-postList' element={<MyPostList />} />
-                <Route path='/mypage/privacy' element={<Privacy />} />
-                <Route path='/mypage/terms' element={<Terms />} />
-                <Route path='/mypage/delete-account' element={<DeleteAccount />} />
+                <Route path='/mypage/password-verification' element={!user ? <Login /> : <PasswordVerification />} />
+                <Route path='/mypage/user-edit' element={!user ? <Login /> : <UserEditForm />} />
+                <Route path='/mypage/my-bookmark' element={!user ? <Login /> : <MyBookmark />} />
+                <Route path='/mypage/levelup-guide' element={!user ? <Login /> : <LevelupGuide />} />
+                <Route path='/mypage/my-postList' element={!user ? <Login /> : <MyPostList />} />
+                <Route path='/mypage/privacy' element={!user ? <Login /> : <Privacy />} />
+                <Route path='/mypage/terms' element={!user ? <Login /> : <Terms />} />
+                <Route path='/mypage/delete-account' element={!user ? <Login /> : <DeleteAccount />} />
                 <Route path='/recipes' element={<Recipes />} />
-                <Route path='/recipes/form' element={<RecipeForm />} />
+                <Route path='/recipes/form' element={!user ? <Login /> : <RecipeForm />} />
                 <Route path='/recipes/:id' element={<RecipeDetail />} />
                 <Route path='/share' element={<Share />} />
-                <Route path='/share/form' element={<ShareForm />} />
+                <Route path='/share/form' element={!user ? <Login /> : <ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
                 <Route path='/404' element={<NotFound />} />
             </Route>
