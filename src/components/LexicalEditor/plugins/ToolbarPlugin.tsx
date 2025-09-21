@@ -96,7 +96,6 @@ const ToolbarPlugin: React.FC = () => {
 
     useEffect(() => {
         if (youtubeUrl) {
-            console.log('youtubeUrl', youtubeUrl);
             editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, youtubeUrl);
         }
     }, [youtubeUrl]);
