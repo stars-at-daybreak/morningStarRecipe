@@ -14,7 +14,7 @@ const InputRadio = ({
     name: string;
     value: string;
     isRequired?: boolean;
-    checked: boolean;
+    checked?: boolean;
     isDisabled?: boolean;
     handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
