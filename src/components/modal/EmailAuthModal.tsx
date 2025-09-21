@@ -37,7 +37,6 @@ const EmailAuthModal = ({
                 setIsHidden(false);
             }
         } else {
-            //todo 취소하기
             handleModal(false);
         }
     };
