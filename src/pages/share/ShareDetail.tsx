@@ -79,7 +79,7 @@ export const ShareDetail = () => {
                             alt='작성자 프로필 이미지'
                         />
                     ) : (
-                        <img src={noneProfile} alt='작성자 프로필 이미지' />
+                        <div className={styles['profile-default']} />
                     )}
                 </div>
 

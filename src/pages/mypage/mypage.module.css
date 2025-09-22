@@ -104,6 +104,84 @@
     opacity: 0.5;
 }
 
+/* 프로필 이미지 변경 박스 */
+/* 드롭다운 컨테이너 */
+.page__profile_dropdown {
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: clamp(2rem, 2rem + (100vw - 390px) * 0.05, 3rem);
+    background-color: white;
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.15);
+    margin-top: 1rem;
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* overflow: hidden; */
+    z-index: 20;
+
+    /* 애니메이션 효과 */
+    animation: slideDown 0.3s ease-out forwards;
+    transform-origin: top center;
+}
+
+/* 스르륵 내려오는 애니메이션 */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-1rem) scaleY(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scaleY(1);
+    }
+}
+
+/* 드롭다운 아이템 */
+.page__profile_dropdown_item {
+    width: 100%;
+    padding: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.03, 2.6rem)
+        clamp(2.6rem, 2.6rem + (100vw - 390px) * 0.08, 3.6rem);
+    background: none;
+    border: none;
+    text-align: center;
+    font-size: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.01, 2.4rem);
+    font-weight: 500;
+    color: var(--color-gray);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 0.1rem solid var(--color-gray-200);
+}
+
+.page__profile_dropdown_item:first-child {
+    border-radius: clamp(2rem, 2rem + (100vw - 390px) * 0.02, 3rem) clamp(2rem, 2rem + (100vw - 390px) * 0.05, 3rem) 0 0;
+}
+.page__profile_dropdown_item:last-child {
+    border-radius: 0 0 clamp(2rem, 2rem + (100vw - 390px) * 0.02, 3rem) clamp(2rem, 2rem + (100vw - 390px) * 0.05, 3rem);
+}
+
+.page__profile_dropdown_item:last-child {
+    border-bottom: none;
+}
+
+.page__profile_dropdown_item:first-child:active {
+    background-color: var(--color-green);
+    color: white;
+    box-shadow: inset 0.3rem 0.3rem 0.6rem rgba(0, 0, 0, 0.2);
+}
+
+.page__profile_dropdown_item:last-child:active {
+    background-color: var(--color-green);
+    color: white;
+    box-shadow: inset 0.3rem 0.3rem 0.6rem rgba(0, 0, 0, 0.2);
+}
+
 /* 프로필 닉네임 */
 .page__profile_nickname {
     font-weight: bold;

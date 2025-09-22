@@ -139,3 +139,22 @@ export const deleteFile = async (fileId: string): Promise<boolean> => {
         return false;
     }
 };
+
+/**
+ * 사용자별 프로필 이미지 삭제
+ */
+export const deleteProfileImage = async (userId: string): Promise<boolean> => {
+    try {
+        const { error } = await supabase.from('files').delete().eq('user_id', userId).eq('file_type', 'profile');
+
+        if (error) {
+            console.error('프로필 이미지 삭제 실패:', error);
+            throw error;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('deleteProfileImage 에러:', error);
+        return false;
+    }
+};

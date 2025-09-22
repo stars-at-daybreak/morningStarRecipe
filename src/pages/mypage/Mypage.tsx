@@ -5,7 +5,7 @@ import { useModal } from '../../components/modal/ModalContext';
 import useUserStore from '../../stores/useUserStore';
 import { useFileUpload } from '../../hooks/useImageUpload';
 import LevelBadge from '../../components/LevelBadge/LevelBadge';
-import { saveProfileImage, getUserProfileImage } from '../../services/supabaseFiles';
+import { saveProfileImage, getUserProfileImage, deleteProfileImage } from '../../services/supabaseFiles';
 import styles from './mypage.module.css';
 
 // API URL을 컴포넌트 외부 상수로 선언
@@ -21,6 +21,7 @@ const Mypage = () => {
     const [displayImageUrl, setDisplayImageUrl] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [imageHasError, setImageHasError] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false); // 드롭다운 상태
 
     const nickname = user?.user_metadata.nickname;
 
@@ -67,8 +68,37 @@ const Mypage = () => {
         setImageHasError(true);
     };
 
+    // 에디터 버튼 클릭 시 드롭다운 토글
     const handleProfileEditClick = () => {
         if (isProcessing || isUploading) return;
+        setShowDropdown(!showDropdown);
+    };
+
+    // 기본 이미지로 변경
+    const handleSetDefaultImage = async () => {
+        if (!user?.id) return;
+
+        try {
+            setIsProcessing(true);
+
+            // 서버에서 프로필 이미지 삭제
+            await deleteProfileImage(user.id);
+
+            // 클라이언트 상태 업데이트
+            setDisplayImageUrl(null);
+            setShowDropdown(false);
+
+            // console.log('기본 이미지로 변경됨');
+        } catch (error) {
+            console.error('기본 이미지 설정 중 오류:', error);
+            alert('기본 이미지로 변경하는데 실패했습니다.');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    // 이미지 선택 버튼 클릭
+    const handleSelectImage = () => {
         setIsProcessing(true);
         const handleFocus = () => {
             setTimeout(() => setIsProcessing(false), 100);
@@ -76,6 +106,7 @@ const Mypage = () => {
         };
         window.addEventListener('focus', handleFocus);
         fileInputRef.current?.click();
+        setShowDropdown(false);
     };
 
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,11 +121,9 @@ const Mypage = () => {
         try {
             const filename = await uploadFile(file);
             if (filename) {
-                // supabaseFiles.ts의 saveProfileImage를 호출합니다.
                 const savedFileId = await saveProfileImage(filename);
                 if (savedFileId) {
-                    // 성공 시 화면에 즉시 반영
-                    setDisplayImageUrl(`${apiUrl}/${filename}?t=${new Date().getTime()}`); // 캐시 방지용 타임스탬프 추가
+                    setDisplayImageUrl(`${apiUrl}/${filename}?t=${new Date().getTime()}`);
                 }
             }
         } catch (err) {
@@ -149,6 +178,22 @@ const Mypage = () => {
                             onClick={handleProfileEditClick}
                             aria-disabled={isProcessing || isUploading}
                         />
+
+                        {/* 드롭다운 메뉴 */}
+                        {showDropdown && (
+                            <div className={styles.page__profile_dropdown}>
+                                <button
+                                    className={styles.page__profile_dropdown_item}
+                                    onClick={handleSetDefaultImage}
+                                    disabled={isProcessing}
+                                >
+                                    기본이미지로 변경하기
+                                </button>
+                                <button className={styles.page__profile_dropdown_item} onClick={handleSelectImage}>
+                                    프로필사진 변경하기
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div className={styles.page__profile_nickname}>{nickname}</div>
 

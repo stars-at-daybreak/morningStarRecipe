@@ -177,7 +177,7 @@ const RecipeDetail = () => {
                             alt='작성자 프로필 이미지'
                         />
                     ) : (
-                        <img src={noneProfile} alt='작성자 프로필 이미지' />
+                        <div className={styles['profile-default']} />
                     )}
                 </div>
 
@@ -232,10 +232,7 @@ const RecipeDetail = () => {
                             aria-label={`싫어요 ${voteCounts.dislikeCount}개 ${voteCounts.prevType === 'dislike' ? '(선택됨)' : ''}`}
                             aria-pressed={voteCounts.prevType === 'dislike'}
                         >
-                            <img
-                                src={voteCounts.prevType === 'dislike' ? dislikeActiveImg : dislikeImg}
-                                alt=''
-                            />
+                            <img src={voteCounts.prevType === 'dislike' ? dislikeActiveImg : dislikeImg} alt='' />
                             <span>{voteCounts.dislikeCount}</span>
                         </button>
                     </div>

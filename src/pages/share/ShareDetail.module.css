@@ -23,6 +23,13 @@
             object-fit: cover;
             object-position: center;
         }
+        .profile-default {
+            width: 90%;
+            height: 90%;
+            background: url('../../assets/none-profile.svg') no-repeat center / contain;
+            margin: clamp(0.1rem, 0.1rem + (100vw - 390px) * 0.005, 0.3rem) 0 0
+                clamp(0.1rem, 0.1rem + (100vw - 390px) * 0.005, 0.3rem);
+        }
     }
 
     .share__writer-nickname {
