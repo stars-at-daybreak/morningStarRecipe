@@ -166,7 +166,7 @@ const Mypage = () => {
                         <input
                             ref={fileInputRef}
                             type='file'
-                            accept='image/*'
+                            accept='image/png, image/jpeg, image/jpg'
                             onChange={handleFileSelect}
                             style={{ display: 'none' }}
                             aria-label='프로필 이미지 파일 선택'

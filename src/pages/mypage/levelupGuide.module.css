@@ -1,0 +1,112 @@
+.levelup_guide {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: clamp(3rem, 3rem + (100vw - 390px) * 0.04, 6rem);
+}
+
+.levelup_guide__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1.6rem;
+}
+
+.levelup_guide__group {
+    width: 100%;
+    max-width: 73.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.05, 2.4rem);
+}
+
+.levelup_guide__group li {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(2rem, 2rem + (100vw - 390px) * 0.05, 4.2rem) clamp(2.4rem, 2.4rem + (100vw - 390px) * 0.05, 5rem);
+    border-radius: clamp(2rem, 2rem + (100vw - 390px) * 0.04, 3rem);
+    background-color: #fff;
+}
+
+.levelup_guide__info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: left;
+    gap: clamp(0.8rem, 0.8rem + (100vw - 390px) * 0.05, 1.8rem);
+}
+
+.levelup_guide__info-title {
+    font-size: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.05, 3.2rem);
+    font-weight: bold;
+}
+.levelup_guide__info-text {
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.05, 2.4rem);
+    color: var(--color-gray);
+}
+
+.levelup_guide__img {
+    width: clamp(5rem, 5rem + (100vw - 390px) * 0.1, 10rem);
+    height: clamp(5rem, 5rem + (100vw - 390px) * 0.1, 10rem);
+}
+
+/* 레벨강등사유 */
+.levelup_guide__downgrade {
+    width: 100%;
+    max-width: 73.6rem;
+    color: var(--color-gray-400);
+    margin-top: clamp(3rem, 3rem + (100vw - 390px) * 0.04, 6rem);
+}
+
+.levelup_guide__downgrade-title {
+    font-size: clamp(1.6rem, 1.6rem + (100vw - 390px) * 0.05, 3.2rem);
+    font-weight: bold;
+    margin-bottom: clamp(1rem, 1rem + (100vw - 390px) * 0.03, 2rem);
+}
+
+.levelup_guide__downgrade-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: left;
+    gap: clamp(2rem, 2rem + (100vw - 390px) * 0.05, 3rem);
+}
+
+.levelup_guide__downgrade-list li {
+    padding-left: 1.8rem;
+    position: relative;
+}
+.levelup_guide__downgrade-list li::after {
+    content: '-';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.levelup_guide__downgrade-list__title {
+    font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.05, 2.2rem);
+    font-weight: bold;
+}
+.levelup_guide__downgrade-list__text {
+    font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.05, 2.2rem);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: left;
+    gap: clamp(0.4rem, 0.4rem + (100vw - 390px) * 0.05, 1.2rem);
+    margin-top: clamp(0.4rem, 0.4rem + (100vw - 390px) * 0.05, 1.2rem);
+}

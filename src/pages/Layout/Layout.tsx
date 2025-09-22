@@ -26,6 +26,22 @@ const Layout = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // 배경색 관리용 useEffect 추가
+    useEffect(() => {
+        const shouldUseGrayBg =
+            location.pathname === '/mypage/levelup-guide' ||
+            location.pathname.startsWith('/recipes/') || // /recipes 상세 페이지만
+            location.pathname.startsWith('/share/'); // /share 상세 페이지만
+
+        if (shouldUseGrayBg) {
+            document.body.classList.add('gray-bg');
+        } else {
+            document.body.classList.remove('gray-bg');
+        }
+
+        return () => document.body.classList.remove('gray-bg');
+    }, [location.pathname]);
+
     return (
         <>
             <div className={isDesktop ? styles.header_desktop : ''}>

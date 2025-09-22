@@ -5,6 +5,7 @@
     align-items: center;
     padding: 1.3rem;
     border-bottom: 0.1rem solid var(--color-gray-200);
+    background-color: #fff;
 }
 .header__logoWrapper,
 .header__title {

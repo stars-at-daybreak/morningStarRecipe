@@ -18,3 +18,8 @@ html {
     clip-path: polygon(0 0, 0 0, 0 0); /* inset(50%) 와 동일한 표현 */
     border: 0;
 }
+
+/* 일부페이지 배경색 추가 */
+body.gray-bg {
+    background-color: var(--color-gray-100);
+}
