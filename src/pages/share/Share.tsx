@@ -22,7 +22,14 @@ function useDebounce<T>(value: T, delay: number) {
 
     return debouncedValue;
 }
-
+// ------------------- 필터 옵션 -------------------
+const filterOptions: { value: ShareStatus; label: string }[] = [
+    { value: 'all', label: '전체' },
+    { value: 'available', label: '나눔중' },
+    { value: 'reserved', label: '예약중' },
+    { value: 'completed', label: '완료' },
+    { value: 'cancelled', label: '취소' },
+];
 // ------------------- Share 컴포넌트 -------------------
 const Share = () => {
     const { user } = useUserStore();
@@ -71,13 +78,18 @@ const Share = () => {
         search,
         initialize,
     } = useSearch(searchConfig);
-    // 초기 검색 (한 번만)
+    // // 초기 검색 (한 번만)
+    const searchRef = useRef(search);
+    searchRef.current = search; // 매 렌더링마다 최신 함수 참조 업데이트
     useEffect(() => {
-        if (!isInitialized) initialize();
-    }, [initialize, isInitialized]);
-    useEffect(() => {
-        search({ searchTerm: debouncedInput });
-    }, [debouncedInput]);
+        if (isInitialized) {
+            searchRef.current({ searchTerm: debouncedInput.toString() });
+        } else {
+            setTimeout(() => {
+                search();
+            }, 1000);
+        }
+    }, [debouncedInput, isInitialized]); // 안정적인 의존성만 사용
     // ------------------- 무한 스크롤 -------------------
     const observerRef = useRef<HTMLDivElement>(null);
     const handleObserver = useCallback(
@@ -118,13 +130,6 @@ const Share = () => {
         setInputValue(val);
     }, []);
 
-    // ------------------- URL 동기화 -------------------
-    useEffect(() => {
-        if (debouncedInput !== initialQuery) {
-            navigate(`/share${debouncedInput ? `?query=${debouncedInput}` : ''}`);
-        }
-    }, [debouncedInput, initialQuery, navigate]);
-
     // ------------------- 로그인 모달 -------------------
     const handleLoginModalOpen = useCallback(
         (e: React.MouseEvent) => {
@@ -142,14 +147,6 @@ const Share = () => {
         [navigate]
     );
 
-    // ------------------- 필터 옵션 -------------------
-    const filterOptions: { value: ShareStatus; label: string }[] = [
-        { value: 'all', label: '전체' },
-        { value: 'available', label: '나눔중' },
-        { value: 'reserved', label: '예약중' },
-        { value: 'completed', label: '완료' },
-        { value: 'cancelled', label: '취소' },
-    ];
     // 스피너 반응형으로 크기 적용
     const [spinnerSize, setSpinnerSize] = useState(8);
 
@@ -230,13 +227,6 @@ const Share = () => {
                     </div>
                 ) : (
                     <>
-                        {loading && (
-                            <div className={styles.sharePage__loading}>
-                                {' '}
-                                <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
-                            </div>
-                        )}
-
                         {!loading && !error && searchList.length === 0 && (
                             <div className={styles.sharePage__noneresults}>
                                 <h2 className='sr-only'>검색 결과가 없습니다</h2>

@@ -49,6 +49,14 @@
     background-color: var(--color-gray-300);
     height: 0.05rem;
 }
+.searchPage__loading,
+.searchPage__loadingMore {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 22rem;
+}
 @media (min-width: 768px) {
     .searchPage__inputWrapper {
         margin: 0 auto;
@@ -76,6 +84,10 @@
     .searchPage__noResults {
         padding-top: 8rem;
         padding-bottom: 8rem;
+    }
+    .searchPage__loading,
+    .searchPage__loadingMore {
+        height: 45rem;
     }
 }
 @media (min-width: 1024px) {
