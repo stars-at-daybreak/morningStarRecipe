@@ -170,10 +170,10 @@ const Mypage = () => {
                     <Link to='/mypage/levelup-guide' className={styles.page__menu_item}>
                         모두의 레벨업 가이드
                     </Link>
-                    <Link to='/privacy' className={styles.page__menu_item}>
+                    <Link to='/mypage/privacy' className={styles.page__menu_item}>
                         개인정보 처리방침
                     </Link>
-                    <Link to='/terms' className={styles.page__menu_item}>
+                    <Link to='/mypage/terms' className={styles.page__menu_item}>
                         서비스 이용약관
                     </Link>
                     <div className={styles.page__actions}>
