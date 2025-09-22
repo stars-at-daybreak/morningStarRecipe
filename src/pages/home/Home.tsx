@@ -31,8 +31,8 @@ const Home = () => {
             >
                 <div className={styles.recommendationImages}></div>
             </a>
-            <Sharing />
             <Recent />
+            <Sharing />
         </div>
     );
 };

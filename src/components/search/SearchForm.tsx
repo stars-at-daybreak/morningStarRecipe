@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Keyboard from 'react-simple-keyboard';
+import hangul from 'hangul-js';
 import 'react-simple-keyboard/build/css/index.css';
 import styles from './SearchForm.module.css';
 import search_icon from '../../assets/search_icon.svg';
@@ -9,53 +10,41 @@ import keyboard_icon from '../../assets/keyboard_icon.svg';
 // 언어 타입 정의
 type LanguageType = 'ko' | 'en';
 
-// 키보드 레이아웃 정의 (mutable array로 변경)
-const KEYBOARD_LAYOUTS: { [key: string]: string[] } = {
-    english: [
-        '1 2 3 4 5 6 7 8 9 0 {bksp}',
-        'q w e r t y u i o p',
-        'a s d f g h j k l {enter}',
-        '{shift} z x c v b n m {shift}',
-        '{lang} @ {space}',
-    ],
-    englishShift: [
-        '! @ # $ % ^ & * ( ) {bksp}',
-        'Q W E R T Y U I O P',
-        'A S D F G H J K L {enter}',
-        '{shift} Z X C V B N M {shift}',
-        '{lang} @ {space}',
-    ],
-    korean: [
+// 한글 키보드 레이아웃
+const KOREAN_LAYOUT = {
+    default: [
         '1 2 3 4 5 6 7 8 9 0 {bksp}',
         'ㅂ ㅈ ㄷ ㄱ ㅅ ㅛ ㅕ ㅑ ㅐ ㅔ',
         'ㅁ ㄴ ㅇ ㄹ ㅎ ㅗ ㅓ ㅏ ㅣ {enter}',
         '{shift} ㅋ ㅌ ㅊ ㅍ ㅠ ㅜ ㅡ {shift}',
-        '{lang} @ {space}',
+        '{lang} {space}',
     ],
-    koreanShift: [
+    shift: [
         '! @ # $ % ^ & * ( ) {bksp}',
         'ㅃ ㅉ ㄸ ㄲ ㅆ ㅛ ㅕ ㅑ ㅒ ㅖ',
         'ㅁ ㄴ ㅇ ㄹ ㅎ ㅗ ㅓ ㅏ ㅣ {enter}',
         '{shift} ㅋ ㅌ ㅊ ㅍ ㅠ ㅜ ㅡ {shift}',
-        '{lang} @ {space}',
+        '{lang} {space}',
     ],
 };
 
-// 버튼 테마 정의
-const BUTTON_THEME: Array<{ class: string; buttons: string }> = [
-    {
-        class: 'hg-button-enter',
-        buttons: '{enter}',
-    },
-    {
-        class: 'hg-button-shift',
-        buttons: '{shift}',
-    },
-    {
-        class: 'hg-button-lang',
-        buttons: '{lang}',
-    },
-];
+// 영어 키보드 레이아웃
+const ENGLISH_LAYOUT = {
+    default: [
+        '1 2 3 4 5 6 7 8 9 0 {bksp}',
+        'q w e r t y u i o p',
+        'a s d f g h j k l {enter}',
+        '{shift} z x c v b n m {shift}',
+        '{lang} {space}',
+    ],
+    shift: [
+        '! @ # $ % ^ & * ( ) {bksp}',
+        'Q W E R T Y U I O P',
+        'A S D F G H J K L {enter}',
+        '{shift} Z X C V B N M {shift}',
+        '{lang} {space}',
+    ],
+};
 
 const SearchForm: React.FC = memo(() => {
     const navigate = useNavigate();
@@ -64,13 +53,14 @@ const SearchForm: React.FC = memo(() => {
     const [query, setQuery] = useState<string>('');
     const [showKeyboard, setShowKeyboard] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
-    const [currentLanguage, setCurrentLanguage] = useState<LanguageType>('en');
-    const [layoutName, setLayoutName] = useState<string>('english');
+    const [currentLanguage, setCurrentLanguage] = useState<LanguageType>('ko');
+    const [layoutName, setLayoutName] = useState<string>('default');
 
-    // Refs - 초기값을 명시적으로 제공
+    // Refs
     const inputRef = useRef<HTMLInputElement>(null);
     const keyboardRef = useRef<any>(null);
     const blurTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+    const isComposingRef = useRef(false);
 
     // 검색 처리
     const handleSearch = useCallback(
@@ -103,14 +93,18 @@ const SearchForm: React.FC = memo(() => {
         }, 150);
     }, []);
 
+    // 한글 조합 이벤트 처리
+    const handleCompositionStart = useCallback(() => {
+        isComposingRef.current = true;
+    }, []);
+
+    const handleCompositionEnd = useCallback(() => {
+        isComposingRef.current = false;
+    }, []);
+
     // 입력창 값 변경
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setQuery(value);
-
-        if (keyboardRef.current) {
-            keyboardRef.current.setInput(value);
-        }
+        setQuery(e.target.value);
     }, []);
 
     // 키보드 토글
@@ -128,54 +122,66 @@ const SearchForm: React.FC = memo(() => {
         });
     }, []);
 
-    // Shift 키 처리
-    const handleShift = useCallback(() => {
-        if (currentLanguage === 'en') {
-            setLayoutName(prev => (prev === 'english' ? 'englishShift' : 'english'));
-        } else {
-            setLayoutName(prev => (prev === 'korean' ? 'koreanShift' : 'korean'));
-        }
-    }, [currentLanguage]);
-
-    // 언어 전환 처리
-    const handleLanguageToggle = useCallback(() => {
-        setCurrentLanguage(prev => {
-            const newLang = prev === 'en' ? 'ko' : 'en';
-            setLayoutName(newLang === 'en' ? 'english' : 'korean');
-            return newLang;
-        });
-    }, []);
-
-    // 가상 키보드 입력 처리
-    const onKeyboardChange = useCallback((input: string) => {
-        setQuery(input);
-        if (inputRef.current) {
-            inputRef.current.value = input;
-        }
-    }, []);
-
     // 가상 키보드 키 입력 처리
     const onKeyPress = useCallback(
-        (button: string) => {
-            switch (button) {
-                case '{shift}':
-                case '{caps}':
-                    handleShift();
-                    break;
-                case '{lang}':
-                    handleLanguageToggle();
-                    break;
-                case '{enter}':
-                    const trimmedQuery = query.trim();
-                    if (trimmedQuery) {
-                        navigate(`/?query=${encodeURIComponent(trimmedQuery)}`);
-                        setShowKeyboard(false);
+        (key: string) => {
+            if (key === '{bksp}') {
+                // 백스페이스
+                const newValue = query.slice(0, -1);
+                setQuery(newValue);
+                if (inputRef.current) {
+                    inputRef.current.value = newValue;
+                }
+            } else if (key === '{shift}') {
+                // Shift 토글
+                setLayoutName(prev => (prev === 'default' ? 'shift' : 'default'));
+            } else if (key === '{enter}') {
+                // 엔터 (검색)
+                const trimmedQuery = query.trim();
+                if (trimmedQuery) {
+                    navigate(`/?query=${encodeURIComponent(trimmedQuery)}`);
+                    setShowKeyboard(false);
+                }
+            } else if (key === '{space}') {
+                // 스페이스
+                const newValue = query + ' ';
+                setQuery(newValue);
+                if (inputRef.current) {
+                    inputRef.current.value = newValue;
+                }
+            } else if (key === '{lang}') {
+                // 언어 전환
+                setCurrentLanguage(prev => {
+                    const newLang = prev === 'en' ? 'ko' : 'en';
+                    setLayoutName('default'); // 언어 전환시 shift 해제
+                    return newLang;
+                });
+            } else {
+                // 일반 문자 입력 - 한글 조합 로직
+                if (currentLanguage === 'ko') {
+                    // 한글 모드: hangul.assemble(hangul.disassemble(prev + key))
+                    const newValue = hangul.assemble(hangul.disassemble(query + key));
+                    setQuery(newValue);
+                    if (inputRef.current) {
+                        inputRef.current.value = newValue;
                     }
-                    break;
+                } else {
+                    // 영어 모드: 단순 추가
+                    const newValue = query + key;
+                    setQuery(newValue);
+                    if (inputRef.current) {
+                        inputRef.current.value = newValue;
+                    }
+                }
             }
         },
-        [handleShift, handleLanguageToggle, query, navigate]
+        [query, navigate, currentLanguage]
     );
+
+    // 현재 언어에 따른 레이아웃
+    const currentLayout = useMemo(() => {
+        return currentLanguage === 'ko' ? KOREAN_LAYOUT : ENGLISH_LAYOUT;
+    }, [currentLanguage]);
 
     // 키보드 표시 텍스트
     const keyboardDisplay = useMemo(
@@ -233,6 +239,8 @@ const SearchForm: React.FC = memo(() => {
                                 onChange={handleInputChange}
                                 onFocus={handleInputFocus}
                                 onBlur={handleInputBlur}
+                                onCompositionStart={handleCompositionStart}
+                                onCompositionEnd={handleCompositionEnd}
                                 className={styles.search__input}
                                 placeholder='오늘의 메뉴를 검색하세요'
                                 autoComplete='off'
@@ -266,13 +274,13 @@ const SearchForm: React.FC = memo(() => {
                 <div className={styles.keyboard__container}>
                     <Keyboard
                         ref={keyboardRef}
-                        onChange={onKeyboardChange}
                         onKeyPress={onKeyPress}
                         layoutName={layoutName}
-                        layout={KEYBOARD_LAYOUTS}
+                        layout={currentLayout}
                         display={keyboardDisplay}
                         theme='hg-theme-default'
-                        buttonTheme={BUTTON_THEME}
+                        disableCaretPositioning={true}
+                        preventMouseDownDefault={true}
                     />
                 </div>
             )}
