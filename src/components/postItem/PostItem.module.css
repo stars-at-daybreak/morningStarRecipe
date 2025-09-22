@@ -213,11 +213,11 @@
     background-color: var(--color-gray-100);
 }
 
-/* 취소됨 상태 */
+/* 나눔취소 상태 */
 .post__status__cancelled {
-    border-color: var(--color-gray-300);
-    color: var(--color-gray-400);
-    background-color: var(--color-gray-100);
+    border-color: var(--color-lv4);
+    color: var(--color-lv4);
+    background-color: var(--color-lv4-bg);
 }
 
 @media (min-width: 768px) {
