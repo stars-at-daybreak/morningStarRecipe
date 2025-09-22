@@ -253,7 +253,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, type, onClick }) => {
             case 'completed':
                 return '나눔완료';
             case 'cancelled':
-                return '취소됨';
+                return '나눔취소';
             default:
                 return '나눔중';
         }
