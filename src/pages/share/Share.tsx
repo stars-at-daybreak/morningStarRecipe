@@ -71,25 +71,18 @@ const Share = () => {
         loadingMore,
         error,
         totalCount,
-        isInitialized,
         hasMore,
         loadMore,
         currentShareStatus,
-        search,
-        initialize,
+        updateSearchParams,
+        searchParams, // 새롭게 추가
     } = useSearch(searchConfig);
-    // // 초기 검색 (한 번만)
-    const searchRef = useRef(search);
-    searchRef.current = search; // 매 렌더링마다 최신 함수 참조 업데이트
+    // 초기 검색
     useEffect(() => {
-        if (isInitialized) {
-            searchRef.current({ searchTerm: debouncedInput.toString() });
-        } else {
-            setTimeout(() => {
-                search();
-            }, 1000);
+        if (searchParams.searchTerm !== debouncedInput.toString()) {
+            updateSearchParams({ searchTerm: debouncedInput.toString() });
         }
-    }, [debouncedInput, isInitialized]); // 안정적인 의존성만 사용
+    }, [debouncedInput, updateSearchParams, searchParams.searchTerm]);
     // ------------------- 무한 스크롤 -------------------
     const observerRef = useRef<HTMLDivElement>(null);
     const handleObserver = useCallback(
@@ -120,9 +113,9 @@ const Share = () => {
     // ------------------- 필터 변경 -------------------
     const handleFilter = useCallback(
         (status: ShareStatus) => {
-            search({ shareStatus: status });
+            updateSearchParams({ shareStatus: status });
         },
-        [search]
+        [updateSearchParams]
     );
 
     // ------------------- 검색 입력 핸들러 -------------------
@@ -220,14 +213,14 @@ const Share = () => {
             <section className={styles.sharePage__results} aria-live='polite'>
                 <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
 
-                {!isInitialized ? (
+                {loading ? (
                     <div className={styles.sharePage__loading}>
                         {' '}
-                        <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
+                        {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
                     </div>
                 ) : (
                     <>
-                        {!loading && !error && searchList.length === 0 && (
+                        {!error && searchList.length === 0 && (
                             <div className={styles.sharePage__noneresults}>
                                 <h2 className='sr-only'>검색 결과가 없습니다</h2>
                                 <EmptyState title='아직 아무것도 없어요' />
@@ -240,7 +233,7 @@ const Share = () => {
 
                         {loadingMore && <div className='loading-more'></div>}
 
-                        {hasMore && !loadingMore && !loading && searchList.length > 0 && (
+                        {hasMore && !loadingMore && searchList.length > 0 && (
                             <div ref={observerRef} aria-hidden='true'>
                                 <span></span>
                             </div>

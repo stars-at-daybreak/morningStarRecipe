@@ -2,6 +2,7 @@
     max-width: 73.6rem;
     margin: 0 auto;
     margin-top: 4rem;
+    min-height: 41rem;
 }
 .ranking__container {
     background-image: url('../../assets/rank_back.png');

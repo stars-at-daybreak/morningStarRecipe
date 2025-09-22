@@ -25,7 +25,6 @@ function useDebounce<T>(value: T, delay: number) {
 
 const SearchPage = ({ query }: SearchPageProps) => {
     // 검색 입력 상태
-    const [currentPostType, setCurrentPostType] = useState<'all' | 'recipe' | 'share'>('all');
     const [inputValue, setInputValue] = useState(query);
     const [debouncedInput] = useDebounce(inputValue, 500);
     // 스피너 반응형으로 크기 적용
@@ -58,16 +57,14 @@ const SearchPage = ({ query }: SearchPageProps) => {
 
     const {
         searchList,
-        isInitialized,
         loading,
         loadingMore,
-        updateSearchTerm,
+        updateSearchParams,
         totalCount,
-        updatePostType,
         hasMore,
         loadMore,
-        search,
-        initialize,
+        searchParams, // 새롭게 추가
+        currentPostType, // state에서 직접 가져오기
     } = useSearch(searchConfig);
     // ------------------- 무한 스크롤 -------------------
     const observerRef = useRef<HTMLDivElement>(null);
@@ -82,7 +79,6 @@ const SearchPage = ({ query }: SearchPageProps) => {
             entries => {
                 const [target] = entries;
                 if (target.isIntersecting) {
-                    // 현재 상태를 직접 확인하고 loadMore 실행
                     if (hasMore && !loadingMore && !loading) {
                         loadMore();
                     }
@@ -99,47 +95,27 @@ const SearchPage = ({ query }: SearchPageProps) => {
         return () => {
             observer.disconnect();
         };
-    }, [hasMore, loadingMore, loading, loadMore]); // 의존성 다시 추가
-    // ------------------- 초기화 (한 번만 실행) -------------------
-    useEffect(() => {
-        if (!isInitialized) {
-            setTimeout(() => {
-                initialize();
-            }, 1000);
-        }
-    }, [initialize, isInitialized]);
+    }, [hasMore, loadingMore, loading, loadMore]);
 
     // ------------------- 디바운스된 검색 실행 -------------------
-    const searchRef = useRef(search);
     useEffect(() => {
-        searchRef.current = search;
-    });
-
-    useEffect(() => {
-        if (isInitialized) {
-            searchRef.current({ searchTerm: debouncedInput.toString() });
+        if (searchParams.searchTerm !== debouncedInput.toString()) {
+            updateSearchParams({ searchTerm: debouncedInput.toString() });
         }
-    }, [debouncedInput, isInitialized]);
+    }, [debouncedInput, updateSearchParams, searchParams.searchTerm]);
 
     // ------------------- 필터 변경 -------------------
     const handlePostTypeChange = useCallback(
         (value: 'all' | 'recipe' | 'share') => {
-            setCurrentPostType(value);
-            updatePostType(value);
-            // 필터 변경 후 즉시 검색 실행
-            search({ searchTerm: debouncedInput.toString(), postType: value });
+            updateSearchParams({ postType: value });
         },
-        [updatePostType, debouncedInput] // search 의존성 제거
+        [updateSearchParams]
     );
 
     // ------------------- 검색 입력 핸들러 -------------------
-    const handleInputChange = useCallback(
-        (val: string) => {
-            setInputValue(val);
-            updateSearchTerm(val);
-        },
-        [updateSearchTerm]
-    );
+    const handleInputChange = useCallback((val: string) => {
+        setInputValue(val);
+    }, []);
 
     // ------------------- 네비게이션 핸들러 -------------------
     const handlePostClick = useCallback(
@@ -161,11 +137,9 @@ const SearchPage = ({ query }: SearchPageProps) => {
     );
 
     // ------------------- 렌더링 상태 계산 -------------------
-    const showNoResults = searchList.length === 0 && isInitialized;
-    const showResults = isInitialized;
-    const showInitialSpinner = !isInitialized;
-    const showLoadingMoreSpinner = searchList.length > 0 && showInitialSpinner;
-
+    const showNoResults = !loading && searchList.length === 0;
+    const showResults = searchList.length > 0;
+    const showLoadingMoreSpinner = loadingMore;
     return (
         <main className={styles.searchPage}>
             <header className={styles.searchPage__header}>
@@ -197,17 +171,12 @@ const SearchPage = ({ query }: SearchPageProps) => {
             </header>
 
             <section className={styles.searchPage__results} aria-live='polite'>
-                {/* 초기화 중 또는 첫 검색 로딩 */}
-                {showInitialSpinner && (
+                {loading ? (
                     <div className={styles.searchPage__loading}>
-                        <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
+                        {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
                     </div>
-                )}
-
-                {/* 초기화 완료 후 */}
-                {isInitialized && (
+                ) : (
                     <>
-                        {/* 검색 결과 없음 */}
                         {showNoResults && (
                             <div className={styles.searchPage__noResults}>
                                 <h2 className='sr-only'>검색 결과가 없습니다</h2>
@@ -215,7 +184,6 @@ const SearchPage = ({ query }: SearchPageProps) => {
                             </div>
                         )}
 
-                        {/* 검색 결과 있음 */}
                         {showResults && (
                             <div className={styles.searchPage__resultsContainer}>
                                 <ul className={styles.searchPage__resultsList}>
@@ -230,14 +198,12 @@ const SearchPage = ({ query }: SearchPageProps) => {
                                     ))}
                                 </ul>
 
-                                {/* 무한스크롤 더 로딩 중 */}
                                 {showLoadingMoreSpinner && (
                                     <div className={styles.searchPage__loadingMore}>
                                         <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
                                     </div>
                                 )}
 
-                                {/* 무한스크롤 트리거 영역 */}
                                 {hasMore && !showLoadingMoreSpinner && (
                                     <div
                                         ref={observerRef}

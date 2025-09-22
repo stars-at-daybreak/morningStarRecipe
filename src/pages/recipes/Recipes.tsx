@@ -67,38 +67,29 @@ const Recipes = () => {
         searchList,
         loading,
         loadingMore,
-        error,
         totalCount,
-        isInitialized,
         hasMore,
         loadMore,
-        updateRecipeSortBy,
         currentRecipeCategory,
         currentRecipeSort,
-        updateCategory,
-        updateSearchTerm,
-        search,
-        initialize,
+        updateSearchParams,
+        searchParams, // 새롭게 추가
     } = useSearch(searchConfig);
-    const searchRef = useRef(search);
-    // 초기 검색
+
     useEffect(() => {
-        if (isInitialized) {
-            searchRef.current({ searchTerm: debouncedInput.toString() });
-        } else {
-            setTimeout(() => {
-                search();
-            }, 1000);
+        if (searchParams.searchTerm !== debouncedInput.toString()) {
+            updateSearchParams({ searchTerm: debouncedInput.toString() });
         }
-    }, [debouncedInput, isInitialized]);
+    }, [debouncedInput, updateSearchParams, searchParams.searchTerm]);
+
     const handleObserver = useCallback(
         (entries: IntersectionObserverEntry[]) => {
             const [target] = entries;
-            if (target.isIntersecting && hasMore && !loadingMore) {
+            if (target.isIntersecting && hasMore && !loadingMore && !loading) {
                 loadMore();
             }
         },
-        [hasMore, loadingMore, loadMore, searchList.length, totalCount]
+        [hasMore, loadingMore, loadMore, loading]
     );
 
     useEffect(() => {
@@ -123,29 +114,17 @@ const Recipes = () => {
     // 카테고리 클릭 핸들러
     const handleCategoryClick = useCallback(
         (categoryId: string) => {
-            updateCategory(categoryId); // 카테고리 상태 업데이트
-            search({
-                // 검색 다시 실행
-                searchTerm: debouncedInput,
-                category: categoryId,
-                sortBy: currentRecipeSort,
-            });
+            updateSearchParams({ category: categoryId }); // 통합된 함수 호출
         },
-        [debouncedInput, currentRecipeSort, search, updateCategory]
+        [updateSearchParams]
     );
 
     // 정렬 클릭 핸들러
     const handleSortClick = useCallback(
         (sort: RecipeSortBy) => {
-            updateRecipeSortBy(sort); // 정렬 상태 업데이트
-            search({
-                // 검색 다시 실행
-                searchTerm: debouncedInput,
-                category: currentRecipeCategory,
-                sortBy: sort,
-            });
+            updateSearchParams({ sortBy: sort }); // 통합된 함수 호출
         },
-        [debouncedInput, currentRecipeCategory, search, updateRecipeSortBy]
+        [updateSearchParams]
     );
     // 스피너 반응형으로 크기 적용
     const [spinnerSize, setSpinnerSize] = useState(8);
@@ -213,7 +192,6 @@ const Recipes = () => {
                         placeholder='오늘의 메뉴를 검색하세요'
                         onChange={val => {
                             setInputValue(val);
-                            updateSearchTerm(val);
                         }}
                     />
                 </div>
@@ -272,15 +250,15 @@ const Recipes = () => {
                 <section className={styles.recipe__results} aria-live='polite'>
                     <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
 
-                    {!isInitialized ? (
+                    {loading ? (
                         <div className={styles.recipe__loading}>
                             {' '}
-                            <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
+                            {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
                         </div>
                     ) : (
                         <>
                             {/* 검색 결과 없음 */}
-                            {!loading && searchList.length === 0 && (
+                            {searchList.length === 0 && (
                                 <div className={styles.recipe__noneresults}>
                                     <h2 className='sr-only'>검색 결과가 없습니다</h2>
                                     <EmptyState title='아직 아무것도 없어요' />
@@ -298,7 +276,7 @@ const Recipes = () => {
                                 </div>
                             ))}
                             {/* 무한스크롤 트리거 영역 - 시각화 */}
-                            {!loading && hasMore && !loadingMore && searchList.length > 0 && (
+                            {hasMore && !loadingMore && searchList.length > 0 && (
                                 <div ref={observerRef} aria-hidden='true'>
                                     <span></span>
                                 </div>
