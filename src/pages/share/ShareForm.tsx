@@ -234,34 +234,34 @@ const ShareForm = () => {
                     />
                     {errors.title && <div className={styles.error_message}>{errors.title}</div>}
                 </section>
-
-                <section className={styles.share_status_section}>
-                    <label htmlFor='share_status' className={styles.share_status_label}>
-                        나눔상태:
-                    </label>
-                    <div className={styles.share_status_select}>
-                        <CustomSelect
-                            value={formData.share_status}
-                            onChange={e =>
-                                setFormData(prev => ({
-                                    ...prev,
-                                    share_status: e.target.value as
-                                        | 'available'
-                                        | 'reserved'
-                                        | 'completed'
-                                        | 'cancelled',
-                                }))
-                            }
-                            options={[
-                                { value: 'available', label: '나눔중' },
-                                { value: 'reserved', label: '예약중' },
-                                { value: 'completed', label: '나눔완료' },
-                                { value: 'cancelled', label: '나눔취소' },
-                            ]}
-                        />
-                    </div>
-                </section>
-
+                {type === 'update' && (
+                    <section className={styles.share_status_section}>
+                        <label htmlFor='share_status' className={styles.share_status_label}>
+                            나눔상태:
+                        </label>
+                        <div className={styles.share_status_select}>
+                            <CustomSelect
+                                value={formData.share_status}
+                                onChange={e =>
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        share_status: e.target.value as
+                                            | 'available'
+                                            | 'reserved'
+                                            | 'completed'
+                                            | 'cancelled',
+                                    }))
+                                }
+                                options={[
+                                    { value: 'available', label: '나눔중' },
+                                    { value: 'reserved', label: '예약중' },
+                                    { value: 'completed', label: '나눔완료' },
+                                    { value: 'cancelled', label: '나눔취소' },
+                                ]}
+                            />
+                        </div>
+                    </section>
+                )}
                 <section>
                     <label htmlFor='pickup_location' className={styles.shareLocation__title}>
                         나눔 위치: <span className={styles.required}></span>

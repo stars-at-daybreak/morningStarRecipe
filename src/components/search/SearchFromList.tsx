@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import Keyboard from 'react-simple-keyboard';
+import hangul from 'hangul-js';
 import 'react-simple-keyboard/build/css/index.css';
 import searchIcon from '../../assets/search_icon.svg';
 import keyboardIcon from '../../assets/keyboard_icon.svg';
@@ -54,12 +55,14 @@ const BUTTON_THEME = [
 
 const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, placeholder = '검색어 입력', style }) => {
     const [showKeyboard, setShowKeyboard] = useState(false);
-    const [layoutName, setLayoutName] = useState<'english' | 'englishShift' | 'korean' | 'koreanShift'>('english');
-    const [currentLanguage, setCurrentLanguage] = useState<LanguageType>('en');
+    const [layoutName, setLayoutName] = useState<'english' | 'englishShift' | 'korean' | 'koreanShift'>('korean');
+    const [currentLanguage, setCurrentLanguage] = useState<LanguageType>('ko');
     const keyboardRef = useRef<any>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const blurTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+    const isComposingRef = useRef(false);
+    const isVirtualKeyboardInputRef = useRef(false);
 
     // 검색 처리
     const handleSearch = useCallback(
@@ -74,9 +77,29 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
         [value, onSubmit]
     );
 
+    // 한글 조합 이벤트 처리
+    const handleCompositionStart = useCallback(() => {
+        isComposingRef.current = true;
+    }, []);
+
+    const handleCompositionEnd = useCallback(() => {
+        isComposingRef.current = false;
+    }, []);
+
+    // 입력 변경 처리 - 한글 조합 고려
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(e.target.value);
-        keyboardRef.current?.setInput(e.target.value);
+        // 가상 키보드 입력이면 처리하지 않음
+        if (isVirtualKeyboardInputRef.current) {
+            return;
+        }
+
+        const newValue = e.target.value;
+        onChange(newValue);
+
+        // 가상 키보드 동기화 (조합 중이 아닐 때만)
+        if (showKeyboard && !isComposingRef.current && keyboardRef.current) {
+            keyboardRef.current.setInput(newValue);
+        }
     };
 
     const handleInputFocus = useCallback(() => {
@@ -92,13 +115,12 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
             clearTimeout(blurTimeoutRef.current);
         }
         blurTimeoutRef.current = setTimeout(() => {
-            // 키보드가 열려있으면 포커스 상태 유지
             if (showKeyboard) return;
             setIsFocused(false);
         }, 150);
     }, [showKeyboard]);
 
-    // 키보드 버튼 클릭 핸들러 - 키보드가 닫혀있을 때만 열기
+    // 키보드 버튼 클릭 핸들러
     const handleKeyboardButtonClick = useCallback(
         (e: React.MouseEvent) => {
             e.preventDefault();
@@ -108,44 +130,78 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
                 setShowKeyboard(true);
                 requestAnimationFrame(() => {
                     inputRef.current?.focus();
+                    if (keyboardRef.current) {
+                        keyboardRef.current.setInput(value);
+                    }
                 });
             }
         },
-        [showKeyboard]
+        [showKeyboard, value]
     );
 
-    const onKeyboardChange = useCallback(
-        (input: string) => {
-            onChange(input);
-        },
-        [onChange]
-    );
-
+    // 가상 키보드 키 입력 처리 - onChange 제거하고 onKeyPress만 사용
     const onKeyPress = useCallback(
         (button: string) => {
+            isVirtualKeyboardInputRef.current = true;
+
             if (button === '{shift}') {
                 if (currentLanguage === 'en') {
                     setLayoutName(prev => (prev === 'english' ? 'englishShift' : 'english'));
                 } else {
                     setLayoutName(prev => (prev === 'korean' ? 'koreanShift' : 'korean'));
                 }
-            }
-            if (button === '{lang}') {
+            } else if (button === '{lang}') {
                 setCurrentLanguage(prev => {
                     const next = prev === 'en' ? 'ko' : 'en';
                     setLayoutName(next === 'en' ? 'english' : 'korean');
                     return next;
                 });
-            }
-            if (button === '{enter}') {
+            } else if (button === '{enter}') {
                 const trimmedValue = value.trim();
                 if (trimmedValue && onSubmit) {
                     onSubmit(trimmedValue);
                 }
                 setShowKeyboard(false);
+            } else if (button === '{bksp}') {
+                // 백스페이스
+                const newValue = value.slice(0, -1);
+                onChange(newValue);
+                if (inputRef.current) {
+                    inputRef.current.value = newValue;
+                }
+            } else if (button === '{space}') {
+                // 스페이스
+                const newValue = value + ' ';
+                onChange(newValue);
+                if (inputRef.current) {
+                    inputRef.current.value = newValue;
+                }
+            } else {
+                // 일반 문자 입력 - 한글 조합 로직
+                if (button.length === 1) {
+                    let newValue: string;
+
+                    if (currentLanguage === 'ko') {
+                        // 한글 모드: hangul.assemble(hangul.disassemble(prev + key))
+                        newValue = hangul.assemble(hangul.disassemble(value + button));
+                    } else {
+                        // 영어 모드: 단순 추가
+                        newValue = value + button;
+                    }
+
+                    onChange(newValue);
+                    if (inputRef.current) {
+                        inputRef.current.value = newValue;
+                    }
+                }
             }
+
+            // 다음 프레임에서 플래그 리셋
+            requestAnimationFrame(() => {
+                isVirtualKeyboardInputRef.current = false;
+            });
         },
-        [currentLanguage, value, onSubmit]
+        [currentLanguage, value, onSubmit, onChange]
     );
 
     // 외부 클릭 이벤트 처리
@@ -153,7 +209,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
         const target = event.target as Element;
         const keyboardButton = target.closest(`.${styles['search__keyboard-button']}`);
 
-        // 키보드 버튼 클릭은 제외
         if (keyboardButton) {
             return;
         }
@@ -173,7 +228,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
         }
     }, [showKeyboard, handleClickOutside]);
 
-    // 키보드가 닫힐 때 isFocused도 함께 관리
     useEffect(() => {
         if (!showKeyboard) {
             const timeout = setTimeout(() => {
@@ -187,7 +241,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
         }
     }, [showKeyboard]);
 
-    // cleanup 처리
     useEffect(() => {
         return () => {
             if (blurTimeoutRef.current) {
@@ -223,6 +276,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
                                 onChange={handleChange}
                                 onFocus={handleInputFocus}
                                 onBlur={handleInputBlur}
+                                onCompositionStart={handleCompositionStart}
+                                onCompositionEnd={handleCompositionEnd}
                                 placeholder={placeholder}
                                 className={styles['search__input']}
                                 style={style}
@@ -252,13 +307,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSubmit, pl
                 <div className={styles.keyboard__container}>
                     <Keyboard
                         ref={keyboardRef}
-                        onChange={onKeyboardChange}
                         onKeyPress={onKeyPress}
                         layoutName={layoutName}
                         layout={KEYBOARD_LAYOUTS}
                         display={keyboardDisplay}
                         theme='hg-theme-default'
                         buttonTheme={BUTTON_THEME}
+                        disableCaretPositioning={true}
+                        preventMouseDownDefault={true}
                     />
                 </div>
             )}

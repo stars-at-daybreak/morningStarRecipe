@@ -49,12 +49,9 @@ const Recipes = () => {
 
     const [inputValue, setInputValue] = useState(query);
     const debouncedInput = useDebounce(inputValue, 500);
-    const updateQuery = (query: string) => {
-        if (query) navigate(`/recipes?query=${query}`);
-    };
+
     //search, List
     const observerRef = useRef<HTMLDivElement>(null);
-
     // ------------------- useSearch 설정 -------------------
     const searchConfig = useMemo(
         () => ({
@@ -83,13 +80,17 @@ const Recipes = () => {
         search,
         initialize,
     } = useSearch(searchConfig);
-    // 초기 검색 (한 번만)
+    const searchRef = useRef(search);
+    // 초기 검색
     useEffect(() => {
-        if (!isInitialized) initialize();
-    }, [initialize, isInitialized]);
-    useEffect(() => {
-        search({ searchTerm: debouncedInput });
-    }, [debouncedInput]);
+        if (isInitialized) {
+            searchRef.current({ searchTerm: debouncedInput.toString() });
+        } else {
+            setTimeout(() => {
+                search();
+            }, 1000);
+        }
+    }, [debouncedInput, isInitialized]);
     const handleObserver = useCallback(
         (entries: IntersectionObserverEntry[]) => {
             const [target] = entries;
@@ -213,7 +214,6 @@ const Recipes = () => {
                         onChange={val => {
                             setInputValue(val);
                             updateSearchTerm(val);
-                            updateQuery(val);
                         }}
                     />
                 </div>
@@ -269,25 +269,19 @@ const Recipes = () => {
                         </button>
                     )}
                 </div>
-                <section className={styles.sharePage__results} aria-live='polite'>
+                <section className={styles.recipe__results} aria-live='polite'>
                     <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
 
                     {!isInitialized ? (
-                        <div className={styles.sharePage__loading}>
+                        <div className={styles.recipe__loading}>
                             {' '}
                             <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
                         </div>
                     ) : (
                         <>
-                            {loading && (
-                                <div className={styles.recipe__loading}>
-                                    {' '}
-                                    <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
-                                </div>
-                            )}
                             {/* 검색 결과 없음 */}
                             {!loading && searchList.length === 0 && (
-                                <div className={styles.sharePage__noneresults}>
+                                <div className={styles.recipe__noneresults}>
                                     <h2 className='sr-only'>검색 결과가 없습니다</h2>
                                     <EmptyState title='아직 아무것도 없어요' />
                                 </div>

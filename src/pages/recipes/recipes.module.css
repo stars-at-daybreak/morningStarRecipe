@@ -112,10 +112,10 @@
     /* width: clamp(35.8rem, 35.8rem + (100vw - 390px), 73.6rem); */
     width: 100%;
 }
-.sharePage__results {
+.recipe__results {
     width: 100%;
 }
-.sharePage__noneresults {
+.recipe__noneresults {
     padding-top: 6rem;
     padding-bottom: 6rem;
 }
