@@ -60,7 +60,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
                 break;
             case 'SUCCESS': {
                 const data = modalState.data;
-                if (data && typeof data === 'string') navigate(data);
+                if (data && typeof data === 'string') navigate(data, { replace: true });
                 break;
             }
             case 'DELETE_ACCOUNT':
