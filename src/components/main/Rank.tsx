@@ -10,7 +10,7 @@ import rank_2 from '../../assets/rank_2.svg';
 import rank_3 from '../../assets/rank_3.svg';
 import { getUserNickname } from '../../services/supabaseUsers';
 import { Link } from 'react-router-dom';
-
+import EmptyState from '../../components/EmptyState/EmptyState';
 interface PostWithProfileThumbnail extends Tables<'posts'> {
     profileImageUrl?: string;
     thumbnailImageUrl?: string;
@@ -26,9 +26,10 @@ const rankImages: Record<string, string> = {
 const MainRank: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
     const [posts, setPosts] = useState<PostWithProfileThumbnail[]>([]);
-
+    const [loading, setLoading] = useState(true);
     // 🔄 데이터 패치 - 프로필과 썸네일을 동시에 처리
     const fetchData = useCallback(async () => {
+        setLoading(true);
         try {
             const data = await selectPostsLikeTop3();
             if (!data) throw new Error('데이터를 불러올 수 없습니다.');
@@ -60,6 +61,8 @@ const MainRank: React.FC = () => {
             setPosts(enrichedPosts);
         } catch (err) {
             console.error('Failed to fetch ranking data:', err);
+        } finally {
+            setLoading(false); // 끝날 때 false
         }
     }, []);
 
@@ -67,7 +70,7 @@ const MainRank: React.FC = () => {
         fetchData();
     }, [fetchData]);
 
-    const displayPosts = useMemo(() => posts.slice(0, 3), [posts]);
+    const displayPosts = useMemo(() => posts, [posts]);
 
     // 이미지 에러 핸들러
     const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>, fallbackSrc: string) => {
@@ -78,30 +81,39 @@ const MainRank: React.FC = () => {
     return (
         <section className={styles.ranking}>
             <h2 className={styles.ranking__title}>실시간 인기 랭킹</h2>
-            <div className={styles.ranking__container}>
-                <ol className={styles.ranking__profiles}>
-                    {displayPosts.map((post, index) => (
-                        <RankingProfile
-                            key={post.id}
-                            post={post}
-                            index={index}
-                            apiUrl={apiUrl}
-                            onImageError={handleImageError}
-                        />
-                    ))}
-                </ol>
-                <ol className={styles.ranking__posts}>
-                    {displayPosts.map((post, index) => (
-                        <RankingItem
-                            key={post.id}
-                            post={post}
-                            index={index}
-                            apiUrl={apiUrl}
-                            onImageError={handleImageError}
-                        />
-                    ))}
-                </ol>
-            </div>
+            {!loading && displayPosts.length === 0 && (
+                <div className={styles.Rank__noneresults}>
+                    <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                    <EmptyState title='아직 아무것도 없어요' />
+                </div>
+            )}
+            {loading && displayPosts.length === 0 && <div className={styles.ranking__container}></div>}
+            {displayPosts.length != 0 && (
+                <div className={styles.ranking__container}>
+                    <ol className={styles.ranking__profiles}>
+                        {displayPosts.map((post, index) => (
+                            <RankingProfile
+                                key={post.id}
+                                post={post}
+                                index={index}
+                                apiUrl={apiUrl}
+                                onImageError={handleImageError}
+                            />
+                        ))}
+                    </ol>
+                    <ol className={styles.ranking__posts}>
+                        {displayPosts.map((post, index) => (
+                            <RankingItem
+                                key={post.id}
+                                post={post}
+                                index={index}
+                                apiUrl={apiUrl}
+                                onImageError={handleImageError}
+                            />
+                        ))}
+                    </ol>
+                </div>
+            )}
         </section>
     );
 };
