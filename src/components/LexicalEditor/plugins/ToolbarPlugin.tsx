@@ -13,6 +13,8 @@ import { $createImageNode } from '../nodes/ImageNode';
 import { FaAlignLeft, FaAlignCenter, FaAlignRight, FaYoutube } from 'react-icons/fa';
 import { useFileUpload } from '../../../hooks/useImageUpload';
 import { INSERT_YOUTUBE_COMMAND } from '../commands/YouTubeCommands';
+import { useModal } from '../../modal/ModalContext.ts';
+import YoutubeModal from '../../modal/YoutubeModal.tsx';
 const LowPriority = 1;
 
 const FONT_SIZE_OPTIONS = [
@@ -30,6 +32,8 @@ const ToolbarPlugin: React.FC = () => {
     const [fontSize, setFontSize] = useState('16px');
     const [fontColor, setFontColor] = useState('#000000');
     const { uploadFile, isUploading } = useFileUpload();
+    const [youtubeUrl, setYoutubeUrl] = useState('');
+    const [isOpen, setIsOpen] = useState<boolean>();
 
     const updateToolbar = useCallback(() => {
         const selection = $getSelection();
@@ -90,12 +94,11 @@ const ToolbarPlugin: React.FC = () => {
         });
     };
 
-    const handleYouTubeInsert = () => {
-        const youtubeUrl = prompt('YouTube URL을 입력하세요:');
+    useEffect(() => {
         if (youtubeUrl) {
             editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, youtubeUrl);
         }
-    };
+    }, [youtubeUrl]);
 
     return (
         <div className='toolbar'>
@@ -174,9 +177,16 @@ const ToolbarPlugin: React.FC = () => {
                 />
             </label>
 
-            <button type='button' onClick={handleYouTubeInsert} className='toolbar-item' title='YouTube 영상 삽입'>
+            <button type='button' onClick={() => setIsOpen(true)} className='toolbar-item' title='YouTube 영상 삽입'>
                 <FaYoutube className='w-5 h-5' style={{ color: '#FF0000' }} />
             </button>
+
+            {isOpen && (
+                <YoutubeModal
+                    handleModal={(isOpen: boolean) => setIsOpen(isOpen)}
+                    handleYoutubeUrl={youtubeUrl => setYoutubeUrl(youtubeUrl)}
+                />
+            )}
         </div>
     );
 };
