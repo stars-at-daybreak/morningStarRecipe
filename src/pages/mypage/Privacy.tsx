@@ -5,7 +5,7 @@ import styles from './privacy.module.css';
 function Privacy() {
     const pageConfig = useMemo(
         () => ({
-            title: '개인정보처리방침',
+            title: '개인정보 처리방침',
             pageName: 'privacy',
             showBackButton: true,
         }),
