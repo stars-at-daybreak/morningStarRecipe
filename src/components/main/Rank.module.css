@@ -10,6 +10,12 @@
     margin-top: 1rem;
     min-height: 41rem;
 }
+.Rank__noneresults {
+    min-height: 24rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .ranking__title {
     font-size: 2rem;
     font-weight: 700;
@@ -201,6 +207,9 @@
 @media screen and (min-width: 768px) {
     .ranking__container {
         min-height: 55rem;
+    }
+    .Rank__noneresults {
+        min-height: 40rem;
     }
     .ranking__profiles {
         padding-top: 2rem;

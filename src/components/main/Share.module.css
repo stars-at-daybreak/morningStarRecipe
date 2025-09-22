@@ -14,6 +14,7 @@
     padding: 2rem;
     color: #6b7280;
     font-size: 2rem;
+    padding-top: 4rem;
 }
 .viewMoreButton {
     margin-top: 2rem;
@@ -40,6 +41,7 @@
     }
     .noPosts {
         font-size: 2.6rem;
+        padding-top: 6rem;
     }
     .viewMoreButton {
         margin-top: 4rem;

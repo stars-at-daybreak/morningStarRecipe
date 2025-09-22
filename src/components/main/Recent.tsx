@@ -85,7 +85,7 @@ const Recent: React.FC = () => {
                     ))}
                 </div>
             ) : (
-                <div className='text-center p-8 text-gray-500'>게시물이 없습니다.</div>
+                <div className={styles.noPosts}>게시물이 없습니다.</div>
             )}
 
             <Link to='/recipes' className={styles.viewMoreButton}>

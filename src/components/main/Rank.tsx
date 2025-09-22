@@ -10,7 +10,7 @@ import rank_2 from '../../assets/rank_2.svg';
 import rank_3 from '../../assets/rank_3.svg';
 import { getUserNickname } from '../../services/supabaseUsers';
 import { Link } from 'react-router-dom';
-
+import EmptyState from '../../components/EmptyState/EmptyState';
 interface PostWithProfileThumbnail extends Tables<'posts'> {
     profileImageUrl?: string;
     thumbnailImageUrl?: string;
@@ -78,30 +78,38 @@ const MainRank: React.FC = () => {
     return (
         <section className={styles.ranking}>
             <h2 className={styles.ranking__title}>실시간 인기 랭킹</h2>
-            <div className={styles.ranking__container}>
-                <ol className={styles.ranking__profiles}>
-                    {displayPosts.map((post, index) => (
-                        <RankingProfile
-                            key={post.id}
-                            post={post}
-                            index={index}
-                            apiUrl={apiUrl}
-                            onImageError={handleImageError}
-                        />
-                    ))}
-                </ol>
-                <ol className={styles.ranking__posts}>
-                    {displayPosts.map((post, index) => (
-                        <RankingItem
-                            key={post.id}
-                            post={post}
-                            index={index}
-                            apiUrl={apiUrl}
-                            onImageError={handleImageError}
-                        />
-                    ))}
-                </ol>
-            </div>
+            {displayPosts.length === 0 && (
+                <div className={styles.Rank__noneresults}>
+                    <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                    <EmptyState title='아직 아무것도 없어요' />
+                </div>
+            )}
+            {displayPosts.length != 0 && (
+                <div className={styles.ranking__container}>
+                    <ol className={styles.ranking__profiles}>
+                        {displayPosts.map((post, index) => (
+                            <RankingProfile
+                                key={post.id}
+                                post={post}
+                                index={index}
+                                apiUrl={apiUrl}
+                                onImageError={handleImageError}
+                            />
+                        ))}
+                    </ol>
+                    <ol className={styles.ranking__posts}>
+                        {displayPosts.map((post, index) => (
+                            <RankingItem
+                                key={post.id}
+                                post={post}
+                                index={index}
+                                apiUrl={apiUrl}
+                                onImageError={handleImageError}
+                            />
+                        ))}
+                    </ol>
+                </div>
+            )}
         </section>
     );
 };
