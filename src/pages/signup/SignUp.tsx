@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { signup } from '../../services/supabaseUsers.ts';
 import EmailAuthButton from '../../components/button/EmailAuthButton.tsx';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
@@ -169,36 +169,45 @@ const SignUp = () => {
         return hasLetter && hasNumber && hasSpecialChar && isValidLength;
     };
 
+    const checkFormValidity = useCallback((): boolean => {
+        return Boolean(
+            formData.email &&
+                isAuthConfirm &&
+                formData.options.nickname &&
+                isValidatedState.nickname === true &&
+                formData.password &&
+                formData.password2 &&
+                isValidatedState.password === true &&
+                formData.options.name &&
+                formData.options.birthDate &&
+                isValidatedState.birthDate === true &&
+                formData.options.gender &&
+                typeof formData.options.isForeigner === 'boolean' &&
+                checkedItems.has('agreeToTerms1') &&
+                checkedItems.has('agreeToTerms2')
+        );
+    }, [formData, isAuthConfirm, isValidatedState, checkedItems]);
+
     const handleAuthConfirm = (isConfirm: boolean) => {
         setIsAuthConfirm(isConfirm);
     };
 
     useEffect(() => {
-        const isFormValid =
-            formData.email &&
-            isAuthConfirm &&
-            formData.options.nickname &&
-            isValidatedState.nickname &&
-            formData.password &&
-            formData.password2 &&
-            isValidatedState.password &&
-            formData.options.name &&
-            formData.options.birthDate &&
-            isValidatedState.birthDate &&
-            formData.options.gender &&
-            typeof formData.options.isForeigner === 'boolean' &&
-            checkedItems.has('agreeToTerms1') &&
-            checkedItems.has('agreeToTerms2');
-        setIsDisabled(!isFormValid);
         if (formData.password.length !== 0 && formData.password2.length !== 0) {
             const isPasswordValid = validatePassword(formData.password);
             const isPasswordMatch = formData.password === formData.password2;
             setIsValidatedState(prev => ({ ...prev, password: isPasswordValid && isPasswordMatch }));
         }
-        if (formData.options.birthDate.length > 0 && formData.options.birthDate.length <= 6) {
-            setIsValidatedState(prev => ({ ...prev, birthDate: formData.options.birthDate.length === 6 }));
-        }
-    }, [formData, isAuthConfirm, isValidatedState.nickname, checkedItems]);
+    }, [formData.password, formData.password2]);
+
+    useEffect(() => {
+        setIsValidatedState(prev => ({ ...prev, birthDate: formData.options.birthDate.length === 6 }));
+    }, [formData.options.birthDate]);
+
+    useEffect(() => {
+        const isFormValid = checkFormValidity();
+        setIsDisabled(!isFormValid);
+    }, [checkFormValidity]);
 
     usePageSetup({
         title: '회원가입',

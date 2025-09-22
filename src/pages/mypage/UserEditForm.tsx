@@ -201,18 +201,12 @@ const UserEditForm: React.FC = () => {
 
             const result = await updateUser(updateData);
 
-            // 디버깅을 위해 result 값 확인
-            console.log('updateUser result:', result, typeof result);
-
             setIsLoading(false);
 
-            if (result === false) {
+            if (!result) {
                 openModal('FAIL', undefined, '이전 비밀번호와 동일합니다.');
                 return;
-            }
-
-            // 성공 케이스 처리
-            if (result === true) {
+            } else {
                 openModal('SUCCESS', '/mypage', '회원정보가 수정되었습니다.');
                 return;
             }
@@ -392,7 +386,7 @@ const UserEditForm: React.FC = () => {
                             name='birthDate'
                             state={
                                 formData.birthDate
-                                    ? (formData.birthDate.charAt(0) === '0' ? '20' : '19') +
+                                    ? (formData.birthDate.charAt(0) <= '2' ? '20' : '19') +
                                       formData.birthDate.slice(0, 2) +
                                       '.' +
                                       formData.birthDate.slice(2, 4) +
@@ -440,7 +434,7 @@ const UserEditForm: React.FC = () => {
                                     id='korean'
                                     name='isForeigner'
                                     value='false'
-                                    checked={formData.isForeigner === false}
+                                    checked={!formData.isForeigner}
                                     isDisabled={true}
                                     handleInput={() => {}}
                                 />
@@ -449,7 +443,7 @@ const UserEditForm: React.FC = () => {
                                     id='foreigner'
                                     name='isForeigner'
                                     value='true'
-                                    checked={formData.isForeigner === true}
+                                    checked={formData.isForeigner}
                                     isDisabled={true}
                                     handleInput={() => {}}
                                 />
