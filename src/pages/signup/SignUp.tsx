@@ -13,6 +13,7 @@ import EmailAuthModal from '../../components/modal/EmailAuthModal.tsx';
 import NicknameButton from '../../components/button/NicknameButton.tsx';
 import ValidationText from '../../components/validation/ValidationText.tsx';
 import { useModal } from '../../components/modal/ModalContext.ts';
+import { validatePassword } from '../../utils/utils.ts';
 
 const SignUp = () => {
     const [isDisabled, setIsDisabled] = useState(true);
@@ -158,15 +159,6 @@ const SignUp = () => {
                 }));
                 break;
         }
-    };
-
-    const validatePassword = (password: string): boolean => {
-        const hasLetter = /[a-zA-Z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-        const isValidLength = password.length >= 8 && password.length <= 15;
-
-        return hasLetter && hasNumber && hasSpecialChar && isValidLength;
     };
 
     const checkFormValidity = useCallback((): boolean => {
