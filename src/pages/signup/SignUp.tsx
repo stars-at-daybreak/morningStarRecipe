@@ -189,16 +189,25 @@ const SignUp = () => {
             typeof formData.options.isForeigner === 'boolean' &&
             checkedItems.has('agreeToTerms1') &&
             checkedItems.has('agreeToTerms2');
-        setIsDisabled(!isFormValid);
+
         if (formData.password.length !== 0 && formData.password2.length !== 0) {
             const isPasswordValid = validatePassword(formData.password);
             const isPasswordMatch = formData.password === formData.password2;
             setIsValidatedState(prev => ({ ...prev, password: isPasswordValid && isPasswordMatch }));
         }
-        if (formData.options.birthDate.length > 0 && formData.options.birthDate.length <= 6) {
-            setIsValidatedState(prev => ({ ...prev, birthDate: formData.options.birthDate.length === 6 }));
+
+        if (formData.options.birthDate.length === 6) {
+            setIsValidatedState(prev => ({ ...prev, birthDate: true }));
+        } else {
+            setIsValidatedState(prev => ({ ...prev, birthDate: false }));
         }
-    }, [formData, isAuthConfirm, isValidatedState.nickname, checkedItems]);
+
+        if (isFormValid) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [formData, isAuthConfirm, isValidatedState.nickname, isValidatedState.password, isValidatedState.birthDate, checkedItems]);
 
     usePageSetup({
         title: '회원가입',
