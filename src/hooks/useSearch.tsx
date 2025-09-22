@@ -1,10 +1,7 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import type { Tables } from '../types/supabase';
 import { searchPosts } from '../services/supabasePosts';
 import type {
-    RecipeSortBy,
-    ShareStatus,
-    PostType,
     SearchParams,
     RecipeSearchParams,
     ShareSearchParams,
@@ -27,6 +24,7 @@ const createDefaultParams = (pageType: string, initialParams?: Partial<SearchPar
                 ...baseParams,
                 sortBy: 'recently',
                 shareStatus: 'all',
+                postType: 'all',
                 ...initialParams,
             };
         default:
@@ -44,13 +42,11 @@ interface SearchState {
     currentPage: number;
     hasMore: boolean;
     searchParams: SearchParams;
-    isInitialized: boolean; // 첫 검색이 실행되었는지 확인
 }
 
 const useSearch = (options: UseSearchOptions) => {
     const { pageType, initialParams, enableInfiniteScroll = false, pageSize = 20 } = options;
 
-    // 초기 빈 상태
     const initialEmptyState = useMemo((): SearchState => {
         const searchParams = createDefaultParams(pageType, initialParams);
         return {
@@ -62,35 +58,16 @@ const useSearch = (options: UseSearchOptions) => {
             currentPage: 1,
             hasMore: true,
             searchParams,
-            isInitialized: false,
         };
     }, [pageType, initialParams]);
 
     const [state, setState] = useState<SearchState>(initialEmptyState);
 
-    // 검색 실행 함수
     const executeSearch = useCallback(
         async (params: SearchParams, page: number = 1, append: boolean = false) => {
             try {
-                // 로딩 상태 설정
-                setState(prev => ({
-                    ...prev,
-                    loading: !append,
-                    loadingMore: append,
-                    error: null,
-                    isInitialized: true,
-                }));
-
                 if (append && enableInfiniteScroll) {
-                    const requestedOffset = (page - 1) * pageSize;
-                    if (state.totalCount > 0 && requestedOffset >= state.totalCount) {
-                        setState(prev => ({
-                            ...prev,
-                            hasMore: false,
-                            loadingMore: false,
-                        }));
-                        return;
-                    }
+                    setState(prev => ({ ...prev, loadingMore: true, error: null }));
                 }
 
                 const paginationOptions = enableInfiniteScroll ? { page, pageSize } : undefined;
@@ -103,7 +80,6 @@ const useSearch = (options: UseSearchOptions) => {
                 const newData = result.data || [];
                 const newTotalCount = result.count || 0;
 
-                // 모든 상태를 한 번에 업데이트
                 setState(prevState => {
                     let newSearchList: Tables<'posts'>[];
 
@@ -121,6 +97,7 @@ const useSearch = (options: UseSearchOptions) => {
                         : false;
 
                     return {
+                        ...prevState,
                         searchList: newSearchList,
                         loading: false,
                         loadingMore: false,
@@ -128,12 +105,11 @@ const useSearch = (options: UseSearchOptions) => {
                         totalCount: newTotalCount,
                         currentPage: append ? page : 1,
                         hasMore: hasMoreData,
-                        searchParams: params,
-                        isInitialized: true,
                     };
                 });
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.';
+                console.error(errorMessage);
 
                 setState(prevState => ({
                     ...prevState,
@@ -143,35 +119,16 @@ const useSearch = (options: UseSearchOptions) => {
                     searchList: append ? prevState.searchList : [],
                     totalCount: append ? prevState.totalCount : 0,
                     hasMore: append ? prevState.hasMore : false,
-                    isInitialized: true,
                 }));
             }
         },
-        [enableInfiniteScroll, pageSize, state.totalCount]
+        [enableInfiniteScroll, pageSize]
     );
 
-    // 초기 검색 실행 (수동)
-    const initialize = useCallback(() => {
-        if (!state.isInitialized) {
-            executeSearch(state.searchParams, 1, false);
-        }
-    }, [state.isInitialized, state.searchParams, executeSearch]);
-
-    // 검색 함수 (파라미터 변경 후 검색)
-    const search = useCallback(
-        (newParams?: Partial<SearchParams>) => {
-            const searchParams = newParams ? { ...state.searchParams, ...newParams } : state.searchParams;
-            executeSearch(searchParams, 1, false);
-        },
-        [state.searchParams, executeSearch]
-    );
-
-    // 더 많은 데이터 로드
     const loadMore = useCallback(() => {
         if (!enableInfiniteScroll || state.loadingMore || !state.hasMore || state.loading) {
             return;
         }
-
         const nextPage = state.currentPage + 1;
         executeSearch(state.searchParams, nextPage, true);
     }, [
@@ -184,83 +141,29 @@ const useSearch = (options: UseSearchOptions) => {
         executeSearch,
     ]);
 
-    // 상태 업데이트 함수들 (검색은 자동 실행하지 않음)
-    const updateSearchTerm = useCallback((searchTerm: string) => {
-        setState(prev => {
-            const newSearchParams =
-                prev.searchParams.searchTerm === searchTerm ? prev.searchParams : { ...prev.searchParams, searchTerm };
-
-            return prev.searchParams === newSearchParams ? prev : { ...prev, searchParams: newSearchParams };
-        });
+    // 로딩 상태를 함께 업데이트
+    const updateSearchParams = useCallback((newParams: Partial<SearchParams>) => {
+        setState(prev => ({
+            ...prev,
+            searchParams: { ...prev.searchParams, ...newParams },
+            loading: true,
+        }));
     }, []);
 
-    const updateCategory = useCallback((category: string) => {
-        setState(prev => {
-            const newSearchParams =
-                prev.searchParams.category === category ? prev.searchParams : { ...prev.searchParams, category };
-
-            return prev.searchParams === newSearchParams ? prev : { ...prev, searchParams: newSearchParams };
-        });
-    }, []);
-
-    const updateRecipeSortBy = useCallback(
-        (sortBy: RecipeSortBy) => {
-            if (pageType === 'recipe' || pageType === 'all') {
-                setState(prev => {
-                    const recipeParams = prev.searchParams as RecipeSearchParams | AllSearchParams;
-                    const newSearchParams =
-                        recipeParams.sortBy === sortBy ? prev.searchParams : { ...prev.searchParams, sortBy };
-
-                    return prev.searchParams === newSearchParams ? prev : { ...prev, searchParams: newSearchParams };
-                });
-            }
-        },
-        [pageType]
-    );
-
-    const updateShareStatus = useCallback(
-        (shareStatus: ShareStatus) => {
-            if (pageType === 'share' || pageType === 'all') {
-                setState(prev => {
-                    const shareParams = prev.searchParams as ShareSearchParams | AllSearchParams;
-                    const newSearchParams =
-                        shareParams.shareStatus === shareStatus
-                            ? prev.searchParams
-                            : { ...prev.searchParams, shareStatus };
-
-                    return prev.searchParams === newSearchParams ? prev : { ...prev, searchParams: newSearchParams };
-                });
-            }
-        },
-        [pageType]
-    );
-
-    const updatePostType = useCallback(
-        (postType: PostType) => {
-            if (pageType === 'all') {
-                setState(prev => {
-                    const allParams = prev.searchParams as AllSearchParams;
-                    const newSearchParams =
-                        allParams.postType === postType ? prev.searchParams : { ...prev.searchParams, postType };
-
-                    return prev.searchParams === newSearchParams ? prev : { ...prev, searchParams: newSearchParams };
-                });
-            }
-        },
-        [pageType]
-    );
-
-    // 유틸리티 함수들
     const resetSearch = useCallback(() => {
         const newSearchParams = createDefaultParams(pageType);
-        setState(prev => ({ ...prev, searchParams: newSearchParams }));
-    }, [pageType]);
+        updateSearchParams(newSearchParams);
+    }, [pageType, updateSearchParams]);
 
     const refetch = useCallback(() => {
+        updateSearchParams(state.searchParams);
+    }, [state.searchParams, updateSearchParams]);
+
+    // searchParams가 변경될 때마다 검색 실행
+    useEffect(() => {
         executeSearch(state.searchParams, 1, false);
     }, [state.searchParams, executeSearch]);
 
-    // 계산된 값들
     const currentRecipeSort = useMemo(
         () =>
             pageType === 'recipe' || pageType === 'all'
@@ -285,35 +188,21 @@ const useSearch = (options: UseSearchOptions) => {
     // 반환 객체 메모이제이션
     return useMemo(
         () => ({
-            // 데이터
             searchList: state.searchList,
             loading: state.loading,
             loadingMore: state.loadingMore,
             error: state.error,
             totalCount: state.totalCount,
-            isInitialized: state.isInitialized,
-
-            // 무한 스크롤 관련
             hasMore: state.hasMore,
             loadMore,
             currentPage: state.currentPage,
-
-            // 현재 상태
             pageType,
             searchParams: state.searchParams,
             currentRecipeCategory: state.searchParams.category,
             currentRecipeSort,
             currentShareStatus,
             currentPostType,
-
-            // 액션 함수들
-            initialize, // 초기 검색 실행
-            search, // 수동 검색
-            updateSearchTerm,
-            updateCategory,
-            updateRecipeSortBy,
-            updateShareStatus,
-            updatePostType,
+            updateSearchParams,
             resetSearch,
             refetch,
         }),
@@ -324,13 +213,7 @@ const useSearch = (options: UseSearchOptions) => {
             currentRecipeSort,
             currentShareStatus,
             currentPostType,
-            initialize,
-            search,
-            updateSearchTerm,
-            updateCategory,
-            updateRecipeSortBy,
-            updateShareStatus,
-            updatePostType,
+            updateSearchParams,
             resetSearch,
             refetch,
         ]
