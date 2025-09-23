@@ -30,8 +30,8 @@ const Layout = () => {
     useEffect(() => {
         const shouldUseGrayBg =
             location.pathname === '/mypage/levelup-guide' ||
-            location.pathname.startsWith('/recipes/') || // /recipes 상세 페이지만
-            location.pathname.startsWith('/share/'); // /share 상세 페이지만
+            (location.pathname.startsWith('/recipes/') && !location.pathname.includes('/form')) ||
+            (location.pathname.startsWith('/share/') && !location.pathname.includes('/form'));
 
         if (shouldUseGrayBg) {
             document.body.classList.add('gray-bg');
