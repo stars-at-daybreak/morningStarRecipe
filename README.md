@@ -1,111 +1,243 @@
 # 모두의 부엌 (Morning Star Recipe)
 
-> “오늘 저녁 뭐 먹지?”
-> 매일 반복되는 고민, **모두의 부엌**에서 해결해 보세요.
+## 프로젝트 소개
 
-여기는 단순히 레시피만 모아둔 공간이 아닙니다.
-누군가는 **비밀 파스타 레시피**를 공개하고,
-누군가는 댓글로 **“케첩 조금 넣으면 꿀맛!”** 꿀팁을 전합니다.
-그리고 누군가는 새로운 요리를 발견하고 “좋아요”를 누르죠.
+"오늘 저녁 뭐 먹지?" 매일 반복되는 고민을 해결하기 위한 **레시피 공유 플랫폼**입니다.
 
-**모두의 부엌은 요리를 좋아하는 사람들이 모여,
-레시피를 공유하고 소통하는 작은 부엌입니다.**
+### 목표
+- 누구나 쉽게 레시피를 공유하고 검색할 수 있는 직관적인 플랫폼 구축
+- 요리를 좋아하는 사람들이 소통하고 교류할 수 있는 커뮤니티 제공
+- 실제 음식 나눔을 통한 지역 기반 소셜 네트워킹 플랫폼
 
-[지금 바로 맛보기](https://morningstarrecipe.netlify.app/)
+### 주요 기능
+
+<details>
+<summary><strong>실시간 순위 시스템</strong>: 인기 레시피 실시간 랭킹</summary>
+
+- 목적: 사용자 활동 유도 및 경쟁을 통한 콘텐츠 품질 향상
+- 좋아요 수 기반 실시간 순위 업데이트
+- 메인 페이지에 TOP 3 레시피 노출로 트렌드 파악 가능
+
+</details>
+
+<details>
+<summary><strong>레시피 게시글 기능</strong>: 사용자가 직접 레시피 작성 및 공유</summary>
+
+- 목적: 사용자 생성 콘텐츠로 플랫폼 활성화 및 개인만의 레시피 노하우 공유 유도
+- 단계별 설명과 사진을 포함한 상세 레시피 작성
+- 재료, 조리시간, 난이도 등 체계적인 정보 입력
+
+</details>
+
+<details>
+<summary><strong>음식 나눔 게시글</strong>: 만든 음식을 이웃과 나눌 수 있는 기능</summary>
+
+- 지역 기반 음식 나눔 커뮤니티
+- 실제 오프라인 연결을 통한 소셜 네트워킹
+
+</details>
+
+<details>
+<summary><strong>댓글 시스템</strong>: 게시글별 사용자 소통 기능</summary>
+
+- 목적: 커뮤니티 형성 및 사용자 체류시간 증가
+- 실시간 댓글 작성 및 답글 기능
+- 요리 팁과 질문을 주고받는 커뮤니티 형성
+
+</details>
+
+<details>
+<summary><strong>추천/비추천 시스템</strong>: 레시피 평가 기능</summary>
+
+- 목적: 사용자 참여 유도 및 경쟁 분위기 조성으로 콘텐츠 품질 관리
+- 실시간 좋아요/싫어요 투표 시스템
+- 평가 결과에 따른 순위 반영
+
+</details>
+
+<details>
+<summary><strong>찜하기 기능</strong>: 마음에 드는 레시피 북마크 기능</summary>
+
+- 목적: 개인화된 레시피 컬렉션 구성 및 재방문 유도
+- 원클릭으로 레시피 저장 및 해제
+- 마이페이지에서 찜한 레시피 목록 관리
+
+</details>
+
+<details>
+<summary><strong>회원별 등급제도</strong>: 레시피 좋아요 수 높은 사용자 뱃지 부여 기능</summary>
+
+- 목적: 사용자 성취감 부여 및 지속적인 참여 유도
+- 누적 게시글 수에 따른 등급 시스템
+
+| 등급 | 레벨명 | 필요 게시글 수 |
+|------|--------|----------------|
+| LV.1 | 초보 집밥러 | 0~9개 |
+| LV.2 | 우리집 요리사 | 10~49개 |
+| LV.3 | 식탁 해결사 | 50~99개 |
+| LV.4 | 집밥의 고수 | 100개 이상 |
+
+</details>
+
+<details>
+<summary><strong>반응형 디자인</strong>: 모바일 최적화된 UI/UX</summary>
+
+- 다양한 디바이스에서 최적화된 사용 경험
+- 터치 인터페이스 최적화
+
+</details>
 
 ---
 
-## 왜 만들었을까?
+## 배포 URL
 
-레시피를 찾으려고 하면,
-
-- 블로그는 글이 너무 길고,
-- SNS는 금방 묻혀버리고,
-- 앱은 복잡하고 광고투성이…
-
-그래서 우리는 \*\*“누구나 쉽게 레시피를 나누고, 이웃에게 음식을 나눠줄 수 있으며, 가볍게 소통할 수 있는 공간”\*\*을 꿈꿨습니다.
-그게 바로 **모두의 부엌**이에요.
-
----
-
-## 누가 쓰면 좋을까?
-
-- **자취생**: 집에 있는 재료로 간단히 요리하고 싶은 사람
-- **가족 요리 담당자**: 검증된 레시피가 필요한 부모님
-- **요리 초보자**: 따라 하면서 배우고 싶은 사람
-- **레시피 기록가**: 자신의 노하우를 자랑하고 싶은 셰프 지망생
-
----
-
-## 이런 기능이 있어요
-
-- **나만의 레시피 업로드** — 사진 + 단계별 설명
-- **레시피로 만든 음식 나눔 게시글** — 사진 + 음식(6하원칙) 설명
-- **추천해요, 비추천해요** — 마음에 드는 레시피 추천
-- **찜하기** — 레시피 중 마음에 드는 레시피를 저장
-- **댓글** — 질문/팁을 주고받는 소통
-- **실시간 랭킹** — 가장 좋아요를 많이 받은 최고의 레시피 3개를 메인 페이지에 노출
-- **모바일 최적화** — 언제 어디서든 쉽게
-
----
-
-## 사용 시나리오
-
-1. 오늘 저녁 메뉴를 고민한다.
-2. 모두의 부엌에서 “파스타”를 검색한다.
-3. 마음에 드는 레시피에 ❤️ 좋아요를 눌러 저장한다.
-4. 댓글로 “베이컨 대신 버섯을 넣으면 맛있어요!” 꿀팁을 남긴다.
-5. 다음엔 내가 직접 올린 요리에 사람들이 반응하는 걸 본다.
-
-혼자 요리하는 게 아니라, **같이 요리하는 재미**가 생깁니다.
+**배포 사이트**: [https://morningstarrecipe.netlify.app/](https://morningstarrecipe.netlify.app/)
 
 ---
 
 ## 기술 스택
 
-| 분류            | 사용 기술                               |
-| --------------- | --------------------------------------- |
-| **Frontend**    | React, TypeScript                       |
-| **상태 관리**   | Zustand                                 |
-| **빌드 & 배포** | Vite, Netlify                           |
-| **협업 도구**   | GitHub Projects, Figma, Notion, Discord |
-| **백엔드**      | Supabase                                |
-| **에디터**      | CKEditor                                |
+### Frontend
+- **React 19.1.1**: 사용자 인터페이스 구축
+- **TypeScript**: 타입 안정성 확보
+- **Vite**: 빠른 번들링 및 개발 서버
+- **React Router DOM**: 클라이언트 사이드 라우팅
+- **Zustand**: 상태 관리
+
+### Backend & Database
+- **Supabase**: BaaS(Backend-as-a-Service) 백엔드 기능들을 API로 제공하는 서비스
+    - 인증 (Authentication)
+    - 실시간 데이터베이스 (PostgreSQL)
+    - API 자동 생성
+
+### 개발 도구
+- **ESLint**: 코드 품질 관리
+- **Prettier**: 코드 포맷팅
+- **TypeScript ESLint**: TypeScript 린팅
+
+### 배포 및 호스팅
+- **Netlify**: 프론트엔드 배포
+- **GitHub**: 소스 코드 관리
 
 ---
 
-## 앞으로 이렇게 발전할 거예요
+## 설치 및 실행 방법
 
-- 소셜 로그인 (Google, Kakao)
-- 실시간 채팅 페이지
-- 다크모드
-- 커뮤니티 기능 (팔로우, 알림)
-- 추천 레시피 알고리즘
+### 1. 저장소 클론
+```bash
+git clone https://github.com/stars-at-daybreak/morningStarRecipe.git
+cd morningStarRecipe
+```
+
+### 2. 의존성 설치
+```bash
+npm install
+```
+
+### 3. 환경 변수 설정
+프로젝트 루트에 `.env.local` 파일을 생성하고 다음 내용을 추가하세요:
+
+```env
+# Supabase 설정
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_KEY=your_supabase_anon_key
+
+# API 설정 (선택사항)
+VITE_API_BASE_URL=your_api_base_url
+```
+
+### 4. 개발 서버 실행
+```bash
+npm run dev
+```
+
+### 5. 빌드 및 배포
+```bash
+# 타입 체크 및 빌드
+npm run build
+
+# 빌드 결과 미리보기
+npm run preview
+
+# 린트 검사
+npm run lint
+```
 
 ---
 
-## 디자인 철학
+## 테스트용 계정
 
-- **직관적**: 누구나 3초 안에 이해할 수 있는 UI
-- **집중**: 요리 사진과 레시피 본문이 가장 잘 보이도록
-- **가벼움**: 필요한 것만 담아 심플하게
-- **모바일 중심**: 스마트폰/태블릿에서 최적화
+아이디: test@ourkitchen.com  
+비밀번호: test123$
+
+> **참고**: 테스트 계정으로 로그인하여 레시피 등록, 댓글 작성, 좋아요 등 모든 기능을 체험해보실 수 있습니다.
+
+---
+## 폴더 구조
+```
+morningStarRecipe/
+├── public/                     # 정적 파일
+└── src/                        # 소스 코드
+    ├── assets/                 # 정적 리소스 (이미지, 아이콘 등)
+    ├── components/             # 재사용 가능한 컴포넌트
+    ├── data/                   # 정적 데이터
+    ├── error/                  # 에러 처리 관련
+    ├── hooks/                  # 커스텀 훅
+    ├── pages/                  # 페이지 컴포넌트
+    ├── providers/              # Context Provider
+    ├── services/               # API 서비스 레이어
+    ├── stores/                 # 상태 관리 (Zustand)
+    ├── styles/                 # 스타일 파일
+    ├── types/                  # TypeScript 타입 정의
+    └── utils/                  # 유틸리티 함수
+```
+---
+
+## URL 구조 (모놀리식 아키텍처)
+
+| 경로 | 설명 | 인증 필요 |
+|------|------|-----------|
+| `/` | 메인 페이지 | 불필요 |
+| `/login` | 로그인 | 불필요 |
+| `/password` | 비밀번호 찾기 | 불필요 |
+| `/signup` | 회원가입 | 불필요 |
+| `/recipes` | 레시피 목록 | 불필요 |
+| `/recipes/:id` | 레시피 상세 페이지 | 불필요 |
+| `/recipes/form` | 레시피 작성 | 필요 |
+| `/share` | 나눔 게시글 목록 | 불필요 |
+| `/share/:id` | 나눔 게시글 상세 | 불필요 |
+| `/share/form` | 나눔 게시글 작성 | 필요 |
+| `/mypage` | 마이페이지 | 필요 |
+| `/mypage/my-postList` | 내 게시물 | 필요 |
+| `/mypage/my-bookmark` | 찜한 레시피 | 필요 |
+| `/mypage/user-edit` | 프로필 수정 | 필요 |
+| `/levelup-guide` | 레벨업 가이드 | 불필요 |
+| `/privacy` | 개인정보 처리방침 | 불필요 |
+| `/terms` | 서비스이용약관 | 불필요 |
+| `/404` | 페이지 없음 | 불필요 |
 
 ---
 
-## 팀
-
-| 이름   | 담당              | 이메일                                                      |
-| ------ | ----------------- | ----------------------------------------------------------- |
-| 김동욱 | Frontend          | [slasnrndu@gmail.com](mailto:slasnrndu@gmail.com)           |
-| 이상철 | Frontend          | [tkdcjf3552@gmail.com](mailto:tkdcjf3552@gmail.com)         |
-| 조은별 | Frontend · Design | [silverstar9482@gmail.com](mailto:silverstar9482@gmail.com) |
+## 아키텍처
+TODO: 이미지
 
 ---
 
-### “맛있는 요리는 나누면 더 즐겁다.”
+## 데이터베이스 설계 (ERD)
+<img width="1653" height="1128" alt="Image" src="https://github.com/user-attachments/assets/e8fbeefc-a72d-4b51-be75-b19f93e865ff" />
 
-모두의 부엌은 단순한 레시피 공유 사이트가 아니라,
-**사람들이 함께 요리를 즐기고 이야기하는 작은 커뮤니티**입니다.
+---
 
-당신의 첫 번째 레시피를 올려보세요!
+## 와이어프레임
+<img width="2267" height="1221" alt="Image" src="https://github.com/user-attachments/assets/627dd09d-0696-49ee-8bdd-c063511a073f" />
+
+---
+
+## 팀 정보
+
+| 이름 | 이메일 |
+|------|--------|
+| 김동욱 | slasnrndu@gmail.com |
+| 이상철 | tkdcjf3552@gmail.com |
+| 조은별 | silverstar9482@gmail.com |
+
