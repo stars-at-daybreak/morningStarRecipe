@@ -1,5 +1,12 @@
-# 모두의 부엌
+# 모두의 부엌 **( [https://morningstarrecipe.netlify.app/](https://morningstarrecipe.netlify.app/) )**
+## 테스트용 계정
 
+아이디: test@ourkitchen.com  
+비밀번호: test123$
+
+> **참고**: 테스트 계정으로 로그인하여 레시피 등록, 댓글 작성, 좋아요 등 모든 기능을 체험해보실 수 있습니다.
+
+---
 ## 프로젝트 소개
 
 "오늘 저녁 뭐 먹지?" 매일 반복되는 고민을 해결하기 위한 **레시피 공유 플랫폼**입니다.
@@ -89,11 +96,7 @@
 
 ---
 
-## 배포 URL
 
-**배포 사이트**: [https://morningstarrecipe.netlify.app/](https://morningstarrecipe.netlify.app/)
-
----
 
 ## 기술 스택
 
@@ -162,15 +165,6 @@ npm run preview
 # 린트 검사
 npm run lint
 ```
-
----
-
-## 테스트용 계정
-
-아이디: test@ourkitchen.com  
-비밀번호: test123$
-
-> **참고**: 테스트 계정으로 로그인하여 레시피 등록, 댓글 작성, 좋아요 등 모든 기능을 체험해보실 수 있습니다.
 
 ---
 ## 폴더 구조
