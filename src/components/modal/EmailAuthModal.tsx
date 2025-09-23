@@ -42,7 +42,7 @@ const EmailAuthModal = ({
     };
 
     const handleInputCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputCode = e.target.value;
+        const inputCode = e.target.value.replace(/[^0-9]/g, '');
         if (inputCode.length <= 6) {
             setCode(inputCode);
         }
@@ -73,9 +73,16 @@ const EmailAuthModal = ({
                     <time className={styles['auth-modal__timer']}>{formatTime(timeLeft)}</time>
                     <input
                         className={`${styles['auth-modal__input']} ${code.length === 6 ? styles['auth-modal__input--active'] : ''}`}
-                        type='number'
+                        type='text'
+                        inputMode='numeric'
+                        pattern='[0-9]*'
                         value={code}
                         onChange={handleInputCode}
+                        onKeyDown={(e) => {
+                            if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                                e.preventDefault();
+                            }
+                        }}
                     />
                     <span
                         className={isHidden ? styles['auth-modal__input-text'] : styles['auth-modal__input-text--warn']}

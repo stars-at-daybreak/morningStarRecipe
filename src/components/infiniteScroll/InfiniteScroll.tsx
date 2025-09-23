@@ -40,7 +40,7 @@ const InfinitePostList = ({
             // 최소 1초는 로딩 표시
             const [newPosts] = await Promise.all([
                 fetchFunctionRef.current(currentPage),
-                new Promise(resolve => setTimeout(resolve, 1000)), // 1초 딜레이
+                new Promise(resolve => setTimeout(resolve, 700)), // 0.7초 딜레이
             ]);
 
             setPosts(currentPosts => {

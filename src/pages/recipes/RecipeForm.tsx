@@ -395,7 +395,6 @@ const RecipeForm = () => {
                             value={formData.ingredients}
                             onChange={e => handleInputChange('ingredients', e.target.value)}
                             placeholder='레시피 재료를 입력하세요'
-                            maxLength={50}
                         />
                         {errors.ingredients && <div className={styles.error_message}>{errors.ingredients}</div>}
                     </div>
