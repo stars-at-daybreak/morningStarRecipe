@@ -13,6 +13,10 @@
     max-width: 73.6rem;
     padding: 0 3.5rem;
     margin-top: 5rem;
+
+    label::after {
+        display: none;
+    }
 }
 
 .login__submit-button {
@@ -38,17 +42,17 @@
     .login {
         margin-top: 10rem;
     }
-    
+
     .login__form {
         margin-top: 10rem;
         padding: 0 0;
     }
-    
+
     .login__submit-button {
         margin-top: 6rem;
         font-size: 2.6rem;
     }
-    
+
     .login__link-group {
         margin-top: 2rem;
         font-weight: 400;
