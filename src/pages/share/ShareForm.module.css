@@ -22,6 +22,10 @@
     height: 4.4rem;
     border-radius: 1rem;
     padding: 1.5rem 2rem;
+    outline: none;
+}
+.shareForm__title_input::placeholder {
+    color: var(--color-gray-300);
 }
 /* 나눔상태 */
 .share_status_section {
@@ -64,6 +68,10 @@
     height: 4.4rem;
     border-radius: 1rem;
     padding: 1.5rem 2rem;
+    outline: none;
+}
+.shareLocation__title_input::placeholder {
+    color: var(--color-gray-300);
 }
 /* 나눔 설명 */
 .content_section {

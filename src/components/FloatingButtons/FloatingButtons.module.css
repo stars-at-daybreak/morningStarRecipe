@@ -1,8 +1,8 @@
 /* 공통 */
 .floating-buttons {
     position: fixed;
-    right: 1.6rem;
-    bottom: 8rem;
+    right: 16px;
+    bottom: 80px;
     z-index: 1000;
 }
 
@@ -10,17 +10,17 @@
 .floating-buttons__font-controls {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
 }
 
 .floating-buttons__font-btn {
-    width: 4rem;
-    height: 4rem;
+    width: 40px;
+    height: 40px;
     border: none;
     background-color: var(--color-gray-700);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 2.4rem;
+    background-size: 24px;
     cursor: pointer;
     box-shadow: 2px 3px 6px 0px rgba(0, 0, 0, 0.25);
 }
@@ -36,40 +36,40 @@
 }
 
 .floating-buttons__top-btn {
-    width: 4rem;
-    height: 4rem;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 50%;
     background-color: var(--color-gray-400);
     background-image: url('../../assets/topBtn_icon.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 2.4rem;
+    background-size: 24px;
     cursor: pointer;
     box-shadow: 2px 3px 6px 0px rgba(0, 0, 0, 0.25);
 }
 
 @media (min-width: 768px) {
     .floating-buttons {
-        right: 4rem;
-        bottom: 4rem;
+        right: 40px;
+        bottom: 40px;
     }
 
     .floating-buttons__font-controls {
-        margin-bottom: 2rem;
+        margin-bottom: 20px;
     }
 
     .floating-buttons__font-btn {
-        width: 8rem;
-        height: 8rem;
-        background-size: 3.8rem;
+        width: 80px;
+        height: 80px;
+        background-size: 38px;
         box-shadow: 3px 6px 10px 0px rgba(0, 0, 0, 0.25);
     }
 
     .floating-buttons__top-btn {
-        width: 8rem;
-        height: 8rem;
-        background-size: 3.8rem;
+        width: 80px;
+        height: 80px;
+        background-size: 38px;
         box-shadow: 3px 6px 10px 0px rgba(0, 0, 0, 0.25);
     }
 }
