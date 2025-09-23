@@ -104,7 +104,7 @@
     justify-content: space-between;
     width: 100%;
     padding-top: 4rem;
-    padding-bottom: 1rem;
+    /* padding-bottom: 1rem; */
     align-items: center;
 }
 .share__date span {
@@ -166,13 +166,13 @@
     }
     .share__content {
         border-radius: 3rem;
-        padding-top: 4rem;
+        padding: 4rem;
     }
     .share__comments {
         margin: 6rem auto 0;
     }
     .share__content_inf {
-        padding-bottom: 4rem;
+        /* padding-bottom: 4rem; */
     }
 
     .share__date span {
