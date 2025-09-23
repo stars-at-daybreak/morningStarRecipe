@@ -4,10 +4,13 @@ import level1 from '../../assets/level_icon_lv1.svg';
 import level2 from '../../assets/level_icon_lv2.svg';
 import level3 from '../../assets/level_icon_lv3.svg';
 import level4 from '../../assets/level_icon_lv4.svg';
+import { useLocation } from 'react-router-dom';
 
 function LevelupGuide() {
+    const { pathname } = useLocation();
+
     usePageSetup({
-        title: '모두의 레벨업 가이드',
+        title: pathname.includes('/mypage') ? '마이페이지' : '모두의 레벨업 가이드',
         pageName: 'levelup-guide',
         showBackButton: true,
     });
