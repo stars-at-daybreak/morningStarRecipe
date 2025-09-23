@@ -193,7 +193,11 @@ const SignUp = () => {
     }, [formData.password, formData.password2]);
 
     useEffect(() => {
-        setIsValidatedState(prev => ({ ...prev, birthDate: formData.options.birthDate.length === 6 }));
+        if (formData.options.birthDate.length > 0) {
+            setIsValidatedState(prev => ({ ...prev, birthDate: formData.options.birthDate.length === 6 }));
+        } else {
+            setIsValidatedState(prev => ({ ...prev, birthDate: null }));
+        }
     }, [formData.options.birthDate]);
 
     useEffect(() => {
