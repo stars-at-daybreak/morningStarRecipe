@@ -88,61 +88,69 @@ function MyPostList() {
     };
 
     return (
-        <section className={styles['my-post-list']}>
-            <div className={styles['my-post-list__container']}>
-                {/* 프로필 영역 */}
-                <div className={styles['my-post-list__profile']}>
-                    <div className={styles['my-post-list__profile-image']}>
-                        {userProfileImage ? (
-                            <img
-                                src={`${import.meta.env.VITE_API_BASE_URL}/${userProfileImage.filename}`}
-                                alt='프로필 이미지'
-                                crossOrigin='anonymous'
+        <>
+            <title>내 게시물 - 모두의 부엌</title>
+            <meta name='description' content='내가 작성한 레시피와 나눔 게시글을 확인하고 관리하세요.' />
+            <meta name='robots' content='noindex, nofollow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/mypage/my-postList' />
+            <section className={styles['my-post-list']}>
+                <div className={styles['my-post-list__container']}>
+                    {/* 프로필 영역 */}
+                    <div className={styles['my-post-list__profile']}>
+                        <div className={styles['my-post-list__profile-image']}>
+                            {userProfileImage ? (
+                                <img
+                                    src={`${import.meta.env.VITE_API_BASE_URL}/${userProfileImage.filename}`}
+                                    alt='프로필 이미지'
+                                    crossOrigin='anonymous'
+                                />
+                            ) : (
+                                <div className={styles['my-post-list__profile-default']} />
+                            )}
+                        </div>
+                        <div className={styles['my-post-list__profile-info']}>
+                            <h2 className={styles['my-post-list__profile-title']}>총 게시물 수</h2>
+                            <span className={styles['my-post-list__profile-count']}>{totalCount}개</span>
+                        </div>
+                    </div>
+
+                    {/* 탭 영역 */}
+                    <div className={styles['my-post-list__tabs']}>
+                        <div className={styles['my-post-list__tabs-wrap']}>
+                            <button
+                                className={`${styles['my-post-list__tab']} ${activeTab === 'recipe' ? styles['my-post-list__tab--active'] : ''}`}
+                                onClick={() => setActiveTab('recipe')}
+                            >
+                                모두의 레시피
+                            </button>
+                            <button
+                                className={`${styles['my-post-list__tab']} ${activeTab === 'share' ? styles['my-post-list__tab--active'] : ''}`}
+                                onClick={() => setActiveTab('share')}
+                            >
+                                모두의 나눔
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 게시물 리스트 */}
+                    <div
+                        className={`${styles['my-post-list__posts']} ${isEmpty ? styles['my-post-list__posts--empty'] : ''}`}
+                    >
+                        {isDataLoaded && (
+                            <InfinitePostList
+                                type={activeTab}
+                                fetchFunction={fetchMyPosts}
+                                onPostClick={handlePostClick}
+                                emptyTitle={
+                                    activeTab === 'recipe' ? '맛있는 레시피를 기다려요' : '따뜻한 나눔을 기다려요'
+                                }
+                                key={activeTab} // 탭 변경 시 컴포넌트 리렌더링
                             />
-                        ) : (
-                            <div className={styles['my-post-list__profile-default']} />
                         )}
                     </div>
-                    <div className={styles['my-post-list__profile-info']}>
-                        <h2 className={styles['my-post-list__profile-title']}>총 게시물 수</h2>
-                        <span className={styles['my-post-list__profile-count']}>{totalCount}개</span>
-                    </div>
                 </div>
-
-                {/* 탭 영역 */}
-                <div className={styles['my-post-list__tabs']}>
-                    <div className={styles['my-post-list__tabs-wrap']}>
-                        <button
-                            className={`${styles['my-post-list__tab']} ${activeTab === 'recipe' ? styles['my-post-list__tab--active'] : ''}`}
-                            onClick={() => setActiveTab('recipe')}
-                        >
-                            모두의 레시피
-                        </button>
-                        <button
-                            className={`${styles['my-post-list__tab']} ${activeTab === 'share' ? styles['my-post-list__tab--active'] : ''}`}
-                            onClick={() => setActiveTab('share')}
-                        >
-                            모두의 나눔
-                        </button>
-                    </div>
-                </div>
-
-                {/* 게시물 리스트 */}
-                <div
-                    className={`${styles['my-post-list__posts']} ${isEmpty ? styles['my-post-list__posts--empty'] : ''}`}
-                >
-                    {isDataLoaded && (
-                        <InfinitePostList
-                            type={activeTab}
-                            fetchFunction={fetchMyPosts}
-                            onPostClick={handlePostClick}
-                            emptyTitle={activeTab === 'recipe' ? '맛있는 레시피를 기다려요' : '따뜻한 나눔을 기다려요'}
-                            key={activeTab} // 탭 변경 시 컴포넌트 리렌더링
-                        />
-                    )}
-                </div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 }
 

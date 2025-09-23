@@ -217,118 +217,142 @@ const ShareForm = () => {
     });
 
     return (
-        <div className={styles.container}>
-            <form onSubmit={handleSubmit} className={styles.shareForm}>
-                <section>
-                    <label htmlFor='title' className={styles.shareForm__title}>
-                        제목: <span className={styles.required}></span>
-                    </label>
-                    <input
-                        type='text'
-                        id='title'
-                        value={formData.title}
-                        className={`${styles.shareForm__title_input} ${errors.title ? styles.error : ''}`}
-                        onChange={e => handleInputChange('title', e.target.value)}
-                        placeholder='제목을 입력하세요'
-                        maxLength={100}
-                    />
-                    {errors.title && <div className={styles.error_message}>{errors.title}</div>}
-                </section>
-                {type === 'update' && (
-                    <section className={styles.share_status_section}>
-                        <label htmlFor='share_status' className={styles.share_status_label}>
-                            나눔상태:
+        <>
+            <title>나눔 게시글 작성 - 모두의 부엌</title>
+            <meta
+                name='description'
+                content='남은 재료나 식품을 이웃과 나누어보세요. 따뜻한 나눔으로 서로에게 도움이 되는 커뮤니티를 만들어가요.'
+            />
+            <meta property='og:title' content='나눔 게시글 작성 - 모두의 부엌' />
+            <meta
+                property='og:description'
+                content='남은 재료나 식품을 이웃과 나누어보세요. 따뜻한 나눔으로 서로에게 도움이 되는 커뮤니티를 만들어가요.'
+            />
+            <meta property='og:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta property='og:type' content='website' />
+            <meta property='og:url' content='https://morningstarrecipe.netlify.app/share/form' />
+            <meta name='twitter:card' content='summary_large_image' />
+            <meta name='twitter:title' content='나눔 게시글 작성 - 모두의 부엌' />
+            <meta
+                name='twitter:description'
+                content='남은 재료나 식품을 이웃과 나누어보세요. 따뜻한 나눔으로 서로에게 도움이 되는 커뮤니티를 만들어가요.'
+            />
+            <meta name='twitter:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta name='robots' content='noindex, nofollow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/share/form' />
+            <div className={styles.container}>
+                <form onSubmit={handleSubmit} className={styles.shareForm}>
+                    <section>
+                        <label htmlFor='title' className={styles.shareForm__title}>
+                            제목: <span className={styles.required}></span>
                         </label>
-                        <div className={styles.share_status_select}>
-                            <CustomSelect
-                                value={formData.share_status}
-                                onChange={e =>
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        share_status: e.target.value as
-                                            | 'available'
-                                            | 'reserved'
-                                            | 'completed'
-                                            | 'cancelled',
-                                    }))
-                                }
-                                options={[
-                                    { value: 'available', label: '나눔중' },
-                                    { value: 'reserved', label: '예약중' },
-                                    { value: 'completed', label: '나눔완료' },
-                                    { value: 'cancelled', label: '나눔취소' },
-                                ]}
-                            />
-                        </div>
+                        <input
+                            type='text'
+                            id='title'
+                            value={formData.title}
+                            className={`${styles.shareForm__title_input} ${errors.title ? styles.error : ''}`}
+                            onChange={e => handleInputChange('title', e.target.value)}
+                            placeholder='제목을 입력하세요'
+                            maxLength={100}
+                        />
+                        {errors.title && <div className={styles.error_message}>{errors.title}</div>}
                     </section>
-                )}
-                <section>
-                    <label htmlFor='pickup_location' className={styles.shareLocation__title}>
-                        나눔 위치: <span className={styles.required}></span>
-                    </label>
-                    <input
-                        type='text'
-                        id='pickup_location'
-                        placeholder='나눔할 장소를 입력하세요'
-                        value={formData.pickup_location}
-                        className={`${styles.shareLocation__title_input} ${errors.pickup_location ? styles.error : ''}`}
-                        onChange={e => handleInputChange('pickup_location', e.target.value)}
-                        maxLength={50}
-                    />
-                    {errors.pickup_location && <div className={styles.error_message}>{errors.pickup_location}</div>}
-                </section>
-
-                <div className={styles.content_section}>
-                    <label className={styles.content_label}>
-                        나눔 설명: <span className={styles.required}></span>
-                    </label>
-                    <div className={`${styles.editor_wrapper} ${errors.content ? styles.error : ''}`}>
-                        {isLoading ? (
-                            <div className={styles.loadingMessage}>로딩 중...</div>
-                        ) : (
-                            <LexicalEditor
-                                placeholder='나눔할 물품에 대해 자세히 설명해주세요...'
-                                className='post-editor'
-                                initialValue={formData.content}
-                                onChange={editorState => {
-                                    handleInputChange('content', editorState);
-                                }}
-                            />
-                        )}
-                    </div>
-                    {errors.content && <div className={styles.error_message}>{errors.content}</div>}
-                </div>
-
-                <div className={styles.thumbnail_container}>
-                    <label htmlFor='share_thumbnail' className={styles.share_thumbnail_label}>
-                        <strong>썸네일 등록</strong>(선택사항, 최대 1장)
-                    </label>
-                    <div className={styles.thumbnail_wrapper}>
-                        <ResponsiveFileUpload postId={shareId} onFileUpload={handleFileUpload} />
-                        {thumbnailURL && (
-                            <div className={styles.thumbnail_preview}>
-                                <button
-                                    type='button'
-                                    onClick={() => setThumbnailURL('')}
-                                    className={styles.thumbnail_delete_button}
-                                >
-                                    <img src={delbtn} alt='삭제 버튼' className={styles.thumbnail_delete_img} />
-                                </button>
-                                <img
-                                    src={import.meta.env.VITE_API_BASE_URL + '/' + thumbnailURL}
-                                    alt='썸네일'
-                                    className={styles.thumbnail_img}
+                    {type === 'update' && (
+                        <section className={styles.share_status_section}>
+                            <label htmlFor='share_status' className={styles.share_status_label}>
+                                나눔상태:
+                            </label>
+                            <div className={styles.share_status_select}>
+                                <CustomSelect
+                                    value={formData.share_status}
+                                    onChange={e =>
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            share_status: e.target.value as
+                                                | 'available'
+                                                | 'reserved'
+                                                | 'completed'
+                                                | 'cancelled',
+                                        }))
+                                    }
+                                    options={[
+                                        { value: 'available', label: '나눔중' },
+                                        { value: 'reserved', label: '예약중' },
+                                        { value: 'completed', label: '나눔완료' },
+                                        { value: 'cancelled', label: '나눔취소' },
+                                    ]}
                                 />
                             </div>
-                        )}
-                    </div>
-                </div>
+                        </section>
+                    )}
+                    <section>
+                        <label htmlFor='pickup_location' className={styles.shareLocation__title}>
+                            나눔 위치: <span className={styles.required}></span>
+                        </label>
+                        <input
+                            type='text'
+                            id='pickup_location'
+                            placeholder='나눔할 장소를 입력하세요'
+                            value={formData.pickup_location}
+                            className={`${styles.shareLocation__title_input} ${errors.pickup_location ? styles.error : ''}`}
+                            onChange={e => handleInputChange('pickup_location', e.target.value)}
+                            maxLength={50}
+                        />
+                        {errors.pickup_location && <div className={styles.error_message}>{errors.pickup_location}</div>}
+                    </section>
 
-                <button type='submit' className={styles.shareForm__submit} disabled={isSubmitting}>
-                    {isSubmitting ? '처리 중...' : (type !== 'update' ? '작성' : '수정') + ' 완료'}
-                </button>
-            </form>
-        </div>
+                    <div className={styles.content_section}>
+                        <label className={styles.content_label}>
+                            나눔 설명: <span className={styles.required}></span>
+                        </label>
+                        <div className={`${styles.editor_wrapper} ${errors.content ? styles.error : ''}`}>
+                            {isLoading ? (
+                                <div className={styles.loadingMessage}>로딩 중...</div>
+                            ) : (
+                                <LexicalEditor
+                                    placeholder='나눔할 물품에 대해 자세히 설명해주세요...'
+                                    className='post-editor'
+                                    initialValue={formData.content}
+                                    onChange={editorState => {
+                                        handleInputChange('content', editorState);
+                                    }}
+                                />
+                            )}
+                        </div>
+                        {errors.content && <div className={styles.error_message}>{errors.content}</div>}
+                    </div>
+
+                    <div className={styles.thumbnail_container}>
+                        <label htmlFor='share_thumbnail' className={styles.share_thumbnail_label}>
+                            <strong>썸네일 등록</strong>(선택사항, 최대 1장)
+                        </label>
+                        <div className={styles.thumbnail_wrapper}>
+                            <ResponsiveFileUpload postId={shareId} onFileUpload={handleFileUpload} />
+                            {thumbnailURL && (
+                                <div className={styles.thumbnail_preview}>
+                                    <button
+                                        type='button'
+                                        onClick={() => setThumbnailURL('')}
+                                        className={styles.thumbnail_delete_button}
+                                    >
+                                        <img src={delbtn} alt='삭제 버튼' className={styles.thumbnail_delete_img} />
+                                    </button>
+                                    <img
+                                        src={import.meta.env.VITE_API_BASE_URL + '/' + thumbnailURL}
+                                        alt='썸네일'
+                                        className={styles.thumbnail_img}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <button type='submit' className={styles.shareForm__submit} disabled={isSubmitting}>
+                        {isSubmitting ? '처리 중...' : (type !== 'update' ? '작성' : '수정') + ' 완료'}
+                    </button>
+                </form>
+            </div>
+        </>
     );
 };
 
