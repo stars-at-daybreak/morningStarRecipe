@@ -1,4 +1,4 @@
-# 모두의 부엌 (Morning Star Recipe)
+# 모두의 부엌
 
 ## 프로젝트 소개
 
@@ -219,7 +219,7 @@ morningStarRecipe/
 ---
 
 ## 아키텍처
-TODO: 이미지
+<img width="1443" height="642" alt="사본 -Frontend and Backend Architecture with CI_CD" src="https://github.com/user-attachments/assets/1b13cc44-23d5-43c0-8b7e-9cd1286e86a7" />
 
 ---
 
