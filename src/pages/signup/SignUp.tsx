@@ -22,11 +22,11 @@ const SignUp = () => {
     const [isAuthConfirm, setIsAuthConfirm] = useState(false);
     const [passedNickname, setPassedNickname] = useState('');
     const [isValidatedState, setIsValidatedState] = useState<{
-        nickname: boolean | null;
+        nickname: 'unchecked' | 'available' | 'exists';
         password: boolean | null;
         birthDate: boolean | null;
     }>({
-        nickname: null,
+        nickname: 'unchecked',
         password: null,
         birthDate: null,
     });
@@ -58,7 +58,7 @@ const SignUp = () => {
             return;
         }
         if (formData.options.nickname !== passedNickname) {
-            setIsValidatedState(prev => ({ ...prev, nickname: false }));
+            setIsValidatedState(prev => ({ ...prev, nickname: 'exists' }));
             return;
         }
 
@@ -166,7 +166,7 @@ const SignUp = () => {
             formData.email &&
                 isAuthConfirm &&
                 formData.options.nickname &&
-                isValidatedState.nickname === true &&
+                isValidatedState.nickname === 'available' &&
                 formData.password &&
                 formData.password2 &&
                 isValidatedState.password === true &&
@@ -204,6 +204,14 @@ const SignUp = () => {
         const isFormValid = checkFormValidity();
         setIsDisabled(!isFormValid);
     }, [checkFormValidity]);
+
+    useEffect(() => {
+        if (formData.options.nickname.length > 0) {
+            setIsValidatedState(prev => ({ ...prev, nickname: 'unchecked' }));
+        } else {
+            setIsValidatedState(prev => ({ ...prev, nickname: 'unchecked' }));
+        }
+    }, [formData.options.nickname]);
 
     usePageSetup({
         title: '회원가입',
@@ -253,7 +261,7 @@ const SignUp = () => {
                                 handleInput={handleInput}
                                 placeholder='닉네임을 입력해주세요.'
                                 isRequired={true}
-                                className={isValidatedState.nickname ? 'input__label--active' : ''}
+                                className={isValidatedState.nickname === 'available' ? 'input__label--active' : ''}
                             />
                             <NicknameButton
                                 nickname={formData.options.nickname}
@@ -262,14 +270,20 @@ const SignUp = () => {
                                         setPassedNickname(formData.options.nickname);
                                     }
 
-                                    return setIsValidatedState(prev => ({ ...prev, nickname: !isDuplicated }));
+                                    return setIsValidatedState(prev => ({ ...prev, nickname: isDuplicated ? 'exists' : 'available' }));
                                 }}
                             />
                         </div>
                         <ValidationText
-                            isPassed={isValidatedState.nickname}
+                            isPassed={isValidatedState.nickname === 'available'}
                             text={
-                                isValidatedState.nickname ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.'
+                                isValidatedState.nickname === 'available'
+                                    ? '사용 가능한 닉네임입니다.'
+                                    : isValidatedState.nickname === 'exists'
+                                      ? '이미 존재하는 닉네임입니다.'
+                                      : formData.options.nickname.length > 0
+                                        ? '닉네임 중복확인을 해주세요.'
+                                        : ''
                             }
                         />
                     </fieldset>
