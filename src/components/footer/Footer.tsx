@@ -7,6 +7,10 @@ const Footer = () => {
             {/* 상단 링크 영역 */}
             <div className={styles.footer__container}>
                 <div className={styles.footer__links}>
+                    <Link to='/levelup-guide' className={styles['footer-link']}>
+                        모두의 레벨업 가이드
+                    </Link>
+                    <span className={styles.footer__bar}></span>
                     <Link to='/privacy' className='footer-link'>
                         개인정보 처리방침
                     </Link>

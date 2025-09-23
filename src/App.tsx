@@ -80,6 +80,7 @@ const AppRoutes = () => {
                 <Route path='/mypage/terms' element={!user ? <Login /> : <Terms />} />
                 <Route path='/privacy' element={<Privacy />} />
                 <Route path='/terms' element={<Terms />} />
+                <Route path='/levelup-guide' element={<LevelupGuide />} />
                 <Route path='/mypage/delete-account' element={!user ? <Login /> : <DeleteAccount />} />
                 <Route path='/recipes' element={<Recipes />} />
                 <Route path='/recipes/form' element={!user ? <Login /> : <RecipeForm />} />
