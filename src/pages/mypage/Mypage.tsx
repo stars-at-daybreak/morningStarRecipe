@@ -141,100 +141,122 @@ const Mypage = () => {
     };
 
     return (
-        <div className={styles.page}>
-            <div className={styles.page__container}>
-                <div className={styles.page__profile}>
-                    <div className={styles.page__profile_wrap}>
-                        <div className={styles.page__profile_image_container}>
-                            {displayImageUrl ? (
-                                imageHasError ? (
-                                    <div className={styles.page__profile_fallback_icon} />
+        <>
+            <title>마이페이지 - 모두의 부엌</title>
+            <meta name='description' content='내가 작성한 레시피와 나눔 게시글을 관리하고, 프로필을 수정하세요.' />
+            <meta property='og:title' content='마이페이지 - 모두의 부엌' />
+            <meta
+                property='og:description'
+                content='내가 작성한 레시피와 나눔 게시글을 관리하고, 프로필을 수정하세요.'
+            />
+            <meta property='og:image' content='https://morningstarrecipe.netlify.app/assets/og_logo.png' />
+            <meta property='og:type' content='website' />
+            <meta property='og:url' content='https://morningstarrecipe.netlify.app/mypage' />
+            <meta name='twitter:card' content='summary_large_image' />
+            <meta name='twitter:title' content='마이페이지 - 모두의 부엌' />
+            <meta
+                name='twitter:description'
+                content='내가 작성한 레시피와 나눔 게시글을 관리하고, 프로필을 수정하세요.'
+            />
+            <meta name='twitter:image' content='https://morningstarrecipe.netlify.app/assets/og_logo.png' />
+            <meta name='robots' content='noindex, nofollow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/mypage' />
+
+            <div className={styles.page}>
+                <div className={styles.page__container}>
+                    <div className={styles.page__profile}>
+                        <div className={styles.page__profile_wrap}>
+                            <div className={styles.page__profile_image_container}>
+                                {displayImageUrl ? (
+                                    imageHasError ? (
+                                        <div className={styles.page__profile_fallback_icon} />
+                                    ) : (
+                                        <img
+                                            src={displayImageUrl}
+                                            alt='프로필 이미지'
+                                            className={styles.page__profile_image_tag}
+                                            crossOrigin='anonymous'
+                                            onError={handleImageError}
+                                        />
+                                    )
                                 ) : (
-                                    <img
-                                        src={displayImageUrl}
-                                        alt='프로필 이미지'
-                                        className={styles.page__profile_image_tag}
-                                        crossOrigin='anonymous'
-                                        onError={handleImageError}
-                                    />
-                                )
-                            ) : (
-                                <div className={styles.page__profile_img} />
+                                    <div className={styles.page__profile_img} />
+                                )}
+                            </div>
+
+                            <input
+                                ref={fileInputRef}
+                                type='file'
+                                accept='image/png, image/jpeg, image/jpg'
+                                onChange={handleFileSelect}
+                                style={{ display: 'none' }}
+                                aria-label='프로필 이미지 파일 선택'
+                            />
+                            <div
+                                className={`${styles.page__profile_edit} ${
+                                    isProcessing || isUploading ? styles.page__profile_edit_disabled : ''
+                                }`}
+                                onClick={handleProfileEditClick}
+                                aria-disabled={isProcessing || isUploading}
+                            />
+
+                            {/* 드롭다운 메뉴 */}
+                            {showDropdown && (
+                                <div className={styles.page__profile_dropdown}>
+                                    <button
+                                        className={styles.page__profile_dropdown_item}
+                                        onClick={handleSetDefaultImage}
+                                        disabled={isProcessing}
+                                    >
+                                        기본이미지로 변경하기
+                                    </button>
+                                    <button className={styles.page__profile_dropdown_item} onClick={handleSelectImage}>
+                                        프로필사진 변경하기
+                                    </button>
+                                </div>
                             )}
                         </div>
+                        <div className={styles.page__profile_nickname}>{nickname}</div>
 
-                        <input
-                            ref={fileInputRef}
-                            type='file'
-                            accept='image/png, image/jpeg, image/jpg'
-                            onChange={handleFileSelect}
-                            style={{ display: 'none' }}
-                            aria-label='프로필 이미지 파일 선택'
-                        />
-                        <div
-                            className={`${styles.page__profile_edit} ${
-                                isProcessing || isUploading ? styles.page__profile_edit_disabled : ''
-                            }`}
-                            onClick={handleProfileEditClick}
-                            aria-disabled={isProcessing || isUploading}
-                        />
-
-                        {/* 드롭다운 메뉴 */}
-                        {showDropdown && (
-                            <div className={styles.page__profile_dropdown}>
-                                <button
-                                    className={styles.page__profile_dropdown_item}
-                                    onClick={handleSetDefaultImage}
-                                    disabled={isProcessing}
-                                >
-                                    기본이미지로 변경하기
-                                </button>
-                                <button className={styles.page__profile_dropdown_item} onClick={handleSelectImage}>
-                                    프로필사진 변경하기
-                                </button>
-                            </div>
-                        )}
+                        <div className={styles.page__badge}>
+                            <LevelBadge level={1} size='large' />
+                        </div>
                     </div>
-                    <div className={styles.page__profile_nickname}>{nickname}</div>
 
-                    <div className={styles.page__badge}>
-                        <LevelBadge level={1} size='large' />
-                    </div>
-                </div>
-
-                <div className={styles.page__menu}>
-                    <Link to='/mypage/password-verification' className={styles.page__menu_item}>
-                        회원정보 수정
-                    </Link>
-                    <Link to='/mypage/my-bookmark' className={styles.page__menu_item}>
-                        내가 찜한 리스트
-                    </Link>
-                    <Link to='/mypage/my-postList' className={styles.page__menu_item}>
-                        내가 올린 게시물 리스트
-                    </Link>
-                    <Link to='/mypage/levelup-guide' className={styles.page__menu_item}>
-                        모두의 레벨업 가이드
-                    </Link>
-                    <Link to='/mypage/privacy' className={styles.page__menu_item}>
-                        개인정보 처리방침
-                    </Link>
-                    <Link to='/mypage/terms' className={styles.page__menu_item}>
-                        서비스 이용약관
-                    </Link>
-                    <div className={styles.page__actions}>
-                        <button type='button'>
-                            <Link to={'/mypage/delete-account'} className={styles.page__action_delete}>
-                                회원탈퇴
-                            </Link>
-                        </button>
-                        <span></span>
-                        <button type='button' onClick={handleLogoutClick} className={styles.page__action_logout}>
-                            로그아웃
-                        </button>
+                    <div className={styles.page__menu}>
+                        <Link to='/mypage/password-verification' className={styles.page__menu_item}>
+                            회원정보 수정
+                        </Link>
+                        <Link to='/mypage/my-bookmark' className={styles.page__menu_item}>
+                            내가 찜한 리스트
+                        </Link>
+                        <Link to='/mypage/my-postList' className={styles.page__menu_item}>
+                            내가 올린 게시물 리스트
+                        </Link>
+                        <Link to='/mypage/levelup-guide' className={styles.page__menu_item}>
+                            모두의 레벨업 가이드
+                        </Link>
+                        <Link to='/mypage/privacy' className={styles.page__menu_item}>
+                            개인정보 처리방침
+                        </Link>
+                        <Link to='/mypage/terms' className={styles.page__menu_item}>
+                            서비스 이용약관
+                        </Link>
+                        <div className={styles.page__actions}>
+                            <button type='button'>
+                                <Link to={'/mypage/delete-account'} className={styles.page__action_delete}>
+                                    회원탈퇴
+                                </Link>
+                            </button>
+                            <span></span>
+                            <button type='button' onClick={handleLogoutClick} className={styles.page__action_logout}>
+                                로그아웃
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -141,84 +141,110 @@ const SearchPage = ({ query }: SearchPageProps) => {
     const showResults = searchList.length > 0;
     const showLoadingMoreSpinner = loadingMore;
     return (
-        <main className={styles.searchPage}>
-            <header className={styles.searchPage__header}>
-                <div className={styles.searchPage__inputWrapper}>
-                    <SearchInput value={inputValue || ''} onChange={handleInputChange} />
-                </div>
+        <>
+            <title>레시피 검색 - 모두의 부엌</title>
+            <meta
+                name='description'
+                content='원하는 레시피를 검색해보세요. 재료, 요리명, 카테고리로 다양한 레시피를 찾을 수 있습니다.'
+            />
+            <meta name='keywords' content='레시피 검색, 요리 검색, 재료 검색, 음식 찾기, 요리법 검색' />
+            <meta property='og:title' content='레시피 검색 - 모두의 부엌' />
+            <meta
+                property='og:description'
+                content='원하는 레시피를 검색해보세요. 재료, 요리명, 카테고리로 다양한 레시피를 찾을 수 있습니다.'
+            />
+            <meta property='og:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta property='og:type' content='website' />
+            <meta property='og:url' content='https://morningstarrecipe.netlify.app/?query=' />
+            <meta name='twitter:card' content='summary_large_image' />
+            <meta name='twitter:title' content='레시피 검색 - 모두의 부엌' />
+            <meta
+                name='twitter:description'
+                content='원하는 레시피를 검색해보세요. 재료, 요리명, 카테고리로 다양한 레시피를 찾을 수 있습니다.'
+            />
+            <meta name='twitter:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta name='robots' content='noindex, follow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/?query=' />
 
-                <h2 className={styles.searchPage__resultsTitle}>
-                    <strong>{inputValue}</strong> 검색 결과 총 <strong>{totalCount}건</strong> 입니다.
-                </h2>
-
-                <nav className={styles.searchPage__filter} role='tablist' aria-label='게시물 타입 필터'>
-                    {filterOptions.map(option => (
-                        <button
-                            key={option.value}
-                            role='tab'
-                            aria-selected={currentPostType === option.value}
-                            className={`${styles.searchPage__filterOption} ${
-                                currentPostType === option.value ? styles.searchPage__filterOption_active : ''
-                            }`}
-                            onClick={() => handlePostTypeChange(option.value)}
-                        >
-                            {option.label}
-                        </button>
-                    ))}
-                </nav>
-
-                <div className={styles.searchPage__divider}></div>
-            </header>
-
-            <section className={styles.searchPage__results} aria-live='polite'>
-                {loading ? (
-                    <div className={styles.searchPage__loading}>
-                        {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
+            <main className={styles.searchPage}>
+                <header className={styles.searchPage__header}>
+                    <div className={styles.searchPage__inputWrapper}>
+                        <SearchInput value={inputValue || ''} onChange={handleInputChange} />
                     </div>
-                ) : (
-                    <>
-                        {showNoResults && (
-                            <div className={styles.searchPage__noResults}>
-                                <h2 className='sr-only'>검색 결과가 없습니다</h2>
-                                <EmptyState title='아직 아무것도 없어요' />
-                            </div>
-                        )}
 
-                        {showResults && (
-                            <div className={styles.searchPage__resultsContainer}>
-                                <ul className={styles.searchPage__resultsList}>
-                                    {searchList.map((item, index) => (
-                                        <li key={`${item.id}-${index}`} className={styles.searchPage__resultsItem}>
-                                            <PostItem
-                                                post={item}
-                                                type={item.post_type as 'recipe' | 'share'}
-                                                onClick={postId => handlePostClick(postId, item.post_type || 'all')}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
+                    <h2 className={styles.searchPage__resultsTitle}>
+                        <strong>{inputValue}</strong> 검색 결과 총 <strong>{totalCount}건</strong> 입니다.
+                    </h2>
 
-                                {showLoadingMoreSpinner && (
-                                    <div className={styles.searchPage__loadingMore}>
-                                        <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
-                                    </div>
-                                )}
+                    <nav className={styles.searchPage__filter} role='tablist' aria-label='게시물 타입 필터'>
+                        {filterOptions.map(option => (
+                            <button
+                                key={option.value}
+                                role='tab'
+                                aria-selected={currentPostType === option.value}
+                                className={`${styles.searchPage__filterOption} ${
+                                    currentPostType === option.value ? styles.searchPage__filterOption_active : ''
+                                }`}
+                                onClick={() => handlePostTypeChange(option.value)}
+                            >
+                                {option.label}
+                            </button>
+                        ))}
+                    </nav>
 
-                                {hasMore && !showLoadingMoreSpinner && (
-                                    <div
-                                        ref={observerRef}
-                                        className={styles.searchPage__loadTrigger}
-                                        aria-hidden='true'
-                                    >
-                                        <span style={{ display: 'block', height: '20px', width: '100%' }}></span>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </>
-                )}
-            </section>
-        </main>
+                    <div className={styles.searchPage__divider}></div>
+                </header>
+
+                <section className={styles.searchPage__results} aria-live='polite'>
+                    {loading ? (
+                        <div className={styles.searchPage__loading}>
+                            {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
+                        </div>
+                    ) : (
+                        <>
+                            {showNoResults && (
+                                <div className={styles.searchPage__noResults}>
+                                    <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                                    <EmptyState title='아직 아무것도 없어요' />
+                                </div>
+                            )}
+
+                            {showResults && (
+                                <div className={styles.searchPage__resultsContainer}>
+                                    <ul className={styles.searchPage__resultsList}>
+                                        {searchList.map((item, index) => (
+                                            <li key={`${item.id}-${index}`} className={styles.searchPage__resultsItem}>
+                                                <PostItem
+                                                    post={item}
+                                                    type={item.post_type as 'recipe' | 'share'}
+                                                    onClick={postId => handlePostClick(postId, item.post_type || 'all')}
+                                                />
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {showLoadingMoreSpinner && (
+                                        <div className={styles.searchPage__loadingMore}>
+                                            <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} />
+                                        </div>
+                                    )}
+
+                                    {hasMore && !showLoadingMoreSpinner && (
+                                        <div
+                                            ref={observerRef}
+                                            className={styles.searchPage__loadTrigger}
+                                            aria-hidden='true'
+                                        >
+                                            <span style={{ display: 'block', height: '20px', width: '100%' }}></span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    )}
+                </section>
+            </main>
+        </>
     );
 };
 

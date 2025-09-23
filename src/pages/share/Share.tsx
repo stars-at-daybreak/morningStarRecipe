@@ -158,90 +158,121 @@ const Share = () => {
     }, []);
     // ------------------- 렌더링 -------------------
     return (
-        <main className={styles.sharePage}>
-            <header className={styles.sharePage__header}>
-                <div className={styles.sharePage__inputWrapper}>
-                    <SearchInput
-                        value={inputValue}
-                        placeholder='오늘의 메뉴를 검색하세요'
-                        onChange={handleSearchChange}
-                    />
-                </div>
+        <>
+            <title>모두의 나눔 - 모두의 부엌</title>
+            <meta
+                name='description'
+                content='이웃과 함께하는 따뜻한 재료 나눔. 남은 식재료를 나누고 필요한 재료를 얻어보세요.'
+            />
+            <meta name='keywords' content='재료나눔, 식재료 나눔, 음식나눔, 이웃나눔, 무료나눔, 재료교환' />
+            <meta property='og:title' content='모두의 나눔 - 모두의 부엌' />
+            <meta
+                property='og:description'
+                content='이웃과 함께하는 따뜻한 재료 나눔. 남은 식재료를 나누고 필요한 재료를 얻어보세요.'
+            />
+            <meta property='og:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta property='og:type' content='website' />
+            <meta property='og:url' content='https://morningstarrecipe.netlify.app/share' />
+            <meta name='twitter:card' content='summary_large_image' />
+            <meta name='twitter:title' content='재료 나눔 - 모두의 부엌' />
+            <meta
+                name='twitter:description'
+                content='이웃과 함께하는 따뜻한 재료 나눔. 남은 식재료를 나누고 필요한 재료를 얻어보세요.'
+            />
+            <meta name='twitter:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta name='robots' content='index, follow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/share' />
 
-                <div className={styles.sharePage__filterWrapper}>
-                    <div className={styles.sharePage__filterList}>
-                        {filterOptions.map(option => (
-                            <button
-                                key={option.value}
-                                className={
-                                    currentShareStatus === option.value
-                                        ? styles.sharePage__filterBtn_active
-                                        : styles.sharePage__filterBtn
-                                }
-                                aria-selected={currentShareStatus === option.value}
-                                onClick={() => handleFilter(option.value)}
-                                disabled={loading}
-                            >
-                                {option.label}
-                            </button>
-                        ))}
-
-                        {user ? (
-                            <NavLink
-                                to='/share/form'
-                                className={styles.sharePage__register}
-                                aria-label='새 나눔글 작성하기'
-                            >
-                                <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
-                                나눔 하기
-                            </NavLink>
-                        ) : (
-                            <button
-                                type='button'
-                                onClick={handleLoginModalOpen}
-                                className={styles.sharePage__register}
-                                aria-label='로그인 후 나눔글 작성하기'
-                            >
-                                <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
-                                나눔 하기
-                            </button>
-                        )}
+            <main className={styles.sharePage}>
+                <header className={styles.sharePage__header}>
+                    <div className={styles.sharePage__inputWrapper}>
+                        <SearchInput
+                            value={inputValue}
+                            placeholder='오늘의 메뉴를 검색하세요'
+                            onChange={handleSearchChange}
+                        />
                     </div>
-                </div>
-            </header>
 
-            <section className={styles.sharePage__results} aria-live='polite'>
-                <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
+                    <div className={styles.sharePage__filterWrapper}>
+                        <div className={styles.sharePage__filterList}>
+                            {filterOptions.map(option => (
+                                <button
+                                    key={option.value}
+                                    className={
+                                        currentShareStatus === option.value
+                                            ? styles.sharePage__filterBtn_active
+                                            : styles.sharePage__filterBtn
+                                    }
+                                    aria-selected={currentShareStatus === option.value}
+                                    onClick={() => handleFilter(option.value)}
+                                    disabled={loading}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
 
-                {loading ? (
-                    <div className={styles.sharePage__loading}>
-                        {' '}
-                        {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
+                            {user ? (
+                                <NavLink
+                                    to='/share/form'
+                                    className={styles.sharePage__register}
+                                    aria-label='새 나눔글 작성하기'
+                                >
+                                    <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
+                                    나눔 하기
+                                </NavLink>
+                            ) : (
+                                <button
+                                    type='button'
+                                    onClick={handleLoginModalOpen}
+                                    className={styles.sharePage__register}
+                                    aria-label='로그인 후 나눔글 작성하기'
+                                >
+                                    <img src={writeSVG} className={styles.sharePage__icon} alt='' aria-hidden='true' />
+                                    나눔 하기
+                                </button>
+                            )}
+                        </div>
                     </div>
-                ) : (
-                    <>
-                        {!error && searchList.length === 0 && (
-                            <div className={styles.sharePage__noneresults}>
-                                <h2 className='sr-only'>검색 결과가 없습니다</h2>
-                                <EmptyState title='아직 아무것도 없어요' />
-                            </div>
-                        )}
+                </header>
 
-                        {searchList.map(item => (
-                            <PostItem key={item.id} post={item} type='share' onClick={() => handlePostClick(item.id)} />
-                        ))}
+                <section className={styles.sharePage__results} aria-live='polite'>
+                    <h2 className='sr-only'>나눔 게시글 목록 (총 {totalCount}개)</h2>
 
-                        {loadingMore && <div className='loading-more'></div>}
+                    {loading ? (
+                        <div className={styles.sharePage__loading}>
+                            {' '}
+                            {/* <SyncLoader color='var(--color-green)' size={spinnerSize} margin={2} /> */}
+                        </div>
+                    ) : (
+                        <>
+                            {!error && searchList.length === 0 && (
+                                <div className={styles.sharePage__noneresults}>
+                                    <h2 className='sr-only'>검색 결과가 없습니다</h2>
+                                    <EmptyState title='아직 아무것도 없어요' />
+                                </div>
+                            )}
 
-                        {hasMore && !loadingMore && searchList.length > 0 && (
-                            <div ref={observerRef} aria-hidden='true'>
-                                <span></span>
-                            </div>
-                        )}
-                    </>
-                )}
-            </section>
-        </main>
+                            {searchList.map(item => (
+                                <PostItem
+                                    key={item.id}
+                                    post={item}
+                                    type='share'
+                                    onClick={() => handlePostClick(item.id)}
+                                />
+                            ))}
+
+                            {loadingMore && <div className='loading-more'></div>}
+
+                            {hasMore && !loadingMore && searchList.length > 0 && (
+                                <div ref={observerRef} aria-hidden='true'>
+                                    <span></span>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </section>
+            </main>
+        </>
     );
 };
 
