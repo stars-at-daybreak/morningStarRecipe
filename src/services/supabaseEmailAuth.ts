@@ -74,7 +74,6 @@ export const verifyEmailCode = async (email: string, code: string): Promise<bool
             console.error('인증번호 상태 업데이트 실패:', updateError);
         }
 
-        alert('이메일 인증이 완료되었습니다.');
         return true;
     } catch (error) {
         console.error('이메일 인증 예외:', error);

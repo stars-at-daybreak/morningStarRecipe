@@ -25,3 +25,12 @@ export const formatDateToString = (createdAt: string): string => {
 
     return `${year}.${month}.${day}`;
 };
+
+export const validatePassword = (password: string): boolean => {
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const isValidLength = password.length >= 8 && password.length <= 15;
+
+    return hasLetter && hasNumber && hasSpecialChar && isValidLength;
+};

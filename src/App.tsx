@@ -18,7 +18,6 @@ import RecipeDetail from './pages/recipes/RecipeDetail.tsx';
 import Share from './pages/share/Share.tsx';
 import ShareForm from './pages/share/ShareForm.tsx';
 import { ShareDetail } from './pages/share/ShareDetail.tsx';
-import PasswordFind from './components/PasswordFind.tsx';
 import DeleteAccount from './pages/mypage/DeleteAccount.tsx';
 import NotFound from './pages/404/404.tsx';
 import './App.css';
@@ -26,6 +25,8 @@ import MyBookmark from './pages/mypage/MyBookmark.tsx';
 import MyPostList from './pages/mypage/MyPostList.tsx';
 import LevelupGuide from './pages/mypage/LevelupGuide.tsx';
 import PasswordVerification from './pages/mypage/PasswordVerification.tsx';
+import EmailAuthentication from './pages/login/EmailAuthentication.tsx';
+import PasswordUpdate from './pages/login/PasswordUpdate.tsx';
 
 const App = () => {
     // colorSet을 CSS 변수로 변환
@@ -60,7 +61,14 @@ const AppRoutes = () => {
             <Route path='/' element={<Layout />}>
                 <Route index path='/' element={<Home />} />
                 <Route path='/login' element={!user ? <Login /> : <Navigate to='/' replace={true} />} />
-                <Route path='/password' element={<PasswordFind />} />
+                <Route
+                    path='/password'
+                    element={!user ? <EmailAuthentication /> : <Navigate to='/' replace={true} />}
+                />
+                <Route
+                    path='/password/update'
+                    element={!user ? <PasswordUpdate /> : <Navigate to='/' replace={true} />}
+                />
                 <Route path='/signup' element={!user ? <SignUp /> : <Navigate to='/' replace={true} />} />
                 <Route path='/mypage' element={!user ? <Login /> : <Mypage />} />
                 <Route path='/mypage/password-verification' element={!user ? <Login /> : <PasswordVerification />} />
