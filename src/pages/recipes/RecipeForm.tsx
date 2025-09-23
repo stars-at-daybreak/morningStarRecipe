@@ -261,167 +261,200 @@ const RecipeForm = () => {
     }, [type, recipeId, navigate]);
 
     return (
-        <div className={styles.container}>
-            <form className={styles.recipeForm} onSubmit={handleSubmit}>
-                <div>
-                    <label className={styles.recipeForm__title} htmlFor='title'>
-                        제목 : <span className={styles.required}></span>
-                    </label>
-                    <input
-                        ref={titleRef}
-                        className={`${styles.recipeForm__title_input} ${errors.title ? styles.error : ''}`}
-                        type='text'
-                        id='title'
-                        value={formData.title}
-                        onChange={e => handleInputChange('title', e.target.value)}
-                        placeholder='제목을 입력하세요'
-                        maxLength={100}
-                    />
-                    {errors.title && <div className={styles.error_message}>{errors.title}</div>}
-                </div>
+        <>
+            <title>레시피 작성 - 모두의 부엌</title>
+            <meta
+                name='description'
+                content='나만의 특별한 레시피를 공유해보세요. 요리 과정과 팁을 다른 사람들과 나누어요.'
+            />
+            <meta property='og:title' content='레시피 작성 - 모두의 부엌' />
+            <meta
+                property='og:description'
+                content='나만의 특별한 레시피를 공유해보세요. 요리 과정과 팁을 다른 사람들과 나누어요.'
+            />
+            <meta property='og:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta property='og:type' content='website' />
+            <meta property='og:url' content='https://morningstarrecipe.netlify.app/recipes/form' />
+            <meta name='twitter:card' content='summary_large_image' />
+            <meta name='twitter:title' content='레시피 작성 - 모두의 부엌' />
+            <meta
+                name='twitter:description'
+                content='나만의 특별한 레시피를 공유해보세요. 요리 과정과 팁을 다른 사람들과 나누어요.'
+            />
+            <meta name='twitter:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta name='robots' content='noindex, nofollow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/recipes/form' />
 
-                <div className={styles.recipe_select_section}>
-                    <ul>
-                        <li className={styles.recipe_select_group}>
-                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
-                                카테고리 :
-                            </label>
-                            <div className={styles.recipe_select_input}>
-                                <CustomSelect
-                                    value={formData.category_id}
-                                    onChange={e => setFormData({ ...formData, category_id: e.target.value })}
-                                    options={categories.map(category => ({ value: category.id, label: category.name }))}
-                                />
-                            </div>
-                        </li>
-                        <li className={styles.recipe_select_group}>
-                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
-                                난이도 :
-                            </label>
-                            <div className={styles.recipe_select_input}>
-                                <CustomSelect
-                                    value={formData.difficulty}
-                                    onChange={e =>
-                                        setFormData({
-                                            ...formData,
-                                            difficulty: e.target.value as 'top' | 'middle' | 'bottom',
-                                        })
-                                    }
-                                    options={[
-                                        { value: 'top', label: '상' },
-                                        { value: 'middle', label: '중' },
-                                        { value: 'bottom', label: '하' },
-                                    ]}
-                                />
-                            </div>
-                        </li>
-                        <li className={styles.recipe_select_group}>
-                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
-                                요리시간 :
-                            </label>
-                            <div className={styles.recipe_select_input}>
-                                <CustomSelect
-                                    value={String(formData.cooking_time)}
-                                    onChange={e => setFormData({ ...formData, cooking_time: Number(e.target.value) })}
-                                    options={[
-                                        { value: '10', label: '10분' },
-                                        { value: '20', label: '20분' },
-                                        { value: '30', label: '30분' },
-                                        { value: '40', label: '40분' },
-                                        { value: '50', label: '50분' },
-                                        { value: '60', label: '60분' },
-                                    ]}
-                                />
-                            </div>
-                        </li>
-                        <li className={styles.recipe_select_group}>
-                            <label htmlFor='recipe_category' className={styles.recipe_select_label}>
-                                인원 :
-                            </label>
-                            <div className={styles.recipe_select_input}>
-                                <CustomSelect
-                                    value={String(formData.servings)}
-                                    onChange={e => setFormData({ ...formData, servings: Number(e.target.value) })}
-                                    options={[
-                                        { value: '1', label: '1인분' },
-                                        { value: '2', label: '2인분' },
-                                        { value: '3', label: '3인분' },
-                                        { value: '4', label: '4인분' },
-                                    ]}
-                                />
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div>
-                    <label htmlFor='ingredients' className={styles.ingredients__title}>
-                        재료 : <span className={styles.required}></span>
-                    </label>
-                    <input
-                        ref={ingredientsRef}
-                        className={`${styles.recipeForm__ingredients} ${errors.ingredients ? styles.error : ''}`}
-                        type='text'
-                        id='ingredients'
-                        value={formData.ingredients}
-                        onChange={e => handleInputChange('ingredients', e.target.value)}
-                        placeholder='레시피 재료를 입력하세요'
-                        maxLength={50}
-                    />
-                    {errors.ingredients && <div className={styles.error_message}>{errors.ingredients}</div>}
-                </div>
-
-                <div className={styles.content_section}>
-                    <label className={styles.content_label}>
-                        레시피설명 : <span className={styles.required}></span>
-                    </label>
-                    <div ref={contentRef} className={`${styles.editor_wrapper} ${errors.content ? styles.error : ''}`}>
-                        {isLoading ? (
-                            <div className={styles.loadingMessage}>로딩 중...</div>
-                        ) : (
-                            <LexicalEditor
-                                placeholder='게시글 내용을 입력하세요...'
-                                className='post-editor'
-                                initialValue={formData.content}
-                                onChange={editorState => {
-                                    handleInputChange('content', editorState);
-                                }}
-                            />
-                        )}
+            <div className={styles.container}>
+                <form className={styles.recipeForm} onSubmit={handleSubmit}>
+                    <div>
+                        <label className={styles.recipeForm__title} htmlFor='title'>
+                            제목 : <span className={styles.required}></span>
+                        </label>
+                        <input
+                            ref={titleRef}
+                            className={`${styles.recipeForm__title_input} ${errors.title ? styles.error : ''}`}
+                            type='text'
+                            id='title'
+                            value={formData.title}
+                            onChange={e => handleInputChange('title', e.target.value)}
+                            placeholder='제목을 입력하세요'
+                            maxLength={100}
+                        />
+                        {errors.title && <div className={styles.error_message}>{errors.title}</div>}
                     </div>
-                    {errors.content && <div className={styles.error_message}>{errors.content}</div>}
-                </div>
 
-                <div className={styles.thumbnail_container}>
-                    <label htmlFor='recipe_thumbnail' className={styles.recipe_thumbnail_label}>
-                        <strong>썸네일 등록</strong>(선택사항, 최대 1장)
-                    </label>
-                    <div className={styles.thumbnail_wrapper}>
-                        <ResponsiveFileUpload postId={recipeId} onFileUpload={handleFileUpload} />
-                        {thumbnailURL && (
-                            <div className={styles.thumbnail_preview}>
-                                <button
-                                    type='button'
-                                    onClick={() => setThumbnailURL('')}
-                                    className={styles.thumbnail_delete_button}
-                                >
-                                    <img src={delbtn} alt='삭제 버튼' className={styles.thumbnail_delete_img} />
-                                </button>
-                                <img
-                                    src={import.meta.env.VITE_API_BASE_URL + '/' + thumbnailURL}
-                                    alt='썸네일'
-                                    className={styles.thumbnail_img}
-                                />
-                            </div>
-                        )}
+                    <div className={styles.recipe_select_section}>
+                        <ul>
+                            <li className={styles.recipe_select_group}>
+                                <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                    카테고리 :
+                                </label>
+                                <div className={styles.recipe_select_input}>
+                                    <CustomSelect
+                                        value={formData.category_id}
+                                        onChange={e => setFormData({ ...formData, category_id: e.target.value })}
+                                        options={categories.map(category => ({
+                                            value: category.id,
+                                            label: category.name,
+                                        }))}
+                                    />
+                                </div>
+                            </li>
+                            <li className={styles.recipe_select_group}>
+                                <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                    난이도 :
+                                </label>
+                                <div className={styles.recipe_select_input}>
+                                    <CustomSelect
+                                        value={formData.difficulty}
+                                        onChange={e =>
+                                            setFormData({
+                                                ...formData,
+                                                difficulty: e.target.value as 'top' | 'middle' | 'bottom',
+                                            })
+                                        }
+                                        options={[
+                                            { value: 'top', label: '상' },
+                                            { value: 'middle', label: '중' },
+                                            { value: 'bottom', label: '하' },
+                                        ]}
+                                    />
+                                </div>
+                            </li>
+                            <li className={styles.recipe_select_group}>
+                                <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                    요리시간 :
+                                </label>
+                                <div className={styles.recipe_select_input}>
+                                    <CustomSelect
+                                        value={String(formData.cooking_time)}
+                                        onChange={e =>
+                                            setFormData({ ...formData, cooking_time: Number(e.target.value) })
+                                        }
+                                        options={[
+                                            { value: '10', label: '10분' },
+                                            { value: '20', label: '20분' },
+                                            { value: '30', label: '30분' },
+                                            { value: '40', label: '40분' },
+                                            { value: '50', label: '50분' },
+                                            { value: '60', label: '60분' },
+                                        ]}
+                                    />
+                                </div>
+                            </li>
+                            <li className={styles.recipe_select_group}>
+                                <label htmlFor='recipe_category' className={styles.recipe_select_label}>
+                                    인원 :
+                                </label>
+                                <div className={styles.recipe_select_input}>
+                                    <CustomSelect
+                                        value={String(formData.servings)}
+                                        onChange={e => setFormData({ ...formData, servings: Number(e.target.value) })}
+                                        options={[
+                                            { value: '1', label: '1인분' },
+                                            { value: '2', label: '2인분' },
+                                            { value: '3', label: '3인분' },
+                                            { value: '4', label: '4인분' },
+                                        ]}
+                                    />
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </div>
 
-                <button type='submit' className={styles.recipeForm__submit} disabled={isSubmitting}>
-                    {isSubmitting ? '처리 중...' : (type !== 'update' ? '작성' : '수정') + ' 완료'}
-                </button>
-            </form>
-        </div>
+                    <div>
+                        <label htmlFor='ingredients' className={styles.ingredients__title}>
+                            재료 : <span className={styles.required}></span>
+                        </label>
+                        <input
+                            ref={ingredientsRef}
+                            className={`${styles.recipeForm__ingredients} ${errors.ingredients ? styles.error : ''}`}
+                            type='text'
+                            id='ingredients'
+                            value={formData.ingredients}
+                            onChange={e => handleInputChange('ingredients', e.target.value)}
+                            placeholder='레시피 재료를 입력하세요'
+                            maxLength={50}
+                        />
+                        {errors.ingredients && <div className={styles.error_message}>{errors.ingredients}</div>}
+                    </div>
+
+                    <div className={styles.content_section}>
+                        <label className={styles.content_label}>
+                            레시피설명 : <span className={styles.required}></span>
+                        </label>
+                        <div
+                            ref={contentRef}
+                            className={`${styles.editor_wrapper} ${errors.content ? styles.error : ''}`}
+                        >
+                            {isLoading ? (
+                                <div className={styles.loadingMessage}>로딩 중...</div>
+                            ) : (
+                                <LexicalEditor
+                                    placeholder='게시글 내용을 입력하세요...'
+                                    className='post-editor'
+                                    initialValue={formData.content}
+                                    onChange={editorState => {
+                                        handleInputChange('content', editorState);
+                                    }}
+                                />
+                            )}
+                        </div>
+                        {errors.content && <div className={styles.error_message}>{errors.content}</div>}
+                    </div>
+
+                    <div className={styles.thumbnail_container}>
+                        <label htmlFor='recipe_thumbnail' className={styles.recipe_thumbnail_label}>
+                            <strong>썸네일 등록</strong>(선택사항, 최대 1장)
+                        </label>
+                        <div className={styles.thumbnail_wrapper}>
+                            <ResponsiveFileUpload postId={recipeId} onFileUpload={handleFileUpload} />
+                            {thumbnailURL && (
+                                <div className={styles.thumbnail_preview}>
+                                    <button
+                                        type='button'
+                                        onClick={() => setThumbnailURL('')}
+                                        className={styles.thumbnail_delete_button}
+                                    >
+                                        <img src={delbtn} alt='삭제 버튼' className={styles.thumbnail_delete_img} />
+                                    </button>
+                                    <img
+                                        src={import.meta.env.VITE_API_BASE_URL + '/' + thumbnailURL}
+                                        alt='썸네일'
+                                        className={styles.thumbnail_img}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <button type='submit' className={styles.recipeForm__submit} disabled={isSubmitting}>
+                        {isSubmitting ? '처리 중...' : (type !== 'update' ? '작성' : '수정') + ' 완료'}
+                    </button>
+                </form>
+            </div>
+        </>
     );
 };
 

@@ -68,57 +68,64 @@ const PasswordVerification = () => {
     }
 
     return (
-        <section className={styles['password-verification']}>
-            <div className={styles['password-verification__container']}>
-                <div className={styles['password-verification__header']}>
-                    <h2 className={styles['password-verification__logo']}>
-                        <ResponsiveLogo />
-                    </h2>
-                    <p className={styles['password-verification__description']}>
-                        개인정보를 안전하게 보호하기 위해
-                        <br />
-                        <strong>인증 절차</strong>가 필요합니다
-                    </p>
-                </div>
+        <>
+            <title>본인 확인 - 모두의 부엌 </title>
+            <meta name='description' content='개인정보를 안전하게 보호하기 위해 인증 절차가 필요합니다.' />
+            <meta name='robots' content='noindex, nofollow' />
+            <link rel='canonical' href='https://morningstarrecipe.netlify.app/mypage/password-verification' />
 
-                <form onSubmit={verifyPasswordHandler} className={styles['password-verification__form']}>
-                    <div className={styles['password-verification__input-group']}>
-                        <InputText
-                            label='이메일'
-                            id='email'
-                            state={user.email || ''}
-                            type='email'
-                            handleInput={() => {}} // 수정 불가능
-                            placeholder=''
-                            isDisabled={true}
-                            className='input__label--active'
-                        />
-
-                        <InputText
-                            label='비밀번호'
-                            id='password'
-                            state={password}
-                            type='password'
-                            handleInput={handleInput}
-                            placeholder='비밀번호를 입력해주세요'
-                        />
-
-                        <div className={styles['password-verification__error-wrap']}>
-                            {error && <p className={styles['password-verification__error']}>{error}</p>}
-                        </div>
+            <section className={styles['password-verification']}>
+                <div className={styles['password-verification__container']}>
+                    <div className={styles['password-verification__header']}>
+                        <h2 className={styles['password-verification__logo']}>
+                            <ResponsiveLogo />
+                        </h2>
+                        <p className={styles['password-verification__description']}>
+                            개인정보를 안전하게 보호하기 위해
+                            <br />
+                            <strong>인증 절차</strong>가 필요합니다
+                        </p>
                     </div>
 
-                    <Button
-                        type='submit'
-                        text='회원정보 수정'
-                        variant={isDisabled ? 'secondary' : 'primary'}
-                        size='responsive'
-                        disabled={isDisabled}
-                        className={styles['password-verification__submit-button']}
-                    />
-                </form>
-            </div>
-        </section>
+                    <form onSubmit={verifyPasswordHandler} className={styles['password-verification__form']}>
+                        <div className={styles['password-verification__input-group']}>
+                            <InputText
+                                label='이메일'
+                                id='email'
+                                state={user.email || ''}
+                                type='email'
+                                handleInput={() => {}} // 수정 불가능
+                                placeholder=''
+                                isDisabled={true}
+                                className='input__label--active'
+                            />
+
+                            <InputText
+                                label='비밀번호'
+                                id='password'
+                                state={password}
+                                type='password'
+                                handleInput={handleInput}
+                                placeholder='비밀번호를 입력해주세요'
+                            />
+
+                            <div className={styles['password-verification__error-wrap']}>
+                                {error && <p className={styles['password-verification__error']}>{error}</p>}
+                            </div>
+                        </div>
+
+                        <Button
+                            type='submit'
+                            text='회원정보 수정'
+                            variant={isDisabled ? 'secondary' : 'primary'}
+                            size='responsive'
+                            disabled={isDisabled}
+                            className={styles['password-verification__submit-button']}
+                        />
+                    </form>
+                </div>
+            </section>
+        </>
     );
 };
 

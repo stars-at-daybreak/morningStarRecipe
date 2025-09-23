@@ -166,93 +166,113 @@ const RecipeDetail = () => {
     }, [id, user?.id]);
 
     return (
-        <div className={styles['recipe']}>
-            <section className={styles['recipe__writer']}>
-                <h2 className='sr-only'>작성자 프로필</h2>
+        <>
+            <title>모두의 레시피 - 모두의 부엌</title>
+            <meta name='description' content='맛있는 집밥 레시피를 확인하고 따라 만들어보세요.' />
+            <meta
+                name='keywords'
+                content={`${recipe?.title || '레시피'}, 요리법, 집밥, '요리', ${recipe?.difficulty || ''}, 모두의부엌`}
+            />
+            <meta property='og:title' content='모두의 레시피 - 모두의 부엌' />
+            <meta property='og:description' content='맛있는 집밥 레시피를 확인하고 따라 만들어보세요.' />
+            <meta property='og:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta property='og:type' content='article' />
+            <meta property='og:url' content={`https://morningstarrecipe.netlify.app/recipes/${recipe?.id}`} />
+            <meta name='twitter:card' content='summary_large_image' />
+            <meta name='twitter:title' content={recipe?.title || '레시피 - 모두의 부엌'} />
+            <meta name='twitter:description' content='맛있는 집밥 레시피를 확인하고 따라 만들어보세요.' />
+            <meta name='twitter:image' content='https://morningstarrecipe.netlify.app/assets/og_image.png' />
+            <meta name='robots' content='index, follow' />
+            <link rel='canonical' href={`https://morningstarrecipe.netlify.app/recipes/${recipe?.id}`} />
 
-                <div className={styles['profile-img-box']}>
-                    {writerProfileImage ? (
-                        <img
-                            src={`${import.meta.env.VITE_API_BASE_URL}/${writerProfileImage.filename}`}
-                            alt='작성자 프로필 이미지'
-                        />
-                    ) : (
-                        <div className={styles['profile-default']} />
+            <div className={styles['recipe']}>
+                <section className={styles['recipe__writer']}>
+                    <h2 className='sr-only'>작성자 프로필</h2>
+
+                    <div className={styles['profile-img-box']}>
+                        {writerProfileImage ? (
+                            <img
+                                src={`${import.meta.env.VITE_API_BASE_URL}/${writerProfileImage.filename}`}
+                                alt='작성자 프로필 이미지'
+                            />
+                        ) : (
+                            <div className={styles['profile-default']} />
+                        )}
+                    </div>
+
+                    <span className={styles['recipe__writer-nickname']}>{recipe?.user_nickname}</span>
+                    <div className={styles['recipe__writer-badge']}>
+                        <LevelBadge level={recipe?.current_level || 1} size='large' />
+                    </div>
+
+                    {user?.id === recipe?.user_id && (
+                        <div className={styles['recipe__writer-btn']}>
+                            <button onClick={handleUpdate}>수정</button>
+                            <button onClick={handleDelete}>삭제</button>
+                        </div>
                     )}
-                </div>
+                </section>
 
-                <span className={styles['recipe__writer-nickname']}>{recipe?.user_nickname}</span>
-                <div className={styles['recipe__writer-badge']}>
-                    <LevelBadge level={recipe?.current_level || 1} size='large' />
-                </div>
+                <section className={styles['recipe__title']}>
+                    <h2>{recipe?.title}</h2>
+                    <span className='horizontal-line'></span>
+                    <ul className={styles['recipe__info']}>
+                        <li>카테고리 : {categoryName}</li>
+                        <li>난이도 : {difficultyConvert(recipe?.difficulty)}</li>
+                        <li>요리시간 : {recipe?.cooking_time}분</li>
+                        <li>{recipe?.servings}인분</li>
+                    </ul>
+                </section>
 
-                {user?.id === recipe?.user_id && (
-                    <div className={styles['recipe__writer-btn']}>
-                        <button onClick={handleUpdate}>수정</button>
-                        <button onClick={handleDelete}>삭제</button>
+                <section className={styles['recipe__ingredients']}>
+                    <h2>재료</h2>
+                    <p>{recipe?.ingredients}</p>
+                </section>
+
+                <section className={styles['recipe__content-box']}>
+                    <h2>레시피 설명</h2>
+                    <div className={styles['recipe__content']}></div>
+                    <LexicalRenderer content={recipe?.content || ''} className={styles['share-content-renderer']} />
+
+                    <div className={styles['recipe__btn-box']}>
+                        <div className={styles['recipe__like-btn-group']}>
+                            <button
+                                className={`${voteCounts.prevType === 'like' ? styles['recipe__like-btn--active'] : styles['recipe__like-btn']}`}
+                                onClick={() => handleLike('like')}
+                                aria-label={`좋아요 ${voteCounts.likeCount}개 ${voteCounts.prevType === 'like' ? '(선택됨)' : ''}`}
+                                aria-pressed={voteCounts.prevType === 'like'}
+                            >
+                                <img src={voteCounts.prevType === 'like' ? likeActiveImg : likeImg} alt='' />
+                                <span>{voteCounts.likeCount}</span>
+                            </button>
+                            <button
+                                className={`${voteCounts.prevType === 'dislike' ? styles['recipe__dislike-btn--active'] : styles['recipe__dislike-btn']}`}
+                                onClick={() => handleLike('dislike')}
+                                aria-label={`싫어요 ${voteCounts.dislikeCount}개 ${voteCounts.prevType === 'dislike' ? '(선택됨)' : ''}`}
+                                aria-pressed={voteCounts.prevType === 'dislike'}
+                            >
+                                <img src={voteCounts.prevType === 'dislike' ? dislikeActiveImg : dislikeImg} alt='' />
+                                <span>{voteCounts.dislikeCount}</span>
+                            </button>
+                        </div>
+
+                        <div className={styles['recipe__bookmark-box']}>
+                            작성일자 :<time>{recipe?.created_at}</time>
+                            <button
+                                className={`${styles['recipe__bookmark__btn']} ${isBookmarked ? styles['recipe__bookmark__btn--active'] : ''}`}
+                                onClick={handleBookmark}
+                                aria-label={isBookmarked ? '북마크 해제' : '북마크 추가'}
+                            ></button>
+                        </div>
                     </div>
-                )}
-            </section>
+                </section>
 
-            <section className={styles['recipe__title']}>
-                <h2>{recipe?.title}</h2>
-                <span className='horizontal-line'></span>
-                <ul className={styles['recipe__info']}>
-                    <li>카테고리 : {categoryName}</li>
-                    <li>난이도 : {difficultyConvert(recipe?.difficulty)}</li>
-                    <li>요리시간 : {recipe?.cooking_time}분</li>
-                    <li>{recipe?.servings}인분</li>
-                </ul>
-            </section>
-
-            <section className={styles['recipe__ingredients']}>
-                <h2>재료</h2>
-                <p>{recipe?.ingredients}</p>
-            </section>
-
-            <section className={styles['recipe__content-box']}>
-                <h2>레시피 설명</h2>
-                <div className={styles['recipe__content']}></div>
-                <LexicalRenderer content={recipe?.content || ''} className={styles['share-content-renderer']} />
-
-                <div className={styles['recipe__btn-box']}>
-                    <div className={styles['recipe__like-btn-group']}>
-                        <button
-                            className={`${voteCounts.prevType === 'like' ? styles['recipe__like-btn--active'] : styles['recipe__like-btn']}`}
-                            onClick={() => handleLike('like')}
-                            aria-label={`좋아요 ${voteCounts.likeCount}개 ${voteCounts.prevType === 'like' ? '(선택됨)' : ''}`}
-                            aria-pressed={voteCounts.prevType === 'like'}
-                        >
-                            <img src={voteCounts.prevType === 'like' ? likeActiveImg : likeImg} alt='' />
-                            <span>{voteCounts.likeCount}</span>
-                        </button>
-                        <button
-                            className={`${voteCounts.prevType === 'dislike' ? styles['recipe__dislike-btn--active'] : styles['recipe__dislike-btn']}`}
-                            onClick={() => handleLike('dislike')}
-                            aria-label={`싫어요 ${voteCounts.dislikeCount}개 ${voteCounts.prevType === 'dislike' ? '(선택됨)' : ''}`}
-                            aria-pressed={voteCounts.prevType === 'dislike'}
-                        >
-                            <img src={voteCounts.prevType === 'dislike' ? dislikeActiveImg : dislikeImg} alt='' />
-                            <span>{voteCounts.dislikeCount}</span>
-                        </button>
-                    </div>
-
-                    <div className={styles['recipe__bookmark-box']}>
-                        작성일자 :<time>{recipe?.created_at}</time>
-                        <button
-                            className={`${styles['recipe__bookmark__btn']} ${isBookmarked ? styles['recipe__bookmark__btn--active'] : ''}`}
-                            onClick={handleBookmark}
-                            aria-label={isBookmarked ? '북마크 해제' : '북마크 추가'}
-                        ></button>
-                    </div>
-                </div>
-            </section>
-
-            <section className={styles['recipe__comments-box']}>
-                <h2 className='sr-only'>댓글</h2>
-                {id && <PostComments postId={id} />}
-            </section>
-        </div>
+                <section className={styles['recipe__comments-box']}>
+                    <h2 className='sr-only'>댓글</h2>
+                    {id && <PostComments postId={id} />}
+                </section>
+            </div>
+        </>
     );
 };
 
