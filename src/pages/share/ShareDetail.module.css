@@ -86,6 +86,7 @@
 .share__location p {
     text-align: left;
 }
+.share__content_title,
 .share__location .share__location_tittle,
 .share__content .share__content_tittle {
     font-weight: 700;
@@ -94,6 +95,11 @@
 .share__location,
 .share__content {
     margin-top: 1rem;
+}
+.share__content_title {
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    margin-bottom: 0.8rem;
 }
 .share__comments {
     max-width: 73.6rem;
@@ -174,7 +180,11 @@
     .share__content_inf {
         /* padding-bottom: 4rem; */
     }
-
+    .share__content_title {
+        font-size: 2.2rem;
+        line-height: 2.4rem;
+        margin-bottom: 2rem;
+    }
     .share__date span {
         font-weight: 700;
     }
