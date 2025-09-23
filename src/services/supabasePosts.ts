@@ -210,10 +210,10 @@ const buildSearchQuery = (params: SearchParams, options?: { page?: number; pageS
         const recipeParams = params as RecipeSearchParams;
         switch (recipeParams.sortBy) {
             case 'popular':
-                query = query.order('bookmark_count', { ascending: false });
+                query = query.order('bookmark_count', { ascending: false }).order('created_at', { ascending: false });
                 break;
             case 'recommended':
-                query = query.order('like_count', { ascending: false });
+                query = query.order('like_count', { ascending: false }).order('created_at', { ascending: false });
                 break;
             case 'recently':
                 query = query.order('created_at', { ascending: false });
