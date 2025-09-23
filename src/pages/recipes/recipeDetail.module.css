@@ -65,11 +65,10 @@
 
 .recipe__title {
     margin-top: clamp(2rem, 2rem + (100vw - 390px) * 0.05, 6rem);
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    text-align: center;
     width: 100%;
     max-width: 73.6rem;
     border-radius: clamp(2rem, 2rem + (100vw - 390px) * 0.02, 3rem);
@@ -106,7 +105,7 @@
     border-radius: clamp(2rem, 2rem + (100vw - 390px) * 0.02, 3rem);
     background-color: var(--color-white);
 
-    padding: clamp(2rem, 2rem + (100vw - 390px) * 0.04, 4rem) 2.5rem;
+    padding: clamp(2rem, 2rem + (100vw - 390px) * 0.04, 4rem) 4rem;
 
     font-weight: 400;
     font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.02, 2.2rem);

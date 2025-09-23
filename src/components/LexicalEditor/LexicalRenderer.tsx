@@ -93,11 +93,40 @@ interface LexicalRendererProps {
 }
 
 const LexicalRenderer: React.FC<LexicalRendererProps> = ({ content, className = '' }) => {
+    // 타입 가드 함수들
+    const isTextNode = (node: RenderNode): node is RenderTextNode => {
+        return node.type === 'text';
+    };
+
+    const isParagraphNode = (node: RenderNode): node is RenderParagraphNode => {
+        return node.type === 'paragraph';
+    };
+
+    // 빈 문단인지 확인하는 함수
+    const isEmptyParagraph = (node: RenderNode): boolean => {
+        if (!isParagraphNode(node)) return false;
+
+        if (!node.children || node.children.length === 0) return true;
+
+        // 모든 자식이 빈 텍스트 노드인지 확인
+        return node.children.every(child => isTextNode(child) && (!child.text || child.text.trim() === ''));
+    };
+
     // Lexical JSON을 HTML로 변환하는 재귀 함수
     const renderNode = (node: RenderNode | any, index: number = 0): React.ReactNode => {
         if (!node || typeof node !== 'object') return null;
 
-        const { type, children = [], text, style, url, src, videoId, format, textStyle } = node;
+        const { type } = node;
+
+        // 각 노드 타입에 따라 안전하게 속성 접근
+        const children = node.children || [];
+        const text = isTextNode(node) ? node.text : '';
+        const style = 'style' in node ? node.style : undefined;
+        const url = 'url' in node ? node.url : '';
+        const src = 'src' in node ? node.src : '';
+        const videoId = 'videoId' in node ? node.videoId : '';
+        const format = 'format' in node ? node.format : undefined;
+        const textStyle = 'textStyle' in node ? node.textStyle : undefined;
 
         // format에서 정렬 정보 추출 (문자열인 경우만 처리)
         const getAlignmentClass = (format: string | number | undefined) => {
@@ -188,13 +217,25 @@ const LexicalRenderer: React.FC<LexicalRendererProps> = ({ content, className = 
                 );
 
             case 'paragraph':
+                // 빈 문단도 공간을 차지하도록 처리
+                const isEmpty = isEmptyParagraph(node);
+
                 return (
                     <p
                         key={index}
                         className={`${styles['content-paragraph']} ${alignmentClass}`.trim()}
-                        style={inlineStyles}
+                        style={{
+                            ...inlineStyles,
+                            // 빈 문단에도 최소 높이 제공
+                            minHeight: isEmpty ? '1.2em' : undefined,
+                        }}
                     >
-                        {children.map((child: RenderNode, i: number) => renderNode(child, i))}
+                        {isEmpty ? (
+                            // 빈 문단의 경우 &nbsp; 또는 빈 공간 추가
+                            <span>&nbsp;</span>
+                        ) : (
+                            children.map((child: RenderNode, i: number) => renderNode(child, i))
+                        )}
                     </p>
                 );
 

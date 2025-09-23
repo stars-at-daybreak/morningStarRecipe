@@ -117,6 +117,9 @@ export const ShareDetail = () => {
                     </p>
                 </section>
                 <section className={styles['share__content']}>
+                    <div className={styles['share__content_title']}>
+                        <span>나눔 설명 : </span>
+                    </div>
                     <LexicalRenderer content={share?.content || ''} className={styles['share-content-renderer']} />
                     <div className={styles['share__content_inf']}>
                         <span className={`${styles['share__status']} ${styles[share?.share_status ?? 'default']}`}>
