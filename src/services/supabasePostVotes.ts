@@ -101,3 +101,19 @@ export const getUserVoteStatus = async (postId: string, userId: string): Promise
         return null;
     }
 };
+export const getAnonymousVoteStatus = async (postId: string, userId: string): Promise<VoteType | null> => {
+    try {
+        const { data, error } = await supabase
+            .from('post_votes')
+            .select('vote_type')
+            .eq('post_id', postId)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        return data?.vote_type || null;
+    } catch (error) {
+        console.error('투표 상태 조회 중 오류 발생:', error);
+        return null;
+    }
+};

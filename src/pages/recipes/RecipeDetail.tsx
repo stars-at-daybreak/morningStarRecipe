@@ -76,6 +76,12 @@ const RecipeDetail = () => {
 
             const bookmarkStatus = await selectBookmarksByUserIdPostId(id, user.id);
             setIsBookmarked(bookmarkStatus);
+        } else {
+            setVoteCounts({
+                prevType: null,
+                likeCount: detail?.like_count || 0,
+                dislikeCount: detail?.dislike_count || 0,
+            });
         }
     };
 
