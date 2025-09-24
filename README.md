@@ -1,10 +1,13 @@
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9920e644-b6ba-4c76-868b-9cbd31ac291c" />
+
 # 모두의 부엌 **( https://ourkitchen.store/ )**
+
 ## 테스트용 계정
 
 아이디: test@ourkitchen.com  
 비밀번호: test123$
 
-> **참고**: 테스트 계정으로 로그인하여 레시피 등록, 댓글 작성, 좋아요 등 모든 기능을 체험해보실 수 있습니다.
+> 💡 테스트 계정으로 로그인하여 레시피 등록, 댓글 작성, 좋아요 등 모든 기능을 체험해보실 수 있습니다.
 
 ---
 ## 프로젝트 소개
