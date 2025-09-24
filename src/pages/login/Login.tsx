@@ -6,15 +6,21 @@ import InputText from '../../components/input/InputText.tsx';
 import Button from '../../components/button/Button.tsx';
 import { Link } from 'react-router-dom';
 import ResponsiveLogo from '../../components/logo/ResponsiveLogo.tsx';
+import { useModal } from '../../components/modal/ModalContext.ts';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
+    const { openModal } = useModal();
 
     const signInHandler = async (e: React.FormEvent) => {
         e.preventDefault();
-        await signin(email, password);
+
+        const result = await signin(email, password);
+        if (result.status === 'FAIL') {
+            openModal(result.status, undefined, result.text);
+        }
     };
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
