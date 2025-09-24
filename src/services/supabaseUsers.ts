@@ -58,7 +58,7 @@ export const signup: Signup = async (signupData: SignupData) => {
     }
 };
 
-export const signin = async (email: string, password: string): Promise<void> => {
+export const signin = async (email: string, password: string) => {
     try {
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -67,11 +67,13 @@ export const signin = async (email: string, password: string): Promise<void> => 
 
         if (error) {
             console.error(error);
-            alert('아이디와 비밀번호를 확인해주세요');
+            return supabaseResult('FAIL', '아이디와 비밀번호를 확인해주세요');
         }
+
+        return supabaseResult('SUCCESS', '로그인에 성공했습니다.');
     } catch (error) {
         console.error('로그인 예외:', error);
-        alert('로그인 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        return supabaseResult('FAIL', '로그인 중 예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
 };
 
