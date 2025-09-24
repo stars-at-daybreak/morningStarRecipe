@@ -304,6 +304,7 @@ const ShareForm = () => {
                     <div className={styles.content_section}>
                         <label className={styles.content_label}>
                             나눔 설명: <span className={styles.required}></span>
+                            <p className={styles.share_tip}> * 사진을 첨부하여 레시피를 더욱 특별하게 만들어 보세요.</p>
                         </label>
                         <div className={`${styles.editor_wrapper} ${errors.content ? styles.error : ''}`}>
                             {isLoading ? (
@@ -325,6 +326,7 @@ const ShareForm = () => {
                     <div className={styles.thumbnail_container}>
                         <label htmlFor='share_thumbnail' className={styles.share_thumbnail_label}>
                             <strong>썸네일 등록</strong>(선택사항, 최대 1장)
+                            <p className={styles.share_tip}> * 썸네일은 목록에서만 노출됩니다.</p>
                         </label>
                         <div className={styles.thumbnail_wrapper}>
                             <ResponsiveFileUpload postId={shareId} onFileUpload={handleFileUpload} />
