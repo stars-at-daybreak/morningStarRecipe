@@ -123,6 +123,7 @@
         margin-top: clamp(0.4rem, 0.4rem + (100vw - 390px) * 0.01, 0.8rem);
         color: var(--color-black);
         word-break: break-word;
+        line-height: 130%;
     }
 }
 
