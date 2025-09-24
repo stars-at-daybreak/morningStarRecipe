@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import styles from './privacy.module.css';
+import { useLocation } from 'react-router-dom';
 
 function Privacy() {
+    const { pathname } = useLocation();
+
     const pageConfig = useMemo(
         () => ({
-            title: '개인정보 처리방침',
+            title: pathname.includes('/mypage') ? '마이페이지' : '개인정보 처리방침',
             pageName: 'privacy',
             showBackButton: true,
         }),

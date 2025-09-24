@@ -50,7 +50,7 @@ const PasswordVerification = () => {
     };
 
     usePageSetup({
-        title: '회원정보 수정',
+        title: '마이페이지',
         pageName: 'password-verification',
         showBackButton: true,
     });
