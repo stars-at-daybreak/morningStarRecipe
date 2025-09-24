@@ -240,7 +240,7 @@ const UserEditForm: React.FC = () => {
     };
 
     usePageSetup({
-        title: '회원정보 수정',
+        title: '마이페이지',
         pageName: 'user-edit',
         showBackButton: true,
     });

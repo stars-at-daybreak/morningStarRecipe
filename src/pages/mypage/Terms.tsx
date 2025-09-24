@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import styles from './terms.module.css';
+import { useLocation } from 'react-router-dom';
 
 function Terms() {
+    const { pathname } = useLocation();
+
     const pageConfig = useMemo(
         () => ({
-            title: '서비스 이용약관',
+            title: pathname.includes('/mypage') ? '마이페이지' : '서비스 이용약관',
             pageName: 'terms',
             showBackButton: true,
         }),
