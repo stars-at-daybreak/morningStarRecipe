@@ -13,8 +13,10 @@ import { $createImageNode } from '../nodes/ImageNode';
 import { FaAlignLeft, FaAlignCenter, FaAlignRight, FaYoutube } from 'react-icons/fa';
 import { useFileUpload } from '../../../hooks/useImageUpload';
 import { INSERT_YOUTUBE_COMMAND } from '../commands/YouTubeCommands';
-import { useModal } from '../../modal/ModalContext.ts';
 import YoutubeModal from '../../modal/YoutubeModal.tsx';
+import camera_icon from '../../../assets/camera_icon.svg';
+import youtube_icon from '../../../assets/youtube_icon.svg';
+
 const LowPriority = 1;
 
 const FONT_SIZE_OPTIONS = [
@@ -167,7 +169,7 @@ const ToolbarPlugin: React.FC = () => {
             <div className='divider' />
 
             <label className={`toolbar-item ${isUploading ? 'uploading' : ''}`}>
-                {isUploading ? '⏳' : '📷'}
+                {isUploading ? '⏳' : <img src={camera_icon} alt='이미지 업로드' className='toolbar-item-icon' />}
                 <input
                     type='file'
                     accept='image/png, image/jpeg, image/jpg'
@@ -178,7 +180,8 @@ const ToolbarPlugin: React.FC = () => {
             </label>
 
             <button type='button' onClick={() => setIsOpen(true)} className='toolbar-item' title='YouTube 영상 삽입'>
-                <FaYoutube className='w-5 h-5' style={{ color: '#FF0000' }} />
+                {/* <FaYoutube className='w-5 h-5' style={{ color: '#FF0000' }} /> */}
+                <img src={youtube_icon} alt='유튜브 임베디드' className='toolbar-item-icon' />
             </button>
 
             {isOpen && (

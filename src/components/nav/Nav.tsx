@@ -67,6 +67,11 @@ const Nav = () => {
     ];
 
     const isActive = (item: NavItem): boolean => {
+        if (title == '내가 찜한 리스트' && item.titleMatch == '마이페이지') {
+            return true;
+        } else if (title == '내가 올린 게시물 리스트' && item.titleMatch == '마이페이지') {
+            return true;
+        }
         return title === item.titleMatch;
     };
 

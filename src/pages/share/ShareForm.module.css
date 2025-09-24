@@ -124,6 +124,14 @@
     height: 8.5rem;
     border-radius: 1.5rem;
 }
+.share_tip {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    margin-top: 1rem;
+    color: var(--color-gray-400);
+    font-weight: 400;
+    letter-spacing: -0.025rem;
+}
 /* 저장 버튼 */
 .shareForm__submit {
     width: 100%;
@@ -325,6 +333,11 @@
         padding: 2.2rem 1.6rem;
         border-radius: 80rem;
         margin-top: 6rem;
+    }
+    .share_tip {
+        font-size: 1.8rem;
+        line-height: 1.8rem;
+        margin-top: 1.2rem;
     }
     .error_message {
         font-size: 2rem;

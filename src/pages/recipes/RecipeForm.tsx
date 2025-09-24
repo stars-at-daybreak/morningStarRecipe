@@ -54,7 +54,7 @@ const RecipeForm = () => {
     const { openModal } = useModal();
 
     usePageSetup({
-        title: '레시피 작성',
+        title: '모두의 레시피',
         pageName: type === 'create' ? 'recipeWrite' : 'recipeUpdate',
         showBackButton: true,
     });
@@ -402,6 +402,10 @@ const RecipeForm = () => {
                     <div className={styles.content_section}>
                         <label className={styles.content_label}>
                             레시피설명 : <span className={styles.required}></span>
+                            <p className={styles.recipe_tip}>
+                                {' '}
+                                * 사진을 첨부하여 레시피를 더욱 특별하게 만들어 보세요.
+                            </p>
                         </label>
                         <div
                             ref={contentRef}
@@ -426,6 +430,7 @@ const RecipeForm = () => {
                     <div className={styles.thumbnail_container}>
                         <label htmlFor='recipe_thumbnail' className={styles.recipe_thumbnail_label}>
                             <strong>썸네일 등록</strong>(선택사항, 최대 1장)
+                            <p className={styles.recipe_tip}> * 썸네일은 목록에서만 노출됩니다.</p>
                         </label>
                         <div className={styles.thumbnail_wrapper}>
                             <ResponsiveFileUpload postId={recipeId} onFileUpload={handleFileUpload} />
