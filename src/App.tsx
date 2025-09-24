@@ -88,7 +88,7 @@ const AppRoutes = () => {
                 <Route path='/share' element={<Share />} />
                 <Route path='/share/form' element={!user ? <Login /> : <ShareForm />} />
                 <Route path='/share/:id' element={<ShareDetail />} />
-                <Route path='/404' element={<NotFound />} />
+                <Route path='*' element={<NotFound />} />
             </Route>
         </Routes>
     );

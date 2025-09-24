@@ -46,7 +46,7 @@
     box-shadow: 0.3rem 0.3rem 0.8rem 0 #00000033;
 }
 .post:nth-child(2) .post__rank {
-    color: var(--color-gray-300);
+    color: var(--color-gray-400);
 }
 .post:first-child .post__rank {
     color: var(--color-green);

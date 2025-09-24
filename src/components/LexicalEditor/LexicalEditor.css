@@ -38,7 +38,10 @@
     font-weight: 500;
     transition: all 0.2s ease;
 }
-
+.toolbar-item-icon {
+    width: 2rem;
+    height: 2rem;
+}
 .toolbar-item:hover {
     background: #e5e7eb;
     border-color: #d1d5db;
@@ -339,6 +342,10 @@
     }
     .toolbar {
         border-bottom: 0.15rem solid var(--color-gray-300);
+    }
+    .toolbar-item-icon {
+        width: 2.6rem;
+        height: 2.6rem;
     }
 }
 @media screen and (min-width: 1024px) {
