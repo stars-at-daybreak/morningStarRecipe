@@ -5,11 +5,9 @@ import PostComments from '../../components/post/PostComments.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
 import type { PostWithUserNickname } from '../../types/posts.type.ts';
 import { getUserVoteStatus, handlePostVote } from '../../services/supabasePostVotes.ts';
-import type { VoteType } from '../../types/postVotes.type.ts';
 import { getUserProfileImage } from '../../services/supabaseFiles.ts';
 import type { Tables } from '../../types/supabase.ts';
 import styles from './recipeDetail.module.css';
-import noneProfile from '../../assets/none-profile.svg';
 import LevelBadge from '../../components/LevelBadge/LevelBadge.tsx';
 import { fetchCategory } from '../../services/supabaseCategories.ts';
 import likeImg from '../../assets/like_icon.svg';
@@ -56,13 +54,15 @@ const RecipeDetail = () => {
             if (detail.created_at) {
                 detail.created_at = formatDateToString(detail.created_at);
             }
-
             setRecipe(detail);
+
             const category = await fetchCategory(detail.category_id);
             setCategoryName(category?.name || '없음');
 
             const writerProfileImage = await getUserProfileImage(detail.user_id);
             setWriterProfileImage(writerProfileImage);
+        } else {
+            navigate('/recipes');
         }
 
         if (user?.id) {

@@ -75,8 +75,8 @@
 .signup__radio-legend:after {
     content: '';
     display: inline-block;
-    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
-    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.4rem);
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
     margin-left: 0.2rem;
     background-color: var(--color-gray);
     mask: url('../../assets/circle_check.svg') no-repeat center;
@@ -84,7 +84,15 @@
     -webkit-mask-size: contain;
 }
 .signup__radio-legend--active:after {
+    content: '';
+    display: inline-block;
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    margin-left: 0.2rem;
     background-color: var(--color-green);
+    mask: url('../../assets/circle_check.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
 }
 
 .signup__gender-group {
@@ -171,6 +179,12 @@
     margin-top: 3rem;
 }
 
+.signup__nickname-box span,
+.signup__password-group span,
+.signup__personal-group span {
+    margin-top: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.6rem);
+}
+
 @media (min-width: 768px) {
     .signup__email-box button,
     .signup__nickname-box button {
@@ -242,5 +256,11 @@
 
     .signup__form button[type='submit'] {
         margin-top: 6rem;
+    }
+
+    .signup__nickname-box span,
+    .signup__password-group span,
+    .signup__personal-group span {
+        margin-top: 1.6rem;
     }
 }
