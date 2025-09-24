@@ -1,4 +1,4 @@
-# 모두의 부엌 **( [https://morningstarrecipe.netlify.app/](https://morningstarrecipe.netlify.app/) )**
+# 모두의 부엌 **( https://ourkitchen.store/ )**
 ## 테스트용 계정
 
 아이디: test@ourkitchen.com  
