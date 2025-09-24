@@ -10,6 +10,7 @@ import LevelBadge from '../../components/LevelBadge/LevelBadge.tsx';
 import { useModal } from '../../components/modal/ModalContext.ts';
 import LexicalRenderer from '../../components/LexicalEditor/LexicalRenderer.tsx';
 import { usePageSetup } from '../../hooks/usePageSetup';
+import { getUserProfileImage } from '../../services/supabaseFiles.ts';
 export const ShareDetail = () => {
     const [writerProfileImage, setWriterProfileImage] = useState<Tables<'files'>>();
     const { id } = useParams<{ id: string }>();
@@ -43,6 +44,8 @@ export const ShareDetail = () => {
                     navigate('/share');
                 }
                 setShare(detail);
+                const writerProfileImage = await getUserProfileImage(detail?.user_id || '');
+                setWriterProfileImage(writerProfileImage);
             } catch (error) {
                 console.error('Failed to fetch post:', error);
             }

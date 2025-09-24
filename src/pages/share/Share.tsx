@@ -188,7 +188,7 @@ const Share = () => {
                     <div className={styles.sharePage__inputWrapper}>
                         <SearchInput
                             value={inputValue}
-                            placeholder='오늘의 메뉴를 검색하세요'
+                            placeholder='어떤 물건을 찾고 계신가요?'
                             onChange={handleSearchChange}
                         />
                     </div>
