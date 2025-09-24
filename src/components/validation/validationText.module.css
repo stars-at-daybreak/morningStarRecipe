@@ -7,7 +7,7 @@
     font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
     line-height: 1.2rem;
     color: var(--color-red);
-    margin-top: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 2rem);
+    margin-top: clamp(1rem, 1rem + (100vw - 390px) * 0.02, 2rem);
 }
 .validation-text {
     display: block;
