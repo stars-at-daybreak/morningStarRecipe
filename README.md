@@ -154,7 +154,7 @@ morningStarRecipe/
 ---
 
 ## 아키텍처
-<img width="820" height="311" alt="ourkichen drawio" src="https://github.com/user-attachments/assets/89509e57-08bf-417e-811c-9c51b1e32185" />
+<img width="1722" height="547" alt="image" src="https://github.com/user-attachments/assets/f8a44022-0a90-4e60-8886-0914ba1e0e9a" />
 
 ---
 
