@@ -4,7 +4,7 @@ import { usePageSetup } from '../../hooks/usePageSetup';
 import { useModal } from '../../components/modal/ModalContext';
 import useUserStore from '../../stores/useUserStore';
 import { useFileUpload } from '../../hooks/useImageUpload';
-import LevelBadge from '../../components/LevelBadge/LevelBadge';
+import LevelBadge from '../../components/levelBadge/LevelBadge';
 import { saveProfileImage, getUserProfileImage, deleteProfileImage } from '../../services/supabaseFiles';
 import styles from './mypage.module.css';
 

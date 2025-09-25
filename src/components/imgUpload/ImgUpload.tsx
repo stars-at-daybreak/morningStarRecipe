@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useFileUpload } from '../../hooks/useImageUpload';
 import plus_icon from '../../assets/plus_icon.png';
-import styles from './ImgUpload.module.css';
+import styles from './imgUpload.module.css';
 
 interface ResponsiveFileUploadProps {
     onFileUpload?: (filename: string | null) => void;

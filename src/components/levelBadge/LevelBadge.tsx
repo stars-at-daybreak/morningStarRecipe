@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './LevelBadge.module.css';
+import styles from './levelBadge.module.css';
 
 // 레벨 타입 정의
 type LevelType = 1 | 2 | 3 | 4;
@@ -45,11 +45,11 @@ export default LevelBadge;
 
 /* 사용법 */
 /*
-import LevelBadge from '../../components/LevelBadge/LevelBadge';
+import levelBadge from '../../components/levelBadge/levelBadge';
 
 return (
   <>
-    <LevelBadge level={1} size='large' />
+    <levelBadge level={1} size='large' />
   </>
 )
 */

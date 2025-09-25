@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import PostItem from '../postItem/PostItem';
 import type { Tables } from '../../types/supabase';
 import { SyncLoader } from 'react-spinners';
-import styles from './InfiniteScroll.module.css';
-import EmptyState from '../EmptyState/EmptyState';
+import styles from './infiniteScroll.module.css';
+import EmptyState from '../emptyState/EmptyState';
 
 interface InfinitePostListProps {
     type: 'recipe' | 'share';

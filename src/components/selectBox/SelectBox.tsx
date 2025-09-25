@@ -1,6 +1,6 @@
 // CustomSelect.tsx
 import React, { useState, useRef, useEffect } from 'react';
-import styles from './SelectBox.module.css';
+import styles from './selectBox.module.css';
 
 interface Option {
     value: string;

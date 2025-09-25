@@ -4,7 +4,7 @@ import useUserStore from '../../stores/useUserStore.ts';
 import type { CommentWithUserNickname } from '../../types/comments.type.ts';
 import styles from './postComments.module.css';
 import PostCommentTextarea from './PostCommentTextarea.tsx';
-import LevelBadge from '../LevelBadge/LevelBadge.tsx';
+import LevelBadge from '../levelBadge/LevelBadge.tsx';
 import noneProfileImg from '../../assets/none-profile.svg';
 import { commentCreatedTime } from '../../utils/utils.ts';
 import { useModal } from '../modal/ModalContext.ts';

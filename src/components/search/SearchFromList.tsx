@@ -4,7 +4,7 @@ import hangul from 'hangul-js';
 import 'react-simple-keyboard/build/css/index.css';
 import searchIcon from '../../assets/search_icon.svg';
 import keyboardIcon from '../../assets/keyboard_icon.svg';
-import styles from './SearchForm.module.css';
+import styles from './searchForm.module.css';
 
 interface SearchInputProps {
     value: string;

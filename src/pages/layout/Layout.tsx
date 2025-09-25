@@ -4,8 +4,8 @@ import Header from '../../components/header/Header.tsx';
 import Main from '../Main.tsx';
 import Footer from '../../components/footer/Footer.tsx';
 import Nav from '../../components/nav/Nav.tsx';
-import styles from './Layout.module.css';
-import FloatingButtons from '../../components/FloatingButtons/FloatingButtons.tsx';
+import styles from './layout.module.css';
+import FloatingButtons from '../../components/floatingButtons/FloatingButtons.tsx';
 
 const Layout = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);

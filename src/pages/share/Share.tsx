@@ -6,10 +6,10 @@ import { usePageSetup } from '../../hooks/usePageSetup';
 import PostItem from '../../components/postItem/PostItem';
 import SearchInput from '../../components/search/SearchFromList';
 import type { ShareStatus } from '../../types/search.types';
-import styles from './SharePage.module.css';
+import styles from './sharePage.module.css';
 import writeSVG from '../../assets/write_icon.svg';
 import { useModal } from '../../components/modal/ModalContext';
-import EmptyState from '../../components/EmptyState/EmptyState';
+import EmptyState from '../../components/emptyState/EmptyState';
 import { SyncLoader } from 'react-spinners';
 // ------------------- 디바운스 훅 -------------------
 function useDebounce<T>(value: T, delay: number) {

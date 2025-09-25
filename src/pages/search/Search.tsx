@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import useSearch from '../../hooks/useSearch';
 import PostItem from '../../components/postItem/PostItem';
 import SearchInput from '../../components/search/SearchFromList';
-import styles from './SearchPage.module.css';
-import EmptyState from '../../components/EmptyState/EmptyState';
+import styles from './searchPage.module.css';
+import EmptyState from '../../components/emptyState/EmptyState';
 import { SyncLoader } from 'react-spinners';
 
 interface SearchPageProps {

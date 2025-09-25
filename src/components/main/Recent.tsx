@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { selectRecentPostsTOP6 } from '../../services/supabasePosts';
 import type { Tables } from '../../types/supabase';
-import styles from './Recent.module.css';
+import styles from './recent.module.css';
 import { Link } from 'react-router-dom';
 import { getPostThumbnails } from '../../services/supabaseFiles';
 import NoneThumnailImageUrl from '../../assets/picture_icon.svg';

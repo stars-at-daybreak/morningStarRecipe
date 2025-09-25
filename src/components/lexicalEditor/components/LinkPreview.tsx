@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchLinkMetadata, LinkMetadata } from '../../../utils/linkPreview';
-import styles from './LinkPreview.module.css';
+import styles from './linkPreview.module.css';
 
 interface LinkPreviewProps {
     url: string;

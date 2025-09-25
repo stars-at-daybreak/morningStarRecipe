@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Keyboard from 'react-simple-keyboard';
 import hangul from 'hangul-js';
 import 'react-simple-keyboard/build/css/index.css';
-import styles from './SearchForm.module.css';
+import styles from './searchForm.module.css';
 import search_icon from '../../assets/search_icon.svg';
 import keyboard_icon from '../../assets/keyboard_icon.svg';
 

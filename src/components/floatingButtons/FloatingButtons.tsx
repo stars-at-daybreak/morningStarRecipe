@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from './FloatingButtons.module.css';
+import styles from './floatingButtons.module.css';
 
 const FloatingButtons = () => {
     const [fontSizePercent, setFontSizePercent] = useState<number>(62.5);

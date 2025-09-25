@@ -1,4 +1,4 @@
-import EmptyState from '../../components/EmptyState/EmptyState';
+import EmptyState from '../../components/emptyState/EmptyState';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import styles from './404.module.css';
 const NotFound = () => {

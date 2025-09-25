@@ -5,7 +5,7 @@ import Recent from '../../components/main/Recent';
 import SearchPage from '../search/Search';
 import SearchForm from '../../components/search/SearchForm';
 import { usePageSetup } from '../../hooks/usePageSetup';
-import styles from './Home.module.css';
+import styles from './home.module.css';
 import Recommendation from '../../components/main/Recommendation';
 const Home = () => {
     const [searchParams] = useSearchParams();
