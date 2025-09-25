@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from 'react-router-dom';
 import { useEffect } from 'react';
 import SignUp from './pages/signup/SignUp.tsx';
 import Login from './pages/login/Login.tsx';
@@ -53,18 +53,27 @@ const App = () => {
 
 const AppRoutes = () => {
     const { user, isLoading } = useUserStore();
-
     const location = useLocation();
+    const navigationType = useNavigationType();
 
-    // 전역 포커스 관리 - 라우트 변경 시마다 포커스 상단 이동
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-            document.body.focus({ preventScroll: true });
-        }, 100);
+        // POP은 뒤로가기/앞으로가기, PUSH는 새로운 페이지
+        if (navigationType !== 'POP') {
+            const timer = setTimeout(() => {
+                window.scrollTo(0, 0);
 
-        return () => clearTimeout(timeoutId);
-    }, [location.pathname]);
+                // 모바일에서는 포커스 스킵
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                    navigator.userAgent
+                );
+                if (!isMobile) {
+                    document.body.focus({ preventScroll: true });
+                }
+            }, 50);
+
+            return () => clearTimeout(timer);
+        }
+    }, [location.pathname, navigationType]);
 
     if (isLoading) {
         return false;
