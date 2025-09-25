@@ -28,6 +28,11 @@
     color: var(--color-gray-300);
 }
 
+.recipeForm__title_input:focus {
+    border: 0.1rem solid var(--color-green);
+    transition: all 0.2s ease-in-out;
+}
+
 .recipe_select_section {
     margin-top: 1.4rem;
     padding: 1.6rem 1.5rem;
@@ -90,6 +95,10 @@
 }
 .recipeForm__ingredients::placeholder {
     color: var(--color-gray-300);
+}
+.recipeForm__ingredients:focus {
+    border: 0.1rem solid var(--color-green);
+    transition: all 0.2s ease-in-out;
 }
 /* 나눔 설명 */
 .content_section {

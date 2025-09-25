@@ -6,6 +6,10 @@
     background: white;
     overflow: hidden;
 }
+.lexical-editor:focus-within {
+    border: 0.1rem solid var(--color-green);
+    transition: all 0.2s ease-in-out;
+}
 
 .editor-container {
     position: relative;
