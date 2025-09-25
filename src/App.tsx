@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import SignUp from './pages/signup/SignUp.tsx';
 import Login from './pages/login/Login.tsx';
@@ -53,6 +53,19 @@ const App = () => {
 
 const AppRoutes = () => {
     const { user, isLoading } = useUserStore();
+
+    const location = useLocation();
+
+    // 전역 포커스 관리 - 라우트 변경 시마다 포커스 상단 이동
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+            document.body.focus({ preventScroll: true });
+        }, 100);
+
+        return () => clearTimeout(timeoutId);
+    }, [location.pathname]);
+
     if (isLoading) {
         return false;
     }
