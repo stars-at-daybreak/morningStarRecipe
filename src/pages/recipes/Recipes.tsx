@@ -11,7 +11,7 @@ import styles from './recipes.module.css';
 import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
 import EmptyState from '../../components/emptyState/EmptyState';
-import { SyncLoader } from 'react-spinners';
+// import { SyncLoader } from 'react-spinners';
 // ------------------- 디바운스 훅 -------------------
 function useDebounce<T>(value: T, delay: number) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -127,21 +127,21 @@ const Recipes = () => {
         [updateSearchParams]
     );
     // 스피너 반응형으로 크기 적용
-    const [spinnerSize, setSpinnerSize] = useState(8);
+    // const [spinnerSize, setSpinnerSize] = useState(8);
 
-    useEffect(() => {
-        const updateSpinnerSize = () => {
-            if (window.innerWidth >= 768) {
-                setSpinnerSize(12); // 태블릿
-            } else {
-                setSpinnerSize(8); // 모바일
-            }
-        };
+    // useEffect(() => {
+    //     const updateSpinnerSize = () => {
+    //         if (window.innerWidth >= 768) {
+    //             setSpinnerSize(12); // 태블릿
+    //         } else {
+    //             setSpinnerSize(8); // 모바일
+    //         }
+    //     };
 
-        updateSpinnerSize();
-        window.addEventListener('resize', updateSpinnerSize);
-        return () => window.removeEventListener('resize', updateSpinnerSize);
-    }, []);
+    //     updateSpinnerSize();
+    //     window.addEventListener('resize', updateSpinnerSize);
+    //     return () => window.removeEventListener('resize', updateSpinnerSize);
+    // }, []);
     return (
         <>
             <title>모든 레시피 - 모두의 부엌</title>
@@ -301,13 +301,14 @@ const Recipes = () => {
                                     </div>
                                 ))}
                                 {/* 무한스크롤 트리거 영역 - 시각화 */}
-                                {hasMore && !loadingMore && searchList.length > 0 && (
-                                    <div ref={observerRef} aria-hidden='true'>
-                                        <span></span>
-                                    </div>
-                                )}
+                                {/* {hasMore && !loadingMore && searchList.length > 0 && (
+                                    
+                                )} */}
                             </>
                         )}
+                        <div ref={observerRef} aria-hidden='true'>
+                            <span></span>
+                        </div>
                     </section>
                 </section>
             </div>

@@ -10,7 +10,6 @@ import styles from './sharePage.module.css';
 import writeSVG from '../../assets/write_icon.svg';
 import { useModal } from '../../components/modal/ModalContext';
 import EmptyState from '../../components/emptyState/EmptyState';
-import { SyncLoader } from 'react-spinners';
 // ------------------- 디바운스 훅 -------------------
 function useDebounce<T>(value: T, delay: number) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -140,22 +139,6 @@ const Share = () => {
         [navigate]
     );
 
-    // 스피너 반응형으로 크기 적용
-    const [spinnerSize, setSpinnerSize] = useState(8);
-
-    useEffect(() => {
-        const updateSpinnerSize = () => {
-            if (window.innerWidth >= 768) {
-                setSpinnerSize(12); // 태블릿
-            } else {
-                setSpinnerSize(8); // 모바일
-            }
-        };
-
-        updateSpinnerSize();
-        window.addEventListener('resize', updateSpinnerSize);
-        return () => window.removeEventListener('resize', updateSpinnerSize);
-    }, []);
     // ------------------- 렌더링 -------------------
     return (
         <>
@@ -263,13 +246,14 @@ const Share = () => {
 
                             {loadingMore && <div className='loading-more'></div>}
 
-                            {hasMore && !loadingMore && searchList.length > 0 && (
-                                <div ref={observerRef} aria-hidden='true'>
-                                    <span></span>
-                                </div>
-                            )}
+                            {/* {hasMore && !loadingMore && searchList.length > 0 && (
+                                
+                            )} */}
                         </>
                     )}
+                    <div ref={observerRef} aria-hidden='true'>
+                        <span></span>
+                    </div>
                 </section>
             </main>
         </>
