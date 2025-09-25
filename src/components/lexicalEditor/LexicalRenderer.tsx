@@ -1,6 +1,6 @@
 import React from 'react';
 import LinkPreview from './components/LinkPreview';
-import styles from './LexicalRenderer.module.css';
+import styles from './lexicalRenderer.module.css';
 
 // Lexical 출력용 노드 타입 정의 (라이브러리 타입과 구분하기 위해 Render prefix 사용)
 interface BaseRenderNode {

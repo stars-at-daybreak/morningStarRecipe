@@ -1,4 +1,4 @@
-import styles from './Recommendation.module.css';
+import styles from './recommendation.module.css';
 import { Link } from 'react-router-dom';
 const Recommendation = () => {
     return (

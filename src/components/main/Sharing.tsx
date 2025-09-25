@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { selectSharePostsTOP3 } from '../../services/supabasePosts';
 import type { Tables } from '../../types/supabase';
-import styles from './Share.module.css';
+import styles from './share.module.css';
 import PostItem from '../../components/postItem/PostItem.tsx';
 import { Link } from 'react-router';
 const Sharing: React.FC = () => {

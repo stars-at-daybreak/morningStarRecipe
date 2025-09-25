@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { usePageStore } from '../../stores/usePageStore';
 import logo from '../../assets/logo.svg';
 import prev from '../../assets/prev_icon.png';
-import styles from './Header.module.css';
+import styles from './header.module.css';
 import { useModal } from '../../components/modal/ModalContext';
 const Header = () => {
     const { title, pageName, showBackButton } = usePageStore();

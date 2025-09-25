@@ -1,6 +1,6 @@
 // components/PostItem.tsx
 import React, { useEffect, useState, useCallback } from 'react';
-import styles from './PostItem.module.css';
+import styles from './postItem.module.css';
 import useUserStore from '../../stores/useUserStore.ts';
 import { getUserVoteStatus } from '../../services/supabasePostVotes.ts';
 import {

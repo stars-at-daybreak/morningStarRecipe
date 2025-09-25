@@ -19,7 +19,7 @@ import YouTubePlugin from './plugins/YouTubePlugin';
 import ErrorBoundary from './ErrorBoundary';
 import { ImageNode } from './nodes/ImageNode';
 import { YouTubeNode } from './nodes/YouTubeNode';
-import './LexicalEditor.css';
+import './lexicalEditor.css';
 import { MATCHERS } from '../../utils/lexicalUtils.ts';
 
 // 리스트 제외한 커스텀 transformers 추가

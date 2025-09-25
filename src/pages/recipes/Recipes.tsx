@@ -10,7 +10,7 @@ import { useModal } from '../../components/modal/ModalContext';
 import styles from './recipes.module.css';
 import useUserStore from '../../stores/useUserStore.ts';
 import PostItem from '../../components/postItem/PostItem';
-import EmptyState from '../../components/EmptyState/EmptyState';
+import EmptyState from '../../components/emptyState/EmptyState';
 import { SyncLoader } from 'react-spinners';
 // ------------------- 디바운스 훅 -------------------
 function useDebounce<T>(value: T, delay: number) {

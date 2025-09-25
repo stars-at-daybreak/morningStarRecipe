@@ -8,7 +8,7 @@ import { getUserVoteStatus, handlePostVote } from '../../services/supabasePostVo
 import { getUserProfileImage } from '../../services/supabaseFiles.ts';
 import type { Tables } from '../../types/supabase.ts';
 import styles from './recipeDetail.module.css';
-import LevelBadge from '../../components/LevelBadge/LevelBadge.tsx';
+import LevelBadge from '../../components/levelBadge/LevelBadge.tsx';
 import { fetchCategory } from '../../services/supabaseCategories.ts';
 import likeImg from '../../assets/like_icon.svg';
 import likeActiveImg from '../../assets/like_icon_active.svg';
@@ -22,7 +22,7 @@ import {
 import { useModal } from '../../components/modal/ModalContext.ts';
 import { formatDateToString } from '../../utils/utils.ts';
 import { usePageSetup } from '../../hooks/usePageSetup.tsx';
-import LexicalRenderer from '../../components/LexicalEditor/LexicalRenderer.tsx';
+import LexicalRenderer from '../../components/lexicalEditor/LexicalRenderer.tsx';
 
 interface VoteCounts {
     prevType: null | 'like' | 'dislike';

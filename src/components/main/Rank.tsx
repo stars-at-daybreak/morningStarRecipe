@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { selectPostsLikeTop3 } from '../../services/supabasePosts';
 import type { Tables } from '../../types/supabase';
-import styles from './Rank.module.css';
+import styles from './rank.module.css';
 import { getUserProfileImage, getPostThumbnails } from '../../services/supabaseFiles';
 import NoneProfileImageUrl from '../../assets/none-profile.svg';
 import NoneThumbnailImageUrl from '../../assets/none-thumbnail.svg';
@@ -10,7 +10,7 @@ import rank_2 from '../../assets/rank_2.svg';
 import rank_3 from '../../assets/rank_3.svg';
 import { getUserNickname } from '../../services/supabaseUsers';
 import { Link } from 'react-router-dom';
-import EmptyState from '../../components/EmptyState/EmptyState';
+import EmptyState from '../emptyState/EmptyState';
 interface PostWithProfileThumbnail extends Tables<'posts'> {
     profileImageUrl?: string;
     thumbnailImageUrl?: string;

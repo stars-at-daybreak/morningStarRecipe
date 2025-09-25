@@ -4,11 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PostComments from '../../components/post/PostComments.tsx';
 import useUserStore from '../../stores/useUserStore.ts';
 import type { PostWithUserNickname } from '../../types/posts.type.ts';
-import styles from './ShareDetail.module.css';
+import styles from './shareDetail.module.css';
 import type { Tables } from '../../types/supabase.ts';
-import LevelBadge from '../../components/LevelBadge/LevelBadge.tsx';
+import LevelBadge from '../../components/levelBadge/LevelBadge.tsx';
 import { useModal } from '../../components/modal/ModalContext.ts';
-import LexicalRenderer from '../../components/LexicalEditor/LexicalRenderer.tsx';
+import LexicalRenderer from '../../components/lexicalEditor/LexicalRenderer.tsx';
 import { usePageSetup } from '../../hooks/usePageSetup';
 import { getUserProfileImage } from '../../services/supabaseFiles.ts';
 export const ShareDetail = () => {

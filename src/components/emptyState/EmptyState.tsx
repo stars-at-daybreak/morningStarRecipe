@@ -1,4 +1,4 @@
-import styles from './EmptyState.module.css';
+import styles from './emptyState.module.css';
 
 interface EmptyStateProps {
     title: string;
@@ -8,8 +8,7 @@ interface EmptyStateProps {
 const EmptyState = ({ title, description }: EmptyStateProps) => {
     return (
         <div className={styles['empty-state']}>
-            <div className={styles['empty-state__icon']}>
-            </div>
+            <div className={styles['empty-state__icon']}></div>
             <h3 className={styles['empty-state__title']}>{title}</h3>
             {description && <p className={styles['empty-state__description']}>{description}</p>}
         </div>
