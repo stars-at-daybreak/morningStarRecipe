@@ -86,7 +86,7 @@ npm install
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_KEY=your_supabase_anon_key
 
-# API 설정 (선택사항)
+# API 설정
 VITE_API_BASE_URL=your_api_base_url
 ```
 
@@ -154,17 +154,28 @@ morningStarRecipe/
 ---
 
 ## 아키텍처
-<img width="1443" height="642" alt="사본 -Frontend and Backend Architecture with CI_CD" src="https://github.com/user-attachments/assets/1b13cc44-23d5-43c0-8b7e-9cd1286e86a7" />
+<img width="820" height="311" alt="ourkichen drawio" src="https://github.com/user-attachments/assets/89509e57-08bf-417e-811c-9c51b1e32185" />
 
 ---
 
 ## 데이터베이스 설계 (ERD)
-<img width="1653" height="1128" alt="Image" src="https://github.com/user-attachments/assets/e8fbeefc-a72d-4b51-be75-b19f93e865ff" />
+
+<img width="1915" height="1287" alt="Untitled (1)" src="https://github.com/user-attachments/assets/e5bec46e-dd39-4ef3-9706-0791d576ed6b" />
 
 ---
 
 ## 와이어프레임
+피그마 "[파일][1]"을  확인해보세요
+
+[1]: https://www.figma.com/design/QH2aX9Jzc2uULJPlUgpv0c/%EB%AA%A8%EB%91%90%EC%9D%98%EB%B6%80%EC%97%8C?node-id=0-1&p=f 
+
 <img width="2267" height="1221" alt="Image" src="https://github.com/user-attachments/assets/627dd09d-0696-49ee-8bdd-c063511a073f" />
+
+---
+
+## 팀 노션 정보
+
+모두의 부엌 : https://www.notion.so/262381ebe37281b1ab69e1c4d20455fe
 
 ---
 
