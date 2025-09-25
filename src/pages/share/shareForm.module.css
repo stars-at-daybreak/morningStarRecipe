@@ -27,6 +27,10 @@
 .shareForm__title_input::placeholder {
     color: var(--color-gray-300);
 }
+.shareForm__title_input:focus {
+    border: 0.1rem solid var(--color-green);
+    transition: all 0.2s ease-in-out;
+}
 /* 나눔상태 */
 .share_status_section {
     display: flex;
@@ -72,6 +76,10 @@
 }
 .shareLocation__title_input::placeholder {
     color: var(--color-gray-300);
+}
+.shareLocation__title_input:focus {
+    border: 0.1rem solid var(--color-green);
+    transition: all 0.2s ease-in-out;
 }
 /* 나눔 설명 */
 .content_section {
