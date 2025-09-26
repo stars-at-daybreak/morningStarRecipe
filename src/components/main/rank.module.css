@@ -67,6 +67,7 @@
     background-color: #f0f0f0;
     border: 0.1rem solid var(--color-white);
     box-shadow: 0.1rem 0.1rem 0.2rem 0px #00000040;
+    object-fit: cover;
 }
 .post__profile {
     width: 3.3rem;
