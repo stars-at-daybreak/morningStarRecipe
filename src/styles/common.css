@@ -5,6 +5,7 @@ body {
 html {
     /* 기본 폰트사이즈 10px */
     font-size: 62.5%;
+    word-break: keep-all;
 }
 
 .sr-only {
