@@ -126,6 +126,7 @@
     background-color: var(--color-gray-200);
     width: 6.4rem;
     height: 6.4rem;
+    object-fit: cover;
 }
 .profile:nth-child(1) {
     order: 2;
