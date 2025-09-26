@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="readme_main" src="https://github.com/user-attachments/assets/c808e12b-d62f-4d3c-8f8f-481bb17718a3" />
+<img width="1920" height="1080" alt="readme_main" src="https://github.com/user-attachments/assets/eb981d62-d26b-4424-90ec-c5a434d7d0ec" />
 
 # 모두의 부엌 **( https://ourkitchen.store/ )**
 
