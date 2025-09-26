@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9920e644-b6ba-4c76-868b-9cbd31ac291c" />
+<img width="1920" height="1080" alt="readme_main" src="https://github.com/user-attachments/assets/c808e12b-d62f-4d3c-8f8f-481bb17718a3" />
 
 # 모두의 부엌 **( https://ourkitchen.store/ )**
 
@@ -35,9 +35,6 @@
 </div>
 
 ---
-
-
-
 
 ## 기술 스택
 
@@ -154,7 +151,7 @@ morningStarRecipe/
 ---
 
 ## 아키텍처
-<img width="1722" height="547" alt="image" src="https://github.com/user-attachments/assets/f8a44022-0a90-4e60-8886-0914ba1e0e9a" />
+<img width="1626" height="575" alt="architecture" src="https://github.com/user-attachments/assets/b47c2cda-0f08-4b63-aed4-3bc0ef0ca52c" />
 
 ---
 
