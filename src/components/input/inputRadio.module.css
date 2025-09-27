@@ -1,0 +1,29 @@
+.radio-group {
+    width: 100%;
+}
+.radio-group__label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: clamp(3.6rem, 3.6rem + (100vw - 39rem) * 0.05, 6.2rem);
+    border: 1px solid var(--color-gray-300);
+    border-radius: 50rem;
+    cursor: pointer;
+
+    font-weight: 500;
+    line-height: 1.6rem;
+    color: var(--color-gray-300);
+
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 39rem) * 0.01, 2.2rem);
+}
+
+.radio-group__input {
+    display: none;
+}
+
+.radio-group__label:has(.radio-group__input:checked) {
+    border: 1px solid var(--color-green);
+    background-color: var(--color-green-100);
+    color: var(--color-green);
+}

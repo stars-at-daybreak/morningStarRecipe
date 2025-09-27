@@ -1,0 +1,41 @@
+.header {
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    justify-content: center;
+    align-items: center;
+    padding: 1.3rem;
+    border-bottom: 0.1rem solid var(--color-gray-200);
+    background-color: #fff;
+}
+.header__logoWrapper,
+.header__title {
+    justify-self: center;
+    text-align: center;
+    height: 2.2rem;
+}
+.header__title {
+    height: auto;
+    font-weight: 700;
+    font-size: 1.6rem;
+    padding: 0.3rem 0;
+}
+.header nav {
+    width: 0.7rem;
+    height: 1.4rem;
+}
+@media (min-width: 1024px) {
+    .header {
+        padding: 3.2rem;
+    }
+    .header__logo {
+        width: 14.2rem;
+        height: 3.4rem;
+    }
+    .header__title {
+        font-size: 3.2rem;
+    }
+    .header nav {
+        width: 0.9rem;
+        height: 1.8rem;
+    }
+}

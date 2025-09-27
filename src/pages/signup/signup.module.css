@@ -1,0 +1,266 @@
+.signup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5rem;
+    width: 100%;
+    padding: 0 1.6rem;
+}
+
+.signup__form {
+    width: 100%;
+    max-width: 73.6rem;
+    margin-top: 5rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup__validation-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.signup__nickname-box {
+    width: 100%;
+    margin-top: 1.6rem;
+}
+.signup__email-box,
+.signup__nickname-contents {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.signup__email-box button,
+.signup__nickname-box button {
+    width: 8.7rem;
+    height: 3.6rem;
+    /* padding: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 2rem) 0; */
+    min-width: auto;
+    margin-left: 1rem;
+    border: 1px solid var(--color-green);
+    border-radius: 50rem;
+
+    color: var(--color-green);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.01, 2.2rem);
+    line-height: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.01, 2.2rem);
+    white-space: nowrap;
+    transition: all 0.1s ease-in-out;
+}
+
+.signup__password-group,
+.signup__personal-group {
+    width: 100%;
+    margin-top: 1.2rem;
+}
+
+.signup__gender-group,
+.signup__isForeigner-group {
+    width: 100%;
+
+    legend {
+        color: var(--color-gray);
+        font-weight: 400;
+        font-size: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
+        line-height: clamp(1.2rem, 1.2rem + (100vw - 390px) * 0.01, 1.8rem);
+    }
+}
+.signup__radio-legend:after {
+    content: '';
+    display: inline-block;
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    margin-left: 0.2rem;
+    background-color: var(--color-gray);
+    mask: url('../../assets/circle_check.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+}
+.signup__radio-legend--active:after {
+    content: '';
+    display: inline-block;
+    width: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    height: clamp(0.9rem, 0.9rem + (100vw - 390px) * 0.05, 1.6rem);
+    margin-left: 0.2rem;
+    background-color: var(--color-green);
+    mask: url('../../assets/circle_check.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+}
+
+.signup__gender-group {
+    margin-top: 3rem;
+}
+.signup__isForeigner-group {
+    margin-top: 1.6rem;
+}
+.signup__radio-group {
+    margin-top: 0.8rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.signup__agree {
+    width: 100%;
+    margin-top: 3rem;
+}
+.signup__terms-box {
+    height: clamp(6.8rem, 6.8rem + (100vw - 390px) * 0.1, 15.8rem);
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+
+    border-radius: 1rem;
+    border: 1px solid var(--color-gray-300);
+    overflow: hidden;
+
+    color: var(--color-gray-300);
+}
+.signup__terms-content {
+    height: 100%;
+    overflow: auto;
+    margin-right: 1rem;
+    padding: 0 1.5rem 0 1rem;
+    font-size: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.8rem);
+    line-height: clamp(1rem, 1rem + (100vw - 390px) * 0.02, 1.8rem);
+}
+.signup__agree label[for*='agreeTo'] {
+    color: var(--color-gray);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 1rem + (100vw - 390px) * 0.01, 2.2rem);
+    line-height: clamp(1.4rem, 1rem + (100vw - 390px) * 0.01, 2.2rem);
+}
+.signup__agree label[for*='agreeTo']::before {
+    content: '';
+    display: inline-block;
+    width: clamp(1rem, 1rem + (100vw - 390px) * 0.1, 1.6rem);
+    height: clamp(1rem, 1rem + (100vw - 390px) * 0.1, 1.6rem);
+    background-color: var(--color-gray);
+    mask: url('../../assets/checkbox.svg') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    margin-right: clamp(0.3rem, 0.3rem + (100vw - 390px) * 0.1, 0.8rem);
+    vertical-align: middle;
+    position: relative;
+    bottom: 2px;
+}
+.signup__agree input[type='checkbox'] {
+    display: none;
+}
+.signup__agree input[type='checkbox']:checked + label::before {
+    background-color: var(--color-green);
+}
+.signup__agree label:not(:first-of-type) {
+    display: inline-block;
+    margin-top: 0.9rem;
+    color: var(--color-gray-400);
+    font-weight: 400;
+}
+
+.signup__terms-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.signup__terms-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.signup__terms-content::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+}
+
+.signup__form button[type='submit'] {
+    margin-top: 3rem;
+}
+
+.signup__nickname-box span,
+.signup__password-group span,
+.signup__personal-group span {
+    margin-top: clamp(1rem, 1rem + (100vw - 390px) * 0.01, 1.6rem);
+}
+
+@media (min-width: 768px) {
+    .signup__email-box button,
+    .signup__nickname-box button {
+        width: 9rem;
+        height: 4.8rem;
+    }
+}
+@media (min-width: 1024px) {
+    .signup {
+        margin-top: 11.7rem;
+    }
+    .signup__form {
+        margin-top: 10rem;
+        padding: 0;
+    }
+
+    .signup__email-box button,
+    .signup__nickname-box button {
+        width: 15rem;
+        height: 6.2rem;
+        /* margin-left: 2.1rem;
+    
+        font-size: 2.2rem;
+        line-height: 2.2rem; */
+    }
+
+    .signup__password-group,
+    .signup__personal-group {
+        margin-top: 2.8rem;
+    }
+    .signup__gender-group {
+        margin-top: 6rem;
+    }
+    .signup__isForeigner-group {
+        margin-top: 3.2rem;
+    }
+    .signup__radio-group {
+        margin-top: 1.6rem;
+        gap: 0.5rem;
+    }
+
+    .signup__agree {
+        margin-top: 6rem;
+    }
+    .signup__terms-box {
+        height: 15.8rem;
+        padding: 2rem 0;
+        margin-top: 3.2rem;
+
+        border-radius: 1.6rem;
+    }
+    .signup__terms-content {
+        padding: 0 2rem;
+    }
+    .signup__agree label[for*='agreeTo'] {
+        font-size: 2.2rem;
+        line-height: 2.2rem;
+    }
+    .signup__agree label[for*='agreeTo']::before {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+    .signup__agree label:not(:first-of-type) {
+        margin-top: 1.8rem;
+    }
+    .signup__terms-content::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    .signup__form button[type='submit'] {
+        margin-top: 6rem;
+    }
+
+    .signup__nickname-box span,
+    .signup__password-group span,
+    .signup__personal-group span {
+        margin-top: 1.6rem;
+    }
+}

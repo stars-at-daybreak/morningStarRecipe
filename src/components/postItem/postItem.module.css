@@ -1,0 +1,299 @@
+/* 나눔&레시피 공통 */
+.post__item {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 0.1rem solid var(--color-gray-200);
+    cursor: pointer;
+    color: var(--color-gray);
+}
+
+.post__item:last-child {
+    margin-bottom: 0;
+}
+
+.post__thumbnail {
+    width: 35%;
+    min-width: 11rem;
+    height: 8.5rem;
+    overflow: hidden;
+    border-radius: 1.8rem;
+    text-align: center;
+    margin-right: 2rem;
+    border: 1px solid var(--color-gray-100);
+    transition: 0.1s ease-in;
+}
+
+.post__thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 기본 썸네일 플레이스홀더 */
+.post__thumbnail__placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-gray-200);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post__thumbnail__icon {
+    width: 2.6rem;
+    height: 2.6rem;
+    background: url('../../assets/picture_icon.svg') no-repeat center / cover;
+}
+
+.post__title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    line-height: 130%;
+    color: var(--color-black);
+    transition: 0.1s ease-in;
+    word-break: break-word;
+}
+
+/* 레시피 목록 */
+.post__recipe__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1rem;
+}
+
+.post__recipe__actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post__vote {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-gray-100);
+    border-radius: 100px;
+    gap: 0.6rem;
+    padding: 0.3rem 1rem;
+}
+
+.post__vote__btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 추천+비추천 */
+
+/* 기본상태 */
+
+/* 공통 */
+/* 추천+비추천 숫자 */
+.post__vote__text__active,
+.post__vote__text__inactive {
+    font-size: 1rem;
+    margin-left: 0.2rem;
+    transition: 0.1s ease-in;
+}
+.post__vote__text__inactive {
+    color: var(--color-gray);
+}
+.post__vote__text__active {
+    color: var(--color-green);
+}
+
+/* 추천+비추천 아이콘 */
+.post__like__icon,
+.post__dislike__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    transition: 0.1s ease-in;
+}
+.post__dislike__icon {
+    margin-top: 0.3rem;
+}
+
+/* 추천 아이콘 */
+.post__like__icon__inactive {
+    background: url('../../assets/like_icon.svg') no-repeat center / cover;
+}
+
+/* 비추천 아이콘 */
+.post__dislike__icon__inactive {
+    background: url('../../assets/dislike_icon.svg') no-repeat center / cover;
+}
+
+/* active 상태 */
+/* 추천 아이콘 */
+.post__like__icon__active {
+    background: url('../../assets/like_icon_active.svg') no-repeat center / cover;
+}
+.post__dislike__icon__active {
+    background: url('../../assets/dislike_icon_active.svg') no-repeat center / cover;
+}
+
+/* 북마크 - 기본상태 */
+/* 공통 */
+.post__bookmark__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    transition: 0.1s ease-in;
+}
+
+.post__bookmark__btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* 기본상태 */
+.post__bookmark__inactive {
+    background: url('../../assets/bookmark_icon.svg') no-repeat center / cover;
+}
+/* active 상태 */
+.post__bookmark__active {
+    background: url('../../assets/bookmark_icon_active.svg') no-repeat center / cover;
+}
+
+/* 나눔 목록 */
+/* 나눔 상태 공통 스타일 */
+.post__share__content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post__share__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* 나눔상태 */
+.post__status__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    font-weight: 500;
+    border: 1px solid;
+    cursor: default;
+    /* 모바일 기본 폰트 사이즈 */
+    font-size: 1.4rem;
+    transition: 0.1s ease-in;
+
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+/* 나눔상태별 스타일 정의 */
+/* 나눔중 상태 */
+.post__status__available {
+    border-color: var(--color-green);
+    color: var(--color-green);
+    background-color: var(--color-green-100);
+}
+
+/* 예약중 상태 */
+.post__status__reserved {
+    border-color: var(--color-lv1);
+    color: var(--color-lv1);
+    background-color: var(--color-lv1-bg);
+}
+
+/* 나눔완료 상태 */
+.post__status__completed {
+    border-color: var(--color-gray-300);
+    color: var(--color-gray-400);
+    background-color: var(--color-gray-100);
+}
+
+/* 나눔취소 상태 */
+.post__status__cancelled {
+    border-color: var(--color-lv4);
+    color: var(--color-lv4);
+    background-color: var(--color-lv4-bg);
+}
+
+@media (min-width: 768px) {
+    /* 나눔&레시피 공통 */
+    .post__item {
+        margin-top: 3.2rem;
+        padding-bottom: 3.2rem;
+    }
+
+    .post__thumbnail {
+        max-width: 18rem;
+        height: 13.2rem;
+        border-radius: 3rem;
+        margin-right: 3.2rem;
+    }
+
+    /* 태블릿 썸네일 아이콘 크기 증가 */
+    .post__thumbnail__icon {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .post__title {
+        font-size: 2rem;
+    }
+
+    /* 레시피 */
+    /* 공통 */
+    .post__recipe__content {
+        gap: 2rem;
+    }
+    .post__vote {
+        padding: 0.5rem 1.2rem;
+        margin-right: 2rem;
+    }
+
+    .post__recipe__actions {
+        justify-content: start;
+    }
+
+    /* 추천+비추천 숫자 */
+    .post__vote__text__active,
+    .post__vote__text__inactive {
+        font-size: 1.6rem;
+        margin-left: 0.4rem;
+    }
+
+    /* 추천+비추천 아이콘 */
+    .post__like__icon,
+    .post__dislike__icon {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    /* 북마크 - 기본상태 */
+    /* 공통 */
+    .post__bookmark__icon {
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+
+    /* 나눔 목록 */
+    .post__status__btn {
+        font-size: 1.8rem;
+        border-width: 2px;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* 나눔&레시피 공통 */
+    .post__title {
+        font-size: 2.4rem;
+    }
+
+    /* 나눔 목록 */
+    .post__status__btn {
+        font-size: 2.2rem;
+    }
+}

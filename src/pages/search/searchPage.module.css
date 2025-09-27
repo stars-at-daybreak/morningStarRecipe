@@ -1,0 +1,112 @@
+.searchPage {
+    width: 100%;
+}
+.searchPage__inputWrapper {
+    max-width: 73.6rem;
+    margin: 0 1.6rem;
+}
+.searchPage__resultsTitle {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--color-gray);
+}
+.searchPage__resultsTitle strong {
+    font-weight: 700;
+}
+.searchPage__filter {
+    max-width: 73.6rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.searchPage__filterOption {
+    width: 33.3%;
+    padding: 1.6rem 1.4rem;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-gray-400);
+}
+.searchPage__filterOption_active {
+    color: var(--color-green);
+    border-bottom: 0.3rem solid var(--color-green);
+}
+.searchPage__results {
+    max-width: 73.6rem;
+    margin: 0 1.6rem;
+    margin-top: 3rem;
+}
+.searchPage__noResults {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+.searchPage__divider {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-gray-300);
+    height: 0.05rem;
+}
+.searchPage__loading,
+.searchPage__loadingMore {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 22rem;
+}
+@media (min-width: 768px) {
+    .searchPage__inputWrapper {
+        margin: 0 auto;
+    }
+    .searchPage__results {
+        margin: 0 auto;
+    }
+    .searchPage__resultsTitle {
+        margin-top: 1.5rem;
+        font-size: 1.7rem;
+    }
+    .searchPage__filter {
+        margin-top: 3.5rem;
+    }
+    .searchPage__filterOption {
+        padding: 2.1rem 1.8rem;
+        font-size: 1.8rem;
+    }
+    .searchPage__filterOption_active {
+        border-bottom: 0.4rem solid var(--color-green);
+    }
+    .searchPage__results {
+        margin-top: 4.5rem;
+    }
+    .searchPage__noResults {
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+    }
+    .searchPage__loading,
+    .searchPage__loadingMore {
+        height: 45rem;
+    }
+}
+@media (min-width: 1024px) {
+    .searchPage__resultsTitle {
+        margin-top: 2rem;
+        font-size: 2rem;
+    }
+    .searchPage__filter {
+        margin-top: 5rem;
+    }
+    .searchPage__filterOption {
+        padding: 2.6rem 2.2rem;
+        font-size: 2.2rem;
+    }
+    .searchPage__results {
+        margin-top: 6rem;
+    }
+    .searchPage__noResults {
+        padding-top: 10rem;
+        padding-bottom: 10rem;
+    }
+}

@@ -1,0 +1,115 @@
+/* Modal 백드롭 */
+.modal__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* 모달창 - 모바일 기본값 */
+.modal {
+    width: 26.4rem;
+    /* padding: 0 clamp(5rem, 5rem + (100vw - 390px) * 0.1, 7.7rem); */
+    background-color: white;
+    border-radius: 2rem;
+}
+
+/* 모달 제목 - 모바일 기본값 */
+.modal__title {
+    margin-bottom: 0.8rem;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    white-space: pre-line;
+    font-weight: 500;
+    text-align: center;
+    color: var(--color-black);
+    letter-spacing: -0.05rem;
+}
+
+/* 모달 내용 영역 */
+.modal__content {
+    margin: 2.4rem 2.7rem;
+}
+
+/* 모달 메시지 - 모바일 기본값 */
+.modal__message {
+    text-align: center;
+    line-height: 1.6rem;
+    white-space: pre-line;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--color-gray-400);
+}
+
+/* 버튼 영역 */
+.modal__button__area {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0 0 2rem 2rem;
+    overflow: hidden;
+}
+
+/* 공통 버튼 스타일 - 모바일 기본값 */
+.modal__button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4.8rem;
+    cursor: pointer;
+    font-size: 1.4rem;
+    border: 1px solid var(--color-gray-200);
+}
+
+/* 취소 버튼 */
+.modal__button__cancel {
+    color: var(--color-gray-400);
+    border-right: none;
+}
+
+/* 확인 버튼 - 기본값 */
+.modal__button__confirm {
+    color: var(--color-green);
+}
+
+/* 태블릿 버전 (1024px 이상) */
+@media (min-width: 1024px) {
+    .modal {
+        width: 43rem;
+        border-radius: 3.2rem;
+    }
+
+    /* 모달 내용 영역 */
+    .modal__content {
+        margin: 4.2rem 6rem;
+    }
+
+    .modal__title {
+        font-size: 2.4rem;
+        line-height: 3.4rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .modal__message {
+        font-size: 2rem;
+        line-height: 2.8rem;
+    }
+
+    /* 버튼 영역 */
+    .modal__button__area {
+        border-radius: 0 0 3.2rem 3.2rem;
+    }
+
+    /* 공통 버튼 스타일 - 태블릿 */
+    .modal__button {
+        height: 7.6rem;
+        font-size: 2.2rem;
+    }
+}

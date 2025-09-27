@@ -1,0 +1,26 @@
+body {
+    color: var(--color-black);
+}
+
+html {
+    /* 기본 폰트사이즈 10px */
+    font-size: 62.5%;
+    word-break: keep-all;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0); /* 구형 브라우저를 위해 사용 */
+    clip-path: polygon(0 0, 0 0, 0 0); /* inset(50%) 와 동일한 표현 */
+    border: 0;
+}
+
+/* 일부페이지 배경색 추가 */
+body.gray-bg {
+    background-color: var(--color-gray-100);
+}

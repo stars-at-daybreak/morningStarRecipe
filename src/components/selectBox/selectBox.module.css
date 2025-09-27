@@ -1,0 +1,102 @@
+.customSelect {
+    position: relative;
+}
+.customSelect__button {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 1rem;
+    background-color: var(--color-white);
+    text-align: left;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    position: relative;
+    outline: none;
+    color: var(--color-gray);
+    border: 0.1rem solid var(--color-white);
+}
+.customSelect__button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--color-gray-300);
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+.customSelect__button:focus {
+    border: 0.1rem solid var(--color-green);
+}
+.customSelect__button:focus::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+.customSelect__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 0.4rem;
+    background-color: var(--color-white);
+    border-radius: 1rem;
+    border: 0.1rem solid var(--color-green);
+    z-index: 10;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.customSelect__option {
+    cursor: pointer;
+    border: none;
+    text-align: left;
+    color: var(--color-gray);
+    font-size: 1.2rem;
+}
+
+.customSelect__option:hover {
+    background-color: var(--color-gray-100);
+    border-radius: 1rem;
+}
+@media screen and (min-width: 786px) {
+    .customSelect__button {
+        padding: 1.2rem 1.6rem;
+        border-radius: 1.3rem;
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        border: 0.15rem solid var(--color-white);
+    }
+    .customSelect__button:focus {
+        border: 0.15rem solid var(--color-green);
+    }
+    .customSelect__dropdown {
+        border: 0.15rem solid var(--color-green);
+        padding: 1.6rem;
+        gap: 1rem;
+    }
+    .customSelect__option {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .customSelect__button {
+        padding: 1.7rem 2rem;
+        border-radius: 1.5rem;
+        font-size: 1.8rem;
+        line-height: 1.8rem;
+    }
+
+    .customSelect__dropdown {
+        padding: 2rem;
+        gap: 1.2rem;
+    }
+    .customSelect__option {
+        font-size: 1.8rem;
+    }
+}

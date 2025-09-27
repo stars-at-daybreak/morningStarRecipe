@@ -1,0 +1,73 @@
+.button {
+    cursor: pointer;
+}
+
+.button--primary {
+    background: var(--color-green);
+    color: var(--color-white);
+}
+.button--secondary {
+    background: var(--color-gray-300);
+    color: var(--color-white);
+}
+.button--outline {
+    border: 0.1rem solid var(--color-green);
+    color: var(--color-green);
+}
+
+.button--small {
+    width: 100%;
+    max-width: 8.7rem;
+    height: 3.6rem;
+    border-radius: 50rem;
+
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+}
+.button--medium {
+    width: 100%;
+    max-width: 32rem;
+    height: 4.4rem;
+    border-radius: 50rem;
+}
+.button--large {
+    width: 100%;
+    max-width: 35.8rem;
+    height: 4.4rem;
+    border-radius: 50rem;
+
+    font-weight: 500;
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+}
+.button--responsive {
+    width: 100%;
+    height: clamp(3.6rem, 3.6rem + (100vw + -390px) * 0.1, 7.2rem);
+    border-radius: 50rem;
+    min-height: 4.4rem;
+
+    font-weight: 500;
+    font-size: clamp(1.4rem, 1.4rem + (100vw - 390px) * 0.05, 2.6rem);
+    line-height: 1.6rem;
+}
+
+@media (min-width: 1024px) {
+    .button--small {
+        width: 100%;
+        max-width: 14.9rem;
+        height: 6.2rem;
+        border-radius: 80rem;
+    }
+    .button--medium {
+        width: 100%;
+        max-width: 73.6rem;
+        height: 7.2rem;
+        border-radius: 80rem;
+    }
+    .button--responsive {
+        width: 100%;
+        border-radius: 80rem;
+        padding: 2.4rem 2rem;
+    }
+}

@@ -1,0 +1,359 @@
+/* Lexical Editor Styles */
+.lexical-editor {
+    border: 0.1rem solid var(--color-gray-300);
+    border-radius: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: white;
+    overflow: hidden;
+}
+.lexical-editor:focus-within {
+    border: 0.1rem solid var(--color-green);
+    transition: all 0.2s ease-in-out;
+}
+
+.editor-container {
+    position: relative;
+}
+
+/* Toolbar Styles */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.8rem 1.2rem;
+    border-bottom: 0.1rem solid var(--color-gray-300);
+    background: #f8f9fa;
+    flex-wrap: wrap;
+}
+
+.toolbar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.2rem;
+    height: 3.2rem;
+    padding: 0.4rem 0.8rem;
+    border: 0.1rem solid transparent;
+    border-radius: 0.4rem;
+    background: transparent;
+    color: #374151;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.toolbar-item-icon {
+    width: 2rem;
+    height: 2rem;
+}
+.toolbar-item:hover {
+    background: #e5e7eb;
+    border-color: #d1d5db;
+}
+
+.toolbar-item.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #2563eb;
+}
+
+.toolbar-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toolbar-item.disabled:hover {
+    background: transparent;
+    border-color: transparent;
+}
+
+.toolbar-select {
+    padding: 0.6rem 0.8rem;
+    border: 0.1rem solid var(--color-gray-300);
+    border-radius: 0.4rem;
+    background: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.divider {
+    width: 0.1rem;
+    height: 2.4rem;
+    background: #d1d5db;
+    margin: 0 0.4rem;
+}
+
+/* Editor Inner Container */
+.editor-inner {
+    position: relative;
+    min-height: 20rem;
+}
+
+/* Content Editable */
+.editor-input {
+    min-height: 20rem;
+    padding: 1.6rem;
+    outline: none;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: #374151;
+    resize: none;
+    caret-color: #3b82f6;
+}
+
+.editor-input:focus {
+    outline: none;
+}
+
+/* Placeholder */
+.editor-placeholder {
+    position: absolute;
+    top: 1.6rem;
+    left: 1.6rem;
+    color: #9ca3af;
+    font-size: 1.6rem;
+    pointer-events: none;
+    user-select: none;
+    margin: 0.8rem 0;
+}
+
+/* Text Formatting */
+.editor-text-bold {
+    font-weight: bold;
+}
+
+.editor-text-italic {
+    font-style: italic;
+}
+
+.editor-text-underline {
+    text-decoration: underline;
+}
+
+.editor-text-strikethrough {
+    text-decoration: line-through;
+}
+
+.editor-text-underlineStrikethrough {
+    text-decoration: underline line-through;
+}
+
+.editor-text-code {
+    background: #f3f4f6;
+    border: 0.1rem solid var(--color-gray-300);
+    border-radius: 0.4rem;
+    padding: 0.2rem 0.4rem;
+    font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 1.4rem;
+}
+
+/* Headings */
+.editor-heading-h1 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 2.4rem 0 1.6rem;
+    color: #111827;
+}
+
+.editor-heading-h2 {
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 2rem 0 1.2rem;
+    color: #111827;
+}
+
+.editor-heading-h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 1.6rem 0 0.8rem;
+    color: #374151;
+}
+
+.editor-heading-h4 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 1.2rem 0 0.6rem;
+    color: #374151;
+}
+
+.editor-heading-h5 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0.8rem 0 0.4rem;
+    color: #374151;
+}
+
+/* Paragraph */
+.editor-paragraph {
+    margin: 0.8rem 0;
+    line-height: 1.6rem;
+}
+
+/* Quote */
+.editor-quote {
+    margin: 1.6rem 0;
+    padding-left: 1.6rem;
+    border-left: 0.4rem solid #e5e7eb;
+    font-style: italic;
+    color: #6b7280;
+}
+
+/* Lists */
+.editor-list-ol {
+    padding-left: 2.4rem;
+    margin: 0.8rem 0;
+}
+
+.editor-list-ul {
+    padding-left: 2.4rem;
+    margin: 0.8rem 0;
+}
+
+.editor-listitem {
+    margin: 0.4rem 0;
+}
+
+.editor-nested-listitem {
+    list-style-type: none;
+}
+
+/* List Item Alignment */
+.editor-listitem[style*='text-align: right'] {
+    text-align: right !important;
+}
+
+.editor-listitem[style*='text-align: center'] {
+    text-align: center !important;
+}
+
+.editor-listitem[style*='text-align: justify'] {
+    text-align: justify !important;
+}
+
+/* Links */
+.editor-link {
+    color: #3b82f6;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.editor-link:hover {
+    color: #2563eb;
+}
+
+/* AutoLink*/
+.editor-auto-link {
+    color: #2563eb;
+}
+
+/* Code Blocks */
+.editor-code {
+    background: #1f2937;
+    color: #f9fafb;
+    font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    padding: 1.6rem;
+    border-radius: 0.8rem;
+    margin: 1.6rem 0;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+/* Image Styles */
+.editor-image {
+    display: block;
+    margin: 1.6rem auto;
+    max-width: 100%;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 1.6rem 0;
+}
+
+.image-wrapper.focused {
+    outline: 0.2rem solid #3b82f6;
+    outline-offset: 0.2rem;
+    border-radius: 0.4rem;
+}
+
+.image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.4rem;
+}
+
+.image-controls {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    display: flex;
+    gap: 0.4rem;
+}
+
+.image-delete-button {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.image-delete-button:hover {
+    background: #dc2626;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-wrap: wrap;
+        gap: 0.2rem;
+        padding: 0.6rem 0.8rem;
+    }
+
+    .toolbar-item {
+        min-width: 2.8rem;
+        height: 2.8rem;
+        font-size: 1.2rem;
+    }
+
+    .editor-input {
+        padding: 1.2rem;
+        font-size: 1.4rem;
+    }
+
+    .editor-placeholder {
+        top: 1.2rem;
+        left: 1.2rem;
+        font-size: 1.4rem;
+    }
+}
+@media screen and (min-width: 768px) {
+    .lexical-editor {
+        border-radius: 1.3rem;
+        border: 0.15rem solid var(--color-gray-300);
+    }
+    .toolbar {
+        border-bottom: 0.15rem solid var(--color-gray-300);
+    }
+    .toolbar-item-icon {
+        width: 2.6rem;
+        height: 2.6rem;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .lexical-editor {
+        border-radius: 1.6rem;
+    }
+}

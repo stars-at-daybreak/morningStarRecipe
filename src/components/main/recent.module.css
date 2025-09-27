@@ -1,0 +1,125 @@
+.Recent {
+    max-width: 73.6rem;
+    margin: 4rem auto 0;
+}
+.RecentTitle {
+    font-weight: 700;
+    font-size: 2rem;
+}
+.RecentList {
+    margin-top: 1.4rem;
+}
+.noPosts {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+    font-size: 2rem;
+    padding-top: 4rem;
+}
+.viewMoreButton {
+    margin-top: 2rem;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: var(--color-white);
+    background-color: var(--color-green);
+    border-radius: 50rem;
+    font-weight: 700;
+    padding: 1.4rem 1rem;
+    font-size: 1.4rem;
+}
+.RecentList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+.RecentItem {
+    aspect-ratio: 112/86;
+    background-color: var(--color-gray-200);
+    border-radius: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.RecentItem .thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1.5rem;
+}
+.RecentItem .fallbackImage {
+    width: 2.6rem;
+    height: 2.6rem;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+@media screen and (min-width: 768px) {
+    .Recent {
+        margin-top: 6rem;
+    }
+    .RecentTitle {
+        font-size: 2.6rem;
+    }
+    .RecentList {
+        margin-top: 2.2rem;
+    }
+    .noPosts {
+        font-size: 2.6rem;
+        padding-top: 6rem;
+    }
+    .viewMoreButton {
+        margin-top: 4rem;
+        padding: 1.8rem 1.3rem;
+        font-size: 2rem;
+    }
+    .RecentList {
+        gap: 1.5rem;
+    }
+    .RecentItem {
+        aspect-ratio: 232/175;
+        border-radius: 2.3rem;
+    }
+    .RecentItem .thumbnail {
+        border-radius: 2.3rem;
+    }
+    .RecentItem .fallbackImage {
+        width: 3.9rem;
+        height: 3.9rem;
+        border-radius: 0;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .Recent {
+        margin-top: 8rem;
+    }
+    .RecentTitle {
+        font-size: 3.2rem;
+    }
+    .RecentList {
+        margin-top: 3rem;
+    }
+    .noPosts {
+        font-size: 3.2rem;
+    }
+    .viewMoreButton {
+        margin-top: 6rem;
+        padding: 2.2rem 1.6rem;
+        font-size: 2.6rem;
+    }
+    .RecentList {
+        gap: 2rem;
+    }
+    .RecentItem {
+        border-radius: 3.1rem;
+    }
+    .RecentItem .thumbnail {
+        border-radius: 3.1rem;
+    }
+    .RecentItem .fallbackImage {
+        width: 5.2rem;
+        height: 5.2rem;
+        border-radius: 0;
+    }
+}
